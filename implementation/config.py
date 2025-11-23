@@ -1,93 +1,162 @@
 """
-Configuration module for Cortex IR System
-Loads environment variables and provides centralized configuration
+Configuration Module for Cortex IR System
+Contains all system parameters and paths
 """
 
 import os
 from pathlib import Path
-from dotenv import load_dotenv
-
-# Load environment variables
-load_dotenv()
+from dataclasses import dataclass
 
 # Base paths
-BASE_DIR = Path(__file__).parent
-ROOT_DIR = BASE_DIR.parent
-INDEXES_DIR = BASE_DIR / "indexes"
-MODELS_DIR = BASE_DIR / "models"
-LOGS_DIR = BASE_DIR / "logs"
+BASE_DIR = Path(__file__).parent.parent
+DATA_DIR = BASE_DIR / "data"
+INDEX_DIR = BASE_DIR / "implementation" / "indexes"
+LOG_DIR = BASE_DIR / "implementation" / "logs"
+MODEL_DIR = BASE_DIR / "implementation" / "models"
 
 # Create directories if they don't exist
-INDEXES_DIR.mkdir(exist_ok=True)
-MODELS_DIR.mkdir(exist_ok=True)
-LOGS_DIR.mkdir(exist_ok=True)
+for directory in [DATA_DIR, INDEX_DIR, LOG_DIR, MODEL_DIR]:
+    directory.mkdir(parents=True, exist_ok=True)
 
-# Dataset Configuration
-DATA_PATH = os.getenv("DATA_PATH", str(ROOT_DIR / "Articles.csv"))
+# Data paths
+DATA_PATH = BASE_DIR / "Articles.csv"
+PROCESSED_DATA_PATH = INDEX_DIR / "processed_articles.pkl"
 
-# Index Paths
-BM25_INDEX_PATH = os.getenv("BM25_INDEX_PATH", str(INDEXES_DIR / "bm25_index"))
-COLBERT_INDEX_PATH = os.getenv("COLBERT_INDEX_PATH", str(INDEXES_DIR / "colbert_index"))
-METADATA_DB_PATH = os.getenv("METADATA_DB_PATH", str(INDEXES_DIR / "metadata.db"))
-PROCESSED_DATA_PATH = os.getenv("PROCESSED_DATA_PATH", str(INDEXES_DIR / "processed_articles.pkl"))
-TOPIC_MODEL_PATH = os.getenv("TOPIC_MODEL_PATH", str(MODELS_DIR / "topic_model"))
+# Model configurations
+SPACY_MODEL = "en_core_web_sm"
+EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+CROSS_ENCODER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"  # For neural reranking
 
-# Model Configuration
-SPACY_MODEL = os.getenv("SPACY_MODEL", "en_core_web_sm")
-CROSS_ENCODER_MODEL = os.getenv("CROSS_ENCODER_MODEL", "cross-encoder/ms-marco-MiniLM-L-6-v2")
-EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
+# BM25 parameters
+BM25_K1 = 1.5
+BM25_B = 0.75
+BM25_TITLE_BOOST = 3  # Repeat title tokens 3x for boosting
 
-# BM25 Parameters
-BM25_K1 = float(os.getenv("BM25_K1", "1.5"))
-BM25_B = float(os.getenv("BM25_B", "0.75"))
-TITLE_BOOST = float(os.getenv("TITLE_BOOST", "3.0"))
-ENTITY_BOOST = float(os.getenv("ENTITY_BOOST", "2.0"))
+# Retrieval parameters
+TOP_K_RETRIEVAL = 100
+TOP_K_RERANK = 50  # Reduced from 100 for faster processing
+TOP_K_FINAL = 10
+RRF_K = 60  # Reciprocal Rank Fusion constant
 
-# Retrieval Parameters
-TOP_K_SPARSE = int(os.getenv("TOP_K_SPARSE", "100"))
-TOP_K_DENSE = int(os.getenv("TOP_K_DENSE", "100"))
-RRF_K = int(os.getenv("RRF_K", "60"))
-RERANK_TOP_K = int(os.getenv("RERANK_TOP_K", "50"))
-FINAL_TOP_K = int(os.getenv("FINAL_TOP_K", "20"))
+# Reranking parameters
+RERANK_BATCH_SIZE = 32  # Batch size for neural reranking
+RERANK_TOP_K = 50  # Number of documents to rerank
 
-# Reranking Parameters
-RERANK_BATCH_SIZE = int(os.getenv("RERANK_BATCH_SIZE", "32"))
-MAX_CONTENT_LENGTH = int(os.getenv("MAX_CONTENT_LENGTH", "400"))
+# Entity extraction
+ENTITY_CONFIDENCE_THRESHOLD = 0.85
+ENTITY_BOOST = 1.2  # Boost factor for entity matches
 
-# Post-processing Parameters
-DIVERSITY_LAMBDA_FACTUAL = float(os.getenv("DIVERSITY_LAMBDA_FACTUAL", "0.9"))
-DIVERSITY_LAMBDA_EXPLORATORY = float(os.getenv("DIVERSITY_LAMBDA_EXPLORATORY", "0.6"))
-ENTITY_CONFIDENCE_THRESHOLD = float(os.getenv("ENTITY_CONFIDENCE_THRESHOLD", "0.85"))
-ENTITY_SIMILARITY_THRESHOLD = float(os.getenv("ENTITY_SIMILARITY_THRESHOLD", "0.8"))
+# Post-processing - Base parameter
+MMR_LAMBDA = 0.7  # Balance between relevance and diversity (default)
 
-# UI Configuration
-GRADIO_SERVER_NAME = os.getenv("GRADIO_SERVER_NAME", "0.0.0.0")
-GRADIO_SERVER_PORT = int(os.getenv("GRADIO_SERVER_PORT", "7860"))
-GRADIO_SHARE = os.getenv("GRADIO_SHARE", "False").lower() == "true"
+# Query-type specific diversity parameters
+DIVERSITY_LAMBDA_BREAKING = 0.3      # High diversity for breaking news
+DIVERSITY_LAMBDA_FACTUAL = 0.5       # Medium diversity for factual queries
+DIVERSITY_LAMBDA_ANALYTICAL = 0.7    # Higher diversity for analytical queries
+DIVERSITY_LAMBDA_HISTORICAL = 0.6    # Medium-high diversity for historical queries
+DIVERSITY_LAMBDA_EXPLORATORY = 0.8   # Highest diversity for exploratory queries
+DIVERSITY_LAMBDA_DEFAULT = 0.6       # Default fallback value
+
+# Temporal parameters
+TEMPORAL_DECAY_DAYS = 365  # Days for temporal decay
+TEMPORAL_BOOST_BREAKING = 2.0  # Boost recent articles for breaking news
+TEMPORAL_BOOST_FACTUAL = 1.0   # No temporal boost for factual queries
+TEMPORAL_BOOST_DEFAULT = 1.2   # Default temporal boost
+
+# Content processing
+MAX_CONTENT_LENGTH = 512  # Maximum tokens for content processing
+MAX_QUERY_LENGTH = 128    # Maximum tokens for query
+
+# Deduplication
+ENTITY_SIMILARITY_THRESHOLD = 0.7  # Threshold for entity-based deduplication
+
+# Dense retrieval (alternative to ColBERT)
+USE_DENSE_RETRIEVAL = True  # Use sentence-transformers instead of ColBERT
+DENSE_TOP_K = 100  # Number of results from dense retrieval
+
+# Logging
+LOG_LEVEL = "INFO"
+LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
 # Performance
-NUM_WORKERS = int(os.getenv("NUM_WORKERS", "4"))
-USE_GPU = os.getenv("USE_GPU", "False").lower() == "true"
+BATCH_SIZE = 32
+NUM_WORKERS = 4
 
-# Query Types
-QUERY_TYPES = {
-    "BREAKING": "breaking",
-    "HISTORICAL": "historical",
-    "FACTUAL": "factual",
-    "ANALYTICAL": "analytical"
-}
 
-# Categories
-CATEGORIES = ["Business", "Sports"]
-
-# Temporal Intelligence Settings
-TEMPORAL_SETTINGS = {
-    "breaking": {"recency_days": 7, "boost_factor": 2.0},
-    "historical": {"date_matching": True, "tolerance_days": 30},
-    "analytical": {"temporal_bias": False},
-    "factual": {"recency_days": 30, "boost_factor": 1.5}
-}
-
-# Logging Configuration
-LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
-LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+@dataclass
+class Config:
+    """Configuration class with all system parameters"""
+    
+    # Paths
+    BASE_DIR: Path = BASE_DIR
+    DATA_DIR: Path = DATA_DIR
+    INDEX_DIR: Path = INDEX_DIR
+    LOG_DIR: Path = LOG_DIR
+    MODEL_DIR: Path = MODEL_DIR
+    DATA_PATH: Path = DATA_PATH
+    PROCESSED_DATA_PATH: Path = PROCESSED_DATA_PATH
+    
+    # Models
+    SPACY_MODEL: str = SPACY_MODEL
+    EMBEDDING_MODEL: str = EMBEDDING_MODEL
+    RERANKER_MODEL: str = RERANKER_MODEL
+    CROSS_ENCODER_MODEL: str = CROSS_ENCODER_MODEL
+    
+    # BM25
+    BM25_K1: float = BM25_K1
+    BM25_B: float = BM25_B
+    BM25_TITLE_BOOST: int = BM25_TITLE_BOOST
+    
+    # Retrieval
+    TOP_K_RETRIEVAL: int = TOP_K_RETRIEVAL
+    TOP_K_RERANK: int = TOP_K_RERANK
+    TOP_K_FINAL: int = TOP_K_FINAL
+    RRF_K: int = RRF_K
+    
+    # Reranking
+    RERANK_BATCH_SIZE: int = RERANK_BATCH_SIZE
+    RERANK_TOP_K: int = RERANK_TOP_K
+    
+    # Entity extraction
+    ENTITY_CONFIDENCE_THRESHOLD: float = ENTITY_CONFIDENCE_THRESHOLD
+    ENTITY_BOOST: float = ENTITY_BOOST
+    
+    # Post-processing
+    MMR_LAMBDA: float = MMR_LAMBDA
+    DIVERSITY_LAMBDA_BREAKING: float = DIVERSITY_LAMBDA_BREAKING
+    DIVERSITY_LAMBDA_FACTUAL: float = DIVERSITY_LAMBDA_FACTUAL
+    DIVERSITY_LAMBDA_ANALYTICAL: float = DIVERSITY_LAMBDA_ANALYTICAL
+    DIVERSITY_LAMBDA_HISTORICAL: float = DIVERSITY_LAMBDA_HISTORICAL
+    DIVERSITY_LAMBDA_EXPLORATORY: float = DIVERSITY_LAMBDA_EXPLORATORY
+    DIVERSITY_LAMBDA_DEFAULT: float = DIVERSITY_LAMBDA_DEFAULT
+    
+    # Temporal
+    TEMPORAL_DECAY_DAYS: int = TEMPORAL_DECAY_DAYS
+    TEMPORAL_BOOST_BREAKING: float = TEMPORAL_BOOST_BREAKING
+    TEMPORAL_BOOST_FACTUAL: float = TEMPORAL_BOOST_FACTUAL
+    TEMPORAL_BOOST_DEFAULT: float = TEMPORAL_BOOST_DEFAULT
+    
+    # Content processing
+    MAX_CONTENT_LENGTH: int = MAX_CONTENT_LENGTH
+    MAX_QUERY_LENGTH: int = MAX_QUERY_LENGTH
+    
+    # Deduplication
+    ENTITY_SIMILARITY_THRESHOLD: float = ENTITY_SIMILARITY_THRESHOLD
+    
+    # Dense retrieval
+    USE_DENSE_RETRIEVAL: bool = USE_DENSE_RETRIEVAL
+    DENSE_TOP_K: int = DENSE_TOP_K
+    
+    # Logging
+    LOG_LEVEL: str = LOG_LEVEL
+    LOG_FORMAT: str = LOG_FORMAT
+    
+    # Performance
+    BATCH_SIZE: int = BATCH_SIZE
+    NUM_WORKERS: int = NUM_WORKERS
+    
+    def __post_init__(self):
+        """Ensure all directories exist"""
+        for directory in [self.DATA_DIR, self.INDEX_DIR, self.LOG_DIR, self.MODEL_DIR]:
+            directory.mkdir(parents=True, exist_ok=True)

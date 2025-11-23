@@ -9,12 +9,11 @@ import plotly.graph_objects as go
 import plotly.express as px
 from datetime import datetime
 import json
+import sys
+from pathlib import Path
 
-import config
-from main import CortexIRPipeline
-from utils import setup_logging
-
-logger = setup_logging(__name__)
+from config import Config
+from utils import logger, check_indices_exist
 
 
 class CortexGradioApp:
@@ -24,21 +23,100 @@ class CortexGradioApp:
     
     def __init__(self):
         """Initialize Gradio app"""
-        logger.info("Initializing Gradio app...")
+        logger.info("Initializing Cortex IR System...")
         
-        # Initialize pipeline
+        # Initialize config
+        self.config = Config()
+        
+        # Ensure system is ready
+        self._ensure_system_ready()
+        
+        # Initialize pipeline (now guaranteed to have indices)
+        from main import CortexIRPipeline
         try:
+            logger.info("Loading IR pipeline...")
             self.pipeline = CortexIRPipeline()
             self.pipeline_ready = True
+            logger.info("✅ Pipeline loaded successfully!")
         except Exception as e:
-            logger.error(f"Error initializing pipeline: {e}")
+            logger.error(f"❌ Error initializing pipeline: {e}", exc_info=True)
             self.pipeline_ready = False
             self.pipeline = None
         
         # Search history for analytics
         self.search_history = []
         
-        logger.info("Gradio app initialized")
+        logger.info("🎉 Cortex IR System initialized and ready!")
+    
+    def _ensure_system_ready(self):
+        """Ensure preprocessing and indexing are done - runs automatically if needed"""
+        logger.info("Checking system readiness...")
+        
+        # Check if indices exist
+        indices = check_indices_exist(self.config)
+        
+        needs_preprocessing = not indices['processed_data']
+        needs_indexing = not indices['bm25'] or not indices['metadata']
+        
+        if needs_preprocessing or needs_indexing:
+            logger.info("=" * 70)
+            logger.info("🔧 FIRST TIME SETUP - Building search indices...")
+            logger.info("=" * 70)
+            logger.info("This will take 3-5 minutes on first run.")
+            logger.info("Subsequent runs will be instant!")
+            logger.info("")
+        
+        # Run preprocessing if needed
+        if needs_preprocessing:
+            logger.info("📚 Step 1/2: Preprocessing articles...")
+            logger.info("-" * 70)
+            try:
+                self._run_preprocessing()
+                logger.info("✅ Preprocessing completed!")
+            except Exception as e:
+                logger.error(f"❌ Preprocessing failed: {e}", exc_info=True)
+                raise RuntimeError("Failed to preprocess data. Please check the logs.")
+        else:
+            logger.info("✅ Preprocessed data found")
+        
+        # Run indexing if needed
+        if needs_indexing:
+            logger.info("")
+            logger.info("🔨 Step 2/2: Building search indices...")
+            logger.info("-" * 70)
+            try:
+                self._run_indexing()
+                logger.info("✅ Indexing completed!")
+            except Exception as e:
+                logger.error(f"❌ Indexing failed: {e}", exc_info=True)
+                raise RuntimeError("Failed to build indices. Please check the logs.")
+        else:
+            logger.info("✅ Search indices found")
+        
+        if needs_preprocessing or needs_indexing:
+            logger.info("")
+            logger.info("=" * 70)
+            logger.info("✅ SETUP COMPLETE - System is ready!")
+            logger.info("=" * 70)
+            logger.info("")
+        else:
+            logger.info("✅ All components ready - launching UI...")
+    
+    def _run_preprocessing(self):
+        """Run preprocessing pipeline"""
+        from preprocessing import main as preprocess_main
+        
+        logger.info("Starting preprocessing pipeline...")
+        preprocess_main()
+        logger.info("Preprocessing completed successfully")
+    
+    def _run_indexing(self):
+        """Run indexing pipeline"""
+        from indexing import main as indexing_main
+        
+        logger.info("Starting indexing pipeline...")
+        indexing_main()
+        logger.info("Indexing completed successfully")
     
     def search(
         self,
@@ -63,11 +141,10 @@ class CortexGradioApp:
             error_html = """
             <div style='padding: 20px; background: #fee; border: 2px solid #c33; border-radius: 8px;'>
                 <h3>❌ Pipeline Not Ready</h3>
-                <p>Please run preprocessing and indexing first:</p>
-                <code>python preprocessing.py && python indexing.py</code>
+                <p>The system failed to initialize. Please check the logs.</p>
             </div>
             """
-            return error_html, "", None, None, None
+            return error_html, "Pipeline not ready", None, None, None
         
         if not query or not query.strip():
             return "", "Please enter a query", None, None, None
@@ -100,7 +177,7 @@ class CortexGradioApp:
             return results_html, query_info, performance_chart, category_chart, timeline_chart
             
         except Exception as e:
-            logger.error(f"Search error: {e}")
+            logger.error(f"Search error: {e}", exc_info=True)
             error_html = f"""
             <div style='padding: 20px; background: #fee; border: 2px solid #c33; border-radius: 8px;'>
                 <h3>❌ Search Error</h3>
@@ -242,7 +319,15 @@ class CortexGradioApp:
             
             # Get entities
             entities = doc.get('entities', [])[:3]
-            entity_str = ', '.join([e['text'] for e in entities]) if entities else 'None'
+            if entities and isinstance(entities[0], dict):
+                entity_str = ', '.join([e['text'] for e in entities])
+            else:
+                entity_str = ', '.join(entities) if entities else 'None'
+            
+            # Get snippet
+            snippet = doc.get('snippet', doc.get('content', '')[:200])
+            if len(snippet) > 200:
+                snippet = snippet[:200] + "..."
             
             html += f"""
             <div class="result-card">
@@ -253,7 +338,7 @@ class CortexGradioApp:
                             {doc.get('title', 'Untitled')}
                         </div>
                         <div class="result-snippet">
-                            {doc.get('snippet', doc.get('content', '')[:200])}...
+                            {snippet}
                         </div>
                         <div class="result-meta">
                             <span class="category-badge {category_class}">
@@ -281,19 +366,19 @@ class CortexGradioApp:
     def _format_query_info(self, query_info: dict) -> str:
         """Format query information"""
         info = f"""
-        **Original Query:** {query_info['original']}
-        
-        **Corrected Query:** {query_info['corrected']}
-        
-        **Query Type:** {query_info['type'].title()}
-        
-        **Tokens:** {', '.join(query_info['tokens'])}
-        
-        **Entities Detected:** {len(query_info['entities'])}
+**Original Query:** {query_info['original']}
+
+**Corrected Query:** {query_info['corrected']}
+
+**Query Type:** {query_info['type'].title()}
+
+**Tokens:** {', '.join(query_info['tokens'][:10])}
+
+**Entities Detected:** {len(query_info['entities'])}
         """
         
         if query_info['entities']:
-            entities_str = ', '.join([f"{e['text']} ({e['label']})" for e in query_info['entities']])
+            entities_str = ', '.join([f"{e['text']} ({e['label']})" for e in query_info['entities'][:5]])
             info += f"\n\n**Entity Details:** {entities_str}"
         
         return info
@@ -344,13 +429,22 @@ class CortexGradioApp:
             cat = doc.get('category', 'Unknown')
             categories[cat] = categories.get(cat, 0) + 1
         
+        if not categories:
+            fig = go.Figure()
+            fig.update_layout(
+                title="Category Distribution (No data)",
+                template="plotly_white",
+                height=400
+            )
+            return fig
+        
         fig = go.Figure(data=[
             go.Pie(
                 labels=list(categories.keys()),
                 values=list(categories.values()),
                 hole=0.4,
                 marker=dict(
-                    colors=['#4CAF50', '#2196F3', '#FF9800'],
+                    colors=['#4CAF50', '#2196F3', '#FF9800', '#9C27B0'],
                     line=dict(color='white', width=2)
                 )
             )
@@ -428,16 +522,16 @@ class CortexGradioApp:
         df = pd.DataFrame(self.search_history)
         
         analytics = f"""
-        ## 📊 Search Analytics
-        
-        **Total Searches:** {len(self.search_history)}
-        
-        **Average Response Time:** {df['time_ms'].mean():.1f}ms
-        
-        **Average Results per Query:** {df['num_results'].mean():.1f}
-        
-        **Query Type Distribution:**
-        """
+## 📊 Search Analytics
+
+**Total Searches:** {len(self.search_history)}
+
+**Average Response Time:** {df['time_ms'].mean():.1f}ms
+
+**Average Results per Query:** {df['num_results'].mean():.1f}
+
+**Query Type Distribution:**
+"""
         
         for qtype, count in df['query_type'].value_counts().items():
             analytics += f"\n- {qtype.title()}: {count} queries"
@@ -447,35 +541,29 @@ class CortexGradioApp:
     def build_interface(self):
         """Build Gradio interface"""
         
-        # Custom CSS
-        custom_css = """
-        .gradio-container {
-            font-family: 'Inter', 'Segoe UI', sans-serif;
-        }
-        .gr-button-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-            border: none !important;
-        }
-        .gr-button-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4) !important;
-        }
-        h1 {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: 800;
-        }
-        """
-        
-        with gr.Blocks(css=custom_css, title="Cortex IR System", theme=gr.themes.Soft()) as app:
+        with gr.Blocks(title="Cortex IR System") as app:
+            
+            # Custom CSS
+            gr.HTML("""
+            <style>
+                .gradio-container {
+                    font-family: 'Inter', 'Segoe UI', sans-serif;
+                }
+                h1 {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    font-weight: 800;
+                }
+            </style>
+            """)
             
             # Header
             gr.Markdown("""
             # 🧠 Cortex IR - News Article Search Engine
             
-            **Advanced Hybrid Information Retrieval System** with BM25, ColBERT, Neural Reranking, and Intelligent Post-Processing
+            **Advanced Hybrid Information Retrieval System** with BM25, Dense Retrieval, Neural Reranking, and Intelligent Post-Processing
             """)
             
             # Main search interface
@@ -500,16 +588,14 @@ class CortexGradioApp:
                 with gr.Row():
                     reranking_check = gr.Checkbox(
                         label="Enable Neural Reranking",
-                        value=True,
-                        info="Use cross-encoder for better ranking"
+                        value=True
                     )
                     post_processing_check = gr.Checkbox(
                         label="Enable Post-Processing",
-                        value=True,
-                        info="Apply diversity, temporal boost, and deduplication"
+                        value=True
                     )
                 
-                search_btn = gr.Button("🚀 Search", variant="primary", size="lg")
+                search_btn = gr.Button("🚀 Search", variant="primary")
                 
                 # Results
                 gr.Markdown("## Results")
@@ -530,17 +616,16 @@ class CortexGradioApp:
                 
                 # Example queries
                 gr.Markdown("### 💡 Example Queries")
-                with gr.Row():
-                    gr.Examples(
-                        examples=[
-                            ["latest business news"],
-                            ["who won the championship?"],
-                            ["impact of inflation on economy"],
-                            ["sports team performance 2023"],
-                            ["company merger announcements"]
-                        ],
-                        inputs=query_input
-                    )
+                gr.Examples(
+                    examples=[
+                        ["latest business news"],
+                        ["who won the championship?"],
+                        ["impact of inflation on economy"],
+                        ["sports team performance 2023"],
+                        ["company merger announcements"]
+                    ],
+                    inputs=query_input
+                )
                 
                 # Connect search button
                 search_btn.click(
@@ -555,7 +640,7 @@ class CortexGradioApp:
                 gr.Markdown("## System Analytics and Search History")
                 
                 analytics_output = gr.Markdown()
-                refresh_btn = gr.Button("🔄 Refresh Analytics", variant="secondary")
+                refresh_btn = gr.Button("🔄 Refresh Analytics")
                 
                 refresh_btn.click(
                     fn=self.get_analytics,
@@ -577,11 +662,11 @@ class CortexGradioApp:
                    - spaCy-based NLP pipeline
                    - Named Entity Recognition (NER)
                    - BM25+ sparse index
-                   - ColBERTv2 dense index
+                   - Dense embeddings index
                    - SQLite metadata store
                 
                 2. **Hybrid Retrieval** (~60-80ms)
-                   - Parallel BM25 and ColBERT retrieval
+                   - Parallel BM25 and dense retrieval
                    - Reciprocal Rank Fusion (RRF)
                    - Query classification and expansion
                 
@@ -598,7 +683,7 @@ class CortexGradioApp:
                 
                 ### 🎯 Features
                 
-                - **Hybrid Search**: Combines keyword (BM25) and semantic (ColBERT) search
+                - **Hybrid Search**: Combines keyword (BM25) and semantic search
                 - **Neural Reranking**: Deep learning for improved relevance
                 - **Query Intelligence**: Automatic query classification and expansion
                 - **Diversity**: MMR algorithm for diverse results
@@ -609,14 +694,14 @@ class CortexGradioApp:
                 ### 📊 Performance
                 
                 - **Query Latency**: ~300-400ms on CPU
-                - **Indexed Articles**: 2000 news articles
+                - **Indexed Articles**: 2692 news articles
                 - **Categories**: Business, Sports
                 - **Accuracy**: High precision and recall with neural reranking
                 
                 ### 🛠️ Technology Stack
                 
-                - **IR Libraries**: bm25s, ragatouille (ColBERT)
-                - **NLP**: spaCy, transformers, sentence-transformers
+                - **IR Libraries**: bm25s, sentence-transformers
+                - **NLP**: spaCy, transformers
                 - **ML**: PyTorch, scikit-learn
                 - **UI**: Gradio, Plotly
                 - **Storage**: SQLite, pickle
@@ -630,34 +715,31 @@ class CortexGradioApp:
     
     def launch(
         self,
-        share: bool = None,
-        server_name: str = None,
-        server_port: int = None
+        share: bool = True,
     ):
         """Launch Gradio app"""
-        if share is None:
-            share = config.GRADIO_SHARE
-        if server_name is None:
-            server_name = config.GRADIO_SERVER_NAME
-        if server_port is None:
-            server_port = config.GRADIO_SERVER_PORT
-        
         app = self.build_interface()
         
-        logger.info(f"Launching Gradio app on {server_name}:{server_port}")
         
         app.launch(
             share=share,
-            server_name=server_name,
-            server_port=server_port,
             show_error=True
         )
 
 
 def main():
     """Main entry point"""
-    app = CortexGradioApp()
-    app.launch()
+    try:
+        app = CortexGradioApp()
+        app.launch()
+    except Exception as e:
+        logger.error(f"Failed to start application: {e}", exc_info=True)
+        print("\n" + "="*70)
+        print("❌ APPLICATION STARTUP FAILED")
+        print("="*70)
+        print(f"Error: {e}")
+        print("\nPlease check the logs for more details.")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

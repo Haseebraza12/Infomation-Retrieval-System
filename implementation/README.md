@@ -15,7 +15,8 @@ A state-of-the-art hybrid information retrieval system for news articles, combin
 - **🔗 Entity Deduplication**: Remove duplicates based on named entities
 - **📊 Topic Clustering**: Organize results by themes
 - **🎨 Modern UI**: Beautiful Gradio interface with animations and visualizations
-- **⚡ Fast Performance**: ~300-400ms query latency on CPU
+- **⚡ Fast Performance**: ~10-15ms query latency on CPU
+- **🚀 Auto-Setup**: Automatically preprocesses and indexes data on first run
 
 ## 📁 Project Structure
 
@@ -124,27 +125,41 @@ cp .env.example .env
 # Edit .env with your preferred settings
 ```
 
-### Build Indices
+## 🚀 Quick Start
 
-**Important**: Before running searches, you must build the indices:
+**Just run one command:**
 
 ```bash
-# Step 1: Preprocess articles
-python preprocessing.py
-
-# Step 2: Build indices (BM25, ColBERT, metadata)
-python indexing.py
+python app.py
 ```
 
-This takes approximately 4-6 minutes for 2000 articles. Indices are saved in the `indexes/` directory.
-
-### Launch Web Interface
+Or directly:
 
 ```bash
 python gradio_app.py
 ```
 
-The web interface will open at `http://localhost:7860`
+The system will automatically:
+- ✅ Check if data is preprocessed (if not, preprocess Articles.csv)
+- ✅ Check if indices are built (if not, build BM25 and metadata indices)
+- ✅ Launch the Gradio web interface at `http://localhost:7860`
+
+**First run takes ~3-5 minutes for preprocessing and indexing. Subsequent runs start instantly.**
+
+### Manual Component Usage
+
+If you need to run components separately:
+
+```bash
+# Step 1: Preprocess articles
+python preprocessing.py
+
+# Step 2: Build indices (BM25, metadata)
+python indexing.py
+
+# Step 3: Launch UI
+python gradio_app.py
+```
 
 ### Command-Line Usage
 

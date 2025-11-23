@@ -7,9 +7,7 @@ from typing import List, Dict, Tuple
 import numpy as np
 from collections import defaultdict
 
-from utils import setup_logging
-
-logger = setup_logging(__name__)
+from utils import logger
 
 
 class IRMetrics:

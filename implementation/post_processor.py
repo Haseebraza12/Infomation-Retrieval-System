@@ -1,593 +1,415 @@
 """
-Post-processing Module for Cortex IR System
-Handles diversity, temporal intelligence, deduplication, and clustering
+Post-Processing Module - Diversity ranking, deduplication, temporal boosting
 """
 
-from typing import List, Dict, Tuple, Set
+from typing import List, Dict, Tuple, Optional
+import numpy as np
 from datetime import datetime, timedelta
 from collections import defaultdict
-import numpy as np
+import re
 
-from sentence_transformers import SentenceTransformer
+from config import Config
+from utils import logger, timer, cosine_similarity, calculate_entity_overlap
 
-import config
-from utils import setup_logging, timer
-
-logger = setup_logging(__name__)
+config = Config()
 
 
-class DiversityReranker:
-    """
-    Diversity-aware reranking using Maximal Marginal Relevance (MMR)
-    """
+class DiversityRanker:
+    """Maximal Marginal Relevance (MMR) for diversity"""
     
-    def __init__(self, embedding_model: str = None):
-        """
-        Initialize diversity reranker
-        
-        Args:
-            embedding_model: Sentence transformer model for embeddings
-        """
-        if embedding_model is None:
-            embedding_model = config.EMBEDDING_MODEL
-        
-        logger.info(f"Loading embedding model: {embedding_model}")
-        
-        try:
-            self.model = SentenceTransformer(embedding_model)
-            self.available = True
-            logger.info("DiversityReranker initialized")
-        except Exception as e:
-            logger.error(f"Error loading embedding model: {e}")
-            self.model = None
-            self.available = False
-    
-    def _compute_similarity(self, emb1: np.ndarray, emb2: np.ndarray) -> float:
-        """Compute cosine similarity between embeddings"""
-        return float(np.dot(emb1, emb2) / (np.linalg.norm(emb1) * np.linalg.norm(emb2)))
+    def __init__(self, config: Config = None):
+        if config is None:
+            config = Config()
+        self.config = config
     
     @timer
-    def rerank_mmr(
+    def rerank(
         self,
-        query: str,
         documents: List[Dict],
         lambda_param: float = 0.7,
-        top_k: int = None
+        top_k: int = 10
     ) -> List[Dict]:
         """
-        Rerank using Maximal Marginal Relevance for diversity
+        Apply MMR for diversity-aware ranking
         
         Args:
-            query: Query string
             documents: List of documents with scores
-            lambda_param: Balance between relevance (1.0) and diversity (0.0)
-            top_k: Number of documents to return
+            lambda_param: Balance between relevance and diversity (0-1)
+            top_k: Number of results
             
         Returns:
             Diversified list of documents
         """
-        if not self.available or not documents:
-            return documents[:top_k] if top_k else documents
+        if not documents or len(documents) <= 1:
+            return documents[:top_k]
         
-        if top_k is None:
-            top_k = config.FINAL_TOP_K
+        # Get document vectors (use content tokens as simple representation)
+        doc_vectors = []
+        for doc in documents:
+            # Create simple bag-of-words vector
+            tokens = set(doc.get('content_tokens', []))
+            doc_vectors.append(tokens)
         
-        logger.info(f"Applying MMR with lambda={lambda_param}")
-        
-        # Get embeddings for query and documents
-        query_embedding = self.model.encode(query)
-        
-        doc_texts = [
-            f"{doc.get('title', '')} {doc.get('content', '')[:500]}"
-            for doc in documents
-        ]
-        doc_embeddings = self.model.encode(doc_texts)
-        
-        # MMR algorithm
+        # Initialize
         selected = []
-        selected_embeddings = []
+        selected_indices = set()
         remaining = list(range(len(documents)))
         
-        # Get initial relevance scores
-        relevance_scores = [
-            doc.get('ensemble_score', doc.get('rerank_score', doc.get('retrieval_score', 0.0)))
-            for doc in documents
-        ]
+        # Select first document (highest relevance)
+        first_idx = 0
+        selected.append(documents[first_idx])
+        selected_indices.add(first_idx)
+        remaining.remove(first_idx)
         
-        # Normalize relevance scores
-        max_rel = max(relevance_scores) if relevance_scores else 1.0
-        min_rel = min(relevance_scores) if relevance_scores else 0.0
-        range_rel = max_rel - min_rel if max_rel > min_rel else 1.0
-        
-        relevance_scores_norm = [
-            (score - min_rel) / range_rel
-            for score in relevance_scores
-        ]
-        
+        # Select remaining documents
         while len(selected) < top_k and remaining:
-            mmr_scores = []
+            best_score = -float('inf')
+            best_idx = None
             
             for idx in remaining:
-                # Relevance component
-                relevance = relevance_scores_norm[idx]
+                # Relevance score
+                relevance = documents[idx].get('ensemble_score',
+                           documents[idx].get('rerank_score',
+                           documents[idx].get('retrieval_score', 0)))
                 
-                # Diversity component (maximum similarity to selected)
-                if selected_embeddings:
-                    max_sim = max(
-                        self._compute_similarity(doc_embeddings[idx], sel_emb)
-                        for sel_emb in selected_embeddings
-                    )
-                else:
-                    max_sim = 0.0
+                # Calculate diversity (minimum similarity to selected docs)
+                max_sim = 0
+                for sel_idx in selected_indices:
+                    # Jaccard similarity
+                    intersection = len(doc_vectors[idx] & doc_vectors[sel_idx])
+                    union = len(doc_vectors[idx] | doc_vectors[sel_idx])
+                    similarity = intersection / union if union > 0 else 0
+                    max_sim = max(max_sim, similarity)
                 
                 # MMR score
-                mmr = lambda_param * relevance - (1 - lambda_param) * max_sim
-                mmr_scores.append((idx, mmr))
+                mmr_score = lambda_param * relevance - (1 - lambda_param) * max_sim
+                
+                if mmr_score > best_score:
+                    best_score = mmr_score
+                    best_idx = idx
             
-            # Select document with highest MMR score
-            best_idx, best_mmr = max(mmr_scores, key=lambda x: x[1])
-            
-            selected.append(best_idx)
-            selected_embeddings.append(doc_embeddings[best_idx])
-            remaining.remove(best_idx)
+            if best_idx is not None:
+                selected.append(documents[best_idx])
+                selected_indices.add(best_idx)
+                remaining.remove(best_idx)
+            else:
+                break
         
-        # Return diversified documents
-        diversified = [documents[idx] for idx in selected]
-        
-        logger.info(f"MMR reranking complete. Selected {len(diversified)} diverse documents")
-        
-        return diversified
+        return selected
 
 
-class TemporalProcessor:
-    """
-    Temporal intelligence for boosting recent/relevant articles
-    """
+class TemporalBooster:
+    """Apply temporal boosting based on recency"""
     
-    def __init__(self):
-        """Initialize temporal processor"""
-        logger.info("TemporalProcessor initialized")
+    def __init__(self, config: Config = None):
+        if config is None:
+            config = Config()
+        self.config = config
     
-    @timer
-    def apply_temporal_boost(
+    def boost(
         self,
-        query_type: str,
         documents: List[Dict],
-        reference_date: datetime = None
+        query_type: str = 'general',
+        boost_factor: float = None
     ) -> List[Dict]:
         """
-        Apply temporal boosting based on query type
+        Apply temporal boosting
         
         Args:
-            query_type: Type of query (breaking, historical, analytical, factual)
             documents: List of documents
-            reference_date: Reference date for comparisons (default: now)
+            query_type: Type of query (breaking, factual, etc.)
+            boost_factor: Boost factor for recent articles
             
         Returns:
-            Documents with temporal boost applied
+            Documents with adjusted scores
         """
-        if reference_date is None:
-            reference_date = datetime.now()
+        if boost_factor is None:
+            # Query-type specific boosting
+            if query_type == 'breaking':
+                boost_factor = self.config.TEMPORAL_BOOST_BREAKING
+            elif query_type == 'factual':
+                boost_factor = self.config.TEMPORAL_BOOST_FACTUAL
+            else:
+                boost_factor = self.config.TEMPORAL_BOOST_DEFAULT
         
-        temporal_settings = config.TEMPORAL_SETTINGS.get(
-            query_type,
-            config.TEMPORAL_SETTINGS['analytical']
-        )
+        if boost_factor == 1.0:
+            return documents  # No boosting needed
         
-        logger.info(f"Applying temporal boost for query type: {query_type}")
+        now = datetime.now()
+        decay_days = self.config.TEMPORAL_DECAY_DAYS
         
         for doc in documents:
             parsed_date = doc.get('parsed_date')
             
-            if parsed_date is None:
-                # No date info, neutral boost
-                doc['temporal_boost'] = 1.0
-                continue
-            
-            # Convert to datetime if needed
-            if isinstance(parsed_date, str):
+            if parsed_date:
                 try:
-                    parsed_date = datetime.fromisoformat(parsed_date)
+                    # Convert to datetime if string
+                    if isinstance(parsed_date, str):
+                        date_obj = datetime.fromisoformat(parsed_date)
+                    else:
+                        date_obj = parsed_date
+                    
+                    # Calculate age in days
+                    age_days = (now - date_obj).days
+                    
+                    # Calculate boost (exponential decay)
+                    if age_days < decay_days:
+                        temporal_weight = boost_factor * np.exp(-age_days / decay_days)
+                    else:
+                        temporal_weight = 1.0
+                    
+                    # Apply boost to score
+                    current_score = doc.get('ensemble_score',
+                                   doc.get('rerank_score',
+                                   doc.get('retrieval_score', 0)))
+                    
+                    doc['temporal_boosted_score'] = current_score * temporal_weight
+                    doc['temporal_weight'] = temporal_weight
                 except:
-                    doc['temporal_boost'] = 1.0
-                    continue
-            
-            # Calculate age in days
-            age_days = (reference_date - parsed_date).days
-            
-            # Apply boost based on query type
-            if query_type == 'breaking':
-                # Boost recent articles
-                recency_days = temporal_settings['recency_days']
-                boost_factor = temporal_settings['boost_factor']
-                
-                if age_days <= recency_days:
-                    boost = 1.0 + boost_factor * (1.0 - age_days / recency_days)
-                else:
-                    boost = 1.0 / (1.0 + np.log1p(age_days - recency_days))
-                
-                doc['temporal_boost'] = boost
-                
-            elif query_type == 'historical':
-                # Date matching (neutral boost for now)
-                doc['temporal_boost'] = 1.0
-                
-            elif query_type == 'factual':
-                # Slight recency preference
-                recency_days = temporal_settings['recency_days']
-                boost_factor = temporal_settings['boost_factor']
-                
-                if age_days <= recency_days:
-                    boost = 1.0 + (boost_factor - 1.0) * (1.0 - age_days / recency_days)
-                else:
-                    boost = 1.0
-                
-                doc['temporal_boost'] = boost
-                
-            else:  # analytical
-                # No temporal bias
-                doc['temporal_boost'] = 1.0
+                    # If date parsing fails, no boost
+                    doc['temporal_boosted_score'] = doc.get('ensemble_score',
+                                                     doc.get('rerank_score',
+                                                     doc.get('retrieval_score', 0)))
+                    doc['temporal_weight'] = 1.0
+            else:
+                # No date, no boost
+                doc['temporal_boosted_score'] = doc.get('ensemble_score',
+                                                 doc.get('rerank_score',
+                                                 doc.get('retrieval_score', 0)))
+                doc['temporal_weight'] = 1.0
         
-        # Apply boost to scores
-        for doc in documents:
-            current_score = doc.get(
-                'ensemble_score',
-                doc.get('rerank_score', doc.get('retrieval_score', 0.0))
-            )
-            doc['temporal_score'] = current_score * doc['temporal_boost']
-        
-        # Re-sort by temporal score
-        documents.sort(key=lambda x: x['temporal_score'], reverse=True)
-        
-        logger.info("Temporal boost applied")
+        # Re-sort by boosted scores
+        documents = sorted(documents, key=lambda x: x['temporal_boosted_score'], reverse=True)
         
         return documents
 
 
-class EntityDeduplicator:
-    """
-    Entity-based deduplication
-    """
+class Deduplicator:
+    """Remove duplicate or highly similar documents"""
     
-    def __init__(self):
-        """Initialize entity deduplicator"""
-        logger.info("EntityDeduplicator initialized")
+    def __init__(self, config: Config = None):
+        if config is None:
+            config = Config()
+        self.config = config
     
-    def _get_entity_set(self, doc: Dict) -> Set[str]:
-        """Get set of high-confidence entities from document"""
-        entities = doc.get('entities', [])
-        
-        entity_texts = set()
-        for entity in entities:
-            if entity.get('confidence', 0.0) >= config.ENTITY_CONFIDENCE_THRESHOLD:
-                entity_texts.add(entity['text'].lower())
-        
-        return entity_texts
-    
-    def _jaccard_similarity(self, set1: Set, set2: Set) -> float:
-        """Calculate Jaccard similarity between two sets"""
-        if not set1 or not set2:
-            return 0.0
-        
-        intersection = len(set1 & set2)
-        union = len(set1 | set2)
-        
-        return intersection / union if union > 0 else 0.0
-    
-    @timer
     def deduplicate(
         self,
         documents: List[Dict],
-        similarity_threshold: float = None
+        threshold: float = None
     ) -> List[Dict]:
         """
-        Remove duplicate documents based on entity similarity
+        Remove duplicate documents
         
         Args:
             documents: List of documents
-            similarity_threshold: Jaccard similarity threshold for duplicates
+            threshold: Similarity threshold for deduplication
             
         Returns:
-            Deduplicated list of documents
+            Deduplicated list
         """
-        if similarity_threshold is None:
-            similarity_threshold = config.ENTITY_SIMILARITY_THRESHOLD
+        if threshold is None:
+            threshold = self.config.ENTITY_SIMILARITY_THRESHOLD
         
-        logger.info(f"Deduplicating with threshold={similarity_threshold}")
+        if not documents:
+            return documents
         
-        deduplicated = []
-        seen_entity_sets = []
-        duplicates_removed = 0
+        unique_docs = []
+        seen_titles = set()
         
         for doc in documents:
-            entity_set = self._get_entity_set(doc)
+            title = doc.get('title', '').lower().strip()
             
-            # Check similarity with already selected documents
+            # Check for exact title match
+            if title in seen_titles:
+                continue
+            
+            # Check for entity similarity with existing docs
             is_duplicate = False
+            doc_entities = doc.get('entities', [])
             
-            for seen_set in seen_entity_sets:
-                similarity = self._jaccard_similarity(entity_set, seen_set)
+            for existing in unique_docs:
+                existing_entities = existing.get('entities', [])
                 
-                if similarity >= similarity_threshold:
-                    is_duplicate = True
-                    duplicates_removed += 1
-                    break
+                # Calculate entity overlap
+                if doc_entities and existing_entities:
+                    overlap = calculate_entity_overlap(doc_entities, existing_entities)
+                    
+                    if overlap >= threshold:
+                        is_duplicate = True
+                        break
             
             if not is_duplicate:
-                deduplicated.append(doc)
-                seen_entity_sets.append(entity_set)
+                unique_docs.append(doc)
+                seen_titles.add(title)
         
-        logger.info(f"Deduplication complete. Removed {duplicates_removed} duplicates")
+        logger.info(f"Deduplication: {len(documents)} -> {len(unique_docs)} documents")
         
-        return deduplicated
+        return unique_docs
 
 
-class CategoryBalancer:
-    """
-    Balance results across categories
-    """
+class TopicClusterer:
+    """Group documents by topics"""
     
-    def __init__(self):
-        """Initialize category balancer"""
-        logger.info("CategoryBalancer initialized")
+    def __init__(self, config: Config = None):
+        if config is None:
+            config = Config()
+        self.config = config
     
-    @timer
-    def balance(
+    def cluster(
         self,
-        documents: List[Dict],
-        preserve_top_k: int = 3
-    ) -> List[Dict]:
+        documents: List[Dict]
+    ) -> Dict[str, List[Dict]]:
         """
-        Balance documents across categories
+        Cluster documents by category and entities
         
         Args:
             documents: List of documents
-            preserve_top_k: Number of top documents to preserve regardless
             
         Returns:
-            Balanced list of documents
+            Dictionary of topic -> documents
         """
-        if len(documents) <= preserve_top_k:
-            return documents
+        clusters = defaultdict(list)
         
-        logger.info("Applying category balancing")
-        
-        # Preserve top documents
-        preserved = documents[:preserve_top_k]
-        remaining = documents[preserve_top_k:]
-        
-        # Group by category
-        by_category = defaultdict(list)
-        for doc in remaining:
-            category = doc.get('category', 'Unknown')
-            by_category[category].append(doc)
-        
-        # Interleave categories
-        balanced = preserved.copy()
-        categories = list(by_category.keys())
-        
-        if not categories:
-            return documents
-        
-        # Round-robin through categories
-        max_per_category = max(len(docs) for docs in by_category.values())
-        
-        for i in range(max_per_category):
-            for category in categories:
-                if i < len(by_category[category]):
-                    balanced.append(by_category[category][i])
-        
-        logger.info(f"Category balancing complete. Categories: {categories}")
-        
-        return balanced
-
-
-class ResultClusterer:
-    """
-    Cluster results by topic for presentation
-    """
-    
-    def __init__(self):
-        """Initialize result clusterer"""
-        logger.info("ResultClusterer initialized")
-    
-    @timer
-    def cluster(
-        self,
-        documents: List[Dict],
-        n_clusters: int = 5
-    ) -> Dict[str, List[Dict]]:
-        """
-        Cluster documents by topic
-        
-        Args:
-            documents: List of documents with topic_id
-            n_clusters: Maximum number of clusters
-            
-        Returns:
-            Dictionary mapping cluster names to documents
-        """
-        logger.info(f"Clustering {len(documents)} documents into {n_clusters} clusters")
-        
-        # Group by topic_id
-        by_topic = defaultdict(list)
         for doc in documents:
-            topic_id = doc.get('topic_id', -1)
-            by_topic[topic_id].append(doc)
+            # Primary clustering by category
+            category = doc.get('category', 'Unknown')
+            clusters[category].append(doc)
         
-        # Sort topics by size
-        sorted_topics = sorted(
-            by_topic.items(),
-            key=lambda x: len(x[1]),
-            reverse=True
-        )
-        
-        # Create clusters
-        clusters = {}
-        for idx, (topic_id, docs) in enumerate(sorted_topics[:n_clusters]):
-            cluster_name = f"Topic {idx + 1}"
-            clusters[cluster_name] = docs
-        
-        # Add remaining to "Other" cluster
-        if len(sorted_topics) > n_clusters:
-            other_docs = []
-            for topic_id, docs in sorted_topics[n_clusters:]:
-                other_docs.extend(docs)
-            if other_docs:
-                clusters["Other Topics"] = other_docs
-        
-        logger.info(f"Created {len(clusters)} clusters")
-        
-        return clusters
+        return dict(clusters)
 
 
 class PostProcessor:
-    """
-    Complete post-processing pipeline
-    """
+    """Main post-processing pipeline"""
     
-    def __init__(self):
-        """Initialize post-processor"""
-        self.diversity_reranker = DiversityReranker()
-        self.temporal_processor = TemporalProcessor()
-        self.deduplicator = EntityDeduplicator()
-        self.category_balancer = CategoryBalancer()
-        self.clusterer = ResultClusterer()
+    def __init__(self, config: Config = None):
+        if config is None:
+            config = Config()
         
-        logger.info("PostProcessor initialized")
+        self.config = config
+        self.diversity_ranker = DiversityRanker(config)
+        self.temporal_booster = TemporalBooster(config)
+        self.deduplicator = Deduplicator(config)
+        self.topic_clusterer = TopicClusterer(config)
+        
+        logger.info("Post-processor initialized")
     
     @timer
     def process(
         self,
-        query: str,
-        query_type: str,
         documents: List[Dict],
-        apply_diversity: bool = True,
-        apply_temporal: bool = True,
-        apply_deduplication: bool = True,
-        apply_balancing: bool = False,
-        top_k: int = None
-    ) -> Tuple[List[Dict], Dict[str, List[Dict]]]:
+        query: Dict,
+        top_k: int = 10
+    ) -> Tuple[List[Dict], Dict]:
         """
         Apply complete post-processing pipeline
         
         Args:
-            query: Query string
-            query_type: Type of query
-            documents: List of documents
-            apply_diversity: Whether to apply diversity reranking
-            apply_temporal: Whether to apply temporal boost
-            apply_deduplication: Whether to deduplicate
-            apply_balancing: Whether to balance categories
-            top_k: Final number of documents to return
+            documents: List of documents from reranking
+            query: Processed query dictionary
+            top_k: Final number of results
             
         Returns:
-            Tuple of (processed_documents, clusters)
+            Tuple of (processed documents, topic clusters)
         """
-        if top_k is None:
-            top_k = config.FINAL_TOP_K
+        if not documents:
+            return documents, {}
         
         logger.info(f"Starting post-processing pipeline for {len(documents)} documents")
         
-        processed = documents.copy()
+        # 1. Temporal boosting (query-type aware)
+        query_type = query.get('type', 'general')
+        documents = self.temporal_booster.boost(documents, query_type=query_type)
         
-        # 1. Diversity reranking
-        if apply_diversity and self.diversity_reranker.available:
-            lambda_param = (
-                config.DIVERSITY_LAMBDA_FACTUAL 
-                if query_type == 'factual' 
-                else config.DIVERSITY_LAMBDA_EXPLORATORY
-            )
-            processed = self.diversity_reranker.rerank_mmr(
-                query,
-                processed,
-                lambda_param=lambda_param,
-                top_k=top_k * 2  # Get more for further processing
-            )
+        # 2. Deduplication
+        documents = self.deduplicator.deduplicate(documents)
         
-        # 2. Temporal intelligence
-        if apply_temporal:
-            processed = self.temporal_processor.apply_temporal_boost(
-                query_type,
-                processed
-            )
+        # 3. Diversity ranking with query-type specific lambda
+        if query_type == 'breaking':
+            lambda_param = self.config.DIVERSITY_LAMBDA_BREAKING
+        elif query_type == 'factual':
+            lambda_param = self.config.DIVERSITY_LAMBDA_FACTUAL
+        elif query_type == 'analytical':
+            lambda_param = self.config.DIVERSITY_LAMBDA_ANALYTICAL
+        elif query_type == 'historical':
+            lambda_param = self.config.DIVERSITY_LAMBDA_HISTORICAL
+        elif query_type == 'exploratory':
+            lambda_param = self.config.DIVERSITY_LAMBDA_EXPLORATORY
+        else:
+            lambda_param = self.config.DIVERSITY_LAMBDA_DEFAULT
         
-        # 3. Entity deduplication
-        if apply_deduplication:
-            processed = self.deduplicator.deduplicate(processed)
+        documents = self.diversity_ranker.rerank(
+            documents,
+            lambda_param=lambda_param,
+            top_k=top_k
+        )
         
-        # 4. Category balancing (optional)
-        if apply_balancing:
-            processed = self.category_balancer.balance(processed)
+        # 4. Topic clustering (for display)
+        clusters = self.topic_clusterer.cluster(documents)
         
-        # Limit to top_k
-        processed = processed[:top_k]
+        logger.info(f"Post-processing complete: {len(documents)} final results")
         
-        # 5. Topic clustering for presentation
-        clusters = self.clusterer.cluster(processed)
-        
-        logger.info(f"Post-processing complete. Final: {len(processed)} documents")
-        
-        return processed, clusters
+        return documents, clusters
 
 
-def main():
+def test_post_processor():
     """Test post-processing"""
-    from retrieval import HybridRetriever
+    from indexing import IndexBuilder
+    from retrieval import ParallelRetriever
     from query_processor import QueryProcessor
     from reranker import EnsembleReranker
     
-    # Initialize
-    retriever = HybridRetriever()
-    processor = QueryProcessor()
-    reranker = EnsembleReranker()
-    post_processor = PostProcessor()
+    cfg = Config()
     
-    # Test query
-    query = "impact of inflation on economy"
+    # Load indices
+    builder = IndexBuilder(cfg)
+    bm25_index = builder.load_bm25_index()
+    articles = builder.load_metadata()
     
-    print("\n=== Post-Processing Test ===\n")
-    print(f"Query: {query}\n")
+    try:
+        dense_embeddings = builder.load_dense_embeddings()
+    except:
+        dense_embeddings = None
     
-    # Process query
-    query_info = processor.process(query)
-    print(f"Query type: {query_info['type']}")
+    # Components
+    query_processor = QueryProcessor(cfg)
+    retriever = ParallelRetriever(cfg)
+    retriever.load_indices(bm25_index, articles, dense_embeddings)
+    reranker = EnsembleReranker(cfg)
+    post_processor = PostProcessor(cfg)
     
-    # Retrieve
-    print("\n1. Retrieving documents...")
-    results, documents = retriever.retrieve_with_documents(
-        query=query_info['corrected'],
-        query_tokens=query_info['tokens'],
-        k=100
+    # Test
+    query = "latest sports news"
+    processed_query = query_processor.process(query)
+    
+    documents = retriever.retrieve_with_documents(
+        query_tokens=processed_query['tokens'],
+        query_text=processed_query['corrected'],
+        top_k=50
     )
     
-    # Rerank
-    print(f"\n2. Reranking {len(documents)} documents...")
-    reranked = reranker.rerank(query, documents, top_k=50)
-    
-    # Post-process
-    print(f"\n3. Post-processing {len(reranked)} documents...")
-    final_docs, clusters = post_processor.process(
-        query=query,
-        query_type=query_info['type'],
-        documents=reranked,
+    documents = reranker.rerank(
+        query=processed_query['corrected'],
+        documents=documents,
+        query_entities=processed_query['entities'],
         top_k=20
     )
     
-    print(f"\n4. Final results: {len(final_docs)} documents")
-    print(f"   Clustered into {len(clusters)} topic groups")
+    print(f"\nBefore post-processing: {len(documents)} docs")
     
-    print("\n5. Top 5 results:")
-    for i, doc in enumerate(final_docs[:5], 1):
-        print(f"{i}. {doc['title']}")
+    final_docs, clusters = post_processor.process(
+        documents=documents,
+        query=processed_query,
+        top_k=10
+    )
+    
+    print(f"After post-processing: {len(final_docs)} docs")
+    print(f"\nClusters: {list(clusters.keys())}")
+    
+    for i, doc in enumerate(final_docs, 1):
+        print(f"\n{i}. {doc['title']}")
         print(f"   Category: {doc['category']}")
-        print(f"   Temporal boost: {doc.get('temporal_boost', 1.0):.2f}")
-        print()
-    
-    print("\n6. Clusters:")
-    for cluster_name, cluster_docs in clusters.items():
-        print(f"   {cluster_name}: {len(cluster_docs)} documents")
+        print(f"   Temporal weight: {doc.get('temporal_weight', 1.0):.3f}")
 
 
 if __name__ == "__main__":
-    main()
+    test_post_processor()

@@ -1,0 +1,750 @@
+2025-11-23 15:56:41,519 - utils - INFO - Initializing Cortex IR System...
+2025-11-23 15:56:41,520 - utils - INFO - Checking system readiness...
+2025-11-23 15:56:41,522 - utils - INFO - ✅ Preprocessed data found
+2025-11-23 15:56:41,523 - utils - INFO - ✅ Search indices found
+2025-11-23 15:56:41,524 - utils - INFO - ✅ All components ready - launching UI...
+2025-11-23 15:56:51,434 - utils - INFO - Loading IR pipeline...
+2025-11-23 15:56:51,434 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-11-23 15:56:51,435 - utils - WARNING - Missing indices:
+2025-11-23 15:56:51,435 - utils - WARNING -   bm25: ✓
+2025-11-23 15:56:51,435 - utils - WARNING -   processed_data: ✓
+2025-11-23 15:56:51,435 - utils - WARNING -   metadata: ✓
+2025-11-23 15:56:51,435 - utils - WARNING -   dense_embeddings: ✗
+2025-11-23 15:56:52,215 - utils - INFO - QueryPreprocessor initialized
+2025-11-23 15:56:52,215 - utils - INFO - QueryClassifier initialized
+2025-11-23 15:56:53,124 - utils - INFO - QueryPreprocessor initialized
+2025-11-23 15:56:53,125 - utils - INFO - QueryExpander initialized
+2025-11-23 15:56:53,125 - utils - INFO - SpellCorrector initialized
+2025-11-23 15:56:53,125 - utils - INFO - QueryProcessor initialized
+2025-11-23 15:56:53,125 - utils - INFO - BM25Indexer initialized with k1=1.5, b=0.75
+2025-11-23 15:56:53,125 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-11-23 15:56:53,385 - utils - INFO - BM25 index loaded successfully
+2025-11-23 15:56:53,385 - utils - INFO - BM25Retriever initialized and index loaded
+2025-11-23 15:56:53,385 - utils - INFO - ColBERTIndexer initialized
+2025-11-23 15:56:53,391 - utils - ERROR - Error loading ColBERT index: No module named 'langchain.retrievers'
+2025-11-23 15:56:53,391 - utils - INFO - ColBERTRetriever initialized and index loaded
+2025-11-23 15:56:53,391 - utils - INFO - ReciprocalRankFusion initialized with k=60
+2025-11-23 15:56:53,391 - utils - INFO - HybridRetriever initialized
+2025-11-23 15:56:53,391 - utils - ERROR - ❌ Error initializing pipeline: module 'config' has no attribute 'CROSS_ENCODER_MODEL'
+Traceback (most recent call last):
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/gradio_app.py", line 38, in __init__
+    self.pipeline = CortexIRPipeline()
+                    ^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/main.py", line 40, in __init__
+    self.reranker = EnsembleReranker()
+                    ^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/reranker.py", line 207, in __init__
+    self.neural_reranker = NeuralReranker()
+                           ^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/reranker.py", line 29, in __init__
+    model_name = config.CROSS_ENCODER_MODEL
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'config' has no attribute 'CROSS_ENCODER_MODEL'
+2025-11-23 15:56:53,436 - utils - INFO - 🎉 Cortex IR System initialized and ready!
+2025-11-23 15:56:53,873 - utils - INFO - 🚀 Launching Gradio app on 0.0.0.0:7860
+2025-11-23 15:56:53,873 - utils - INFO - 🌐 Access the UI at: http://localhost:7860
+2025-11-23 15:56:54,095 - utils - ERROR - Failed to start application: Cannot find empty port in range: 7860-7860. You can specify a different port by setting the GRADIO_SERVER_PORT environment variable or passing the `server_port` parameter to `launch()`.
+Traceback (most recent call last):
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/gradio_app.py", line 740, in main
+    app.launch()
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/gradio_app.py", line 728, in launch
+    app.launch(
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/venv/lib/python3.12/site-packages/gradio/blocks.py", line 2666, in launch
+    ) = http_server.start_server(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/venv/lib/python3.12/site-packages/gradio/http_server.py", line 182, in start_server
+    raise OSError(
+OSError: Cannot find empty port in range: 7860-7860. You can specify a different port by setting the GRADIO_SERVER_PORT environment variable or passing the `server_port` parameter to `launch()`.
+2025-11-23 15:57:06,910 - utils - INFO - Initializing Cortex IR System...
+2025-11-23 15:57:06,910 - utils - INFO - Checking system readiness...
+2025-11-23 15:57:06,911 - utils - INFO - ✅ Preprocessed data found
+2025-11-23 15:57:06,911 - utils - INFO - ✅ Search indices found
+2025-11-23 15:57:06,911 - utils - INFO - ✅ All components ready - launching UI...
+2025-11-23 15:57:13,307 - utils - INFO - Loading IR pipeline...
+2025-11-23 15:57:13,307 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-11-23 15:57:13,308 - utils - WARNING - Missing indices:
+2025-11-23 15:57:13,308 - utils - WARNING -   bm25: ✓
+2025-11-23 15:57:13,308 - utils - WARNING -   processed_data: ✓
+2025-11-23 15:57:13,308 - utils - WARNING -   metadata: ✓
+2025-11-23 15:57:13,308 - utils - WARNING -   dense_embeddings: ✗
+2025-11-23 15:57:13,978 - utils - INFO - QueryPreprocessor initialized
+2025-11-23 15:57:13,978 - utils - INFO - QueryClassifier initialized
+2025-11-23 15:57:14,784 - utils - INFO - QueryPreprocessor initialized
+2025-11-23 15:57:14,785 - utils - INFO - QueryExpander initialized
+2025-11-23 15:57:14,785 - utils - INFO - SpellCorrector initialized
+2025-11-23 15:57:14,785 - utils - INFO - QueryProcessor initialized
+2025-11-23 15:57:14,786 - utils - INFO - BM25Indexer initialized with k1=1.5, b=0.75
+2025-11-23 15:57:14,786 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-11-23 15:57:15,010 - utils - INFO - BM25 index loaded successfully
+2025-11-23 15:57:15,011 - utils - INFO - BM25Retriever initialized and index loaded
+2025-11-23 15:57:15,011 - utils - INFO - ColBERTIndexer initialized
+2025-11-23 15:57:15,013 - utils - ERROR - Error loading ColBERT index: No module named 'langchain.retrievers'
+2025-11-23 15:57:15,013 - utils - INFO - ColBERTRetriever initialized and index loaded
+2025-11-23 15:57:15,013 - utils - INFO - ReciprocalRankFusion initialized with k=60
+2025-11-23 15:57:15,013 - utils - INFO - HybridRetriever initialized
+2025-11-23 15:57:15,013 - utils - ERROR - ❌ Error initializing pipeline: module 'config' has no attribute 'CROSS_ENCODER_MODEL'
+Traceback (most recent call last):
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/gradio_app.py", line 38, in __init__
+    self.pipeline = CortexIRPipeline()
+                    ^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/main.py", line 40, in __init__
+    self.reranker = EnsembleReranker()
+                    ^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/reranker.py", line 207, in __init__
+    self.neural_reranker = NeuralReranker()
+                           ^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/reranker.py", line 29, in __init__
+    model_name = config.CROSS_ENCODER_MODEL
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'config' has no attribute 'CROSS_ENCODER_MODEL'
+2025-11-23 15:57:15,055 - utils - INFO - 🎉 Cortex IR System initialized and ready!
+2025-11-23 15:57:15,324 - utils - INFO - 🚀 Launching Gradio app on 0.0.0.0:7860
+2025-11-23 15:57:15,324 - utils - INFO - 🌐 Access the UI at: http://localhost:7860
+2025-11-23 15:57:15,458 - utils - ERROR - Failed to start application: Cannot find empty port in range: 7860-7860. You can specify a different port by setting the GRADIO_SERVER_PORT environment variable or passing the `server_port` parameter to `launch()`.
+Traceback (most recent call last):
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/gradio_app.py", line 740, in main
+    app.launch()
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/gradio_app.py", line 728, in launch
+    app.launch(
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/venv/lib/python3.12/site-packages/gradio/blocks.py", line 2666, in launch
+    ) = http_server.start_server(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/venv/lib/python3.12/site-packages/gradio/http_server.py", line 182, in start_server
+    raise OSError(
+OSError: Cannot find empty port in range: 7860-7860. You can specify a different port by setting the GRADIO_SERVER_PORT environment variable or passing the `server_port` parameter to `launch()`.
+2025-11-23 15:59:15,352 - utils - INFO - Initializing Cortex IR System...
+2025-11-23 15:59:15,352 - utils - INFO - Checking system readiness...
+2025-11-23 15:59:15,352 - utils - INFO - ✅ Preprocessed data found
+2025-11-23 15:59:15,353 - utils - INFO - ✅ Search indices found
+2025-11-23 15:59:15,353 - utils - INFO - ✅ All components ready - launching UI...
+2025-11-23 15:59:21,394 - utils - INFO - Loading IR pipeline...
+2025-11-23 15:59:21,396 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-11-23 15:59:21,397 - utils - WARNING - Missing indices:
+2025-11-23 15:59:21,397 - utils - WARNING -   bm25: ✓
+2025-11-23 15:59:21,397 - utils - WARNING -   processed_data: ✓
+2025-11-23 15:59:21,397 - utils - WARNING -   metadata: ✓
+2025-11-23 15:59:21,397 - utils - WARNING -   dense_embeddings: ✗
+2025-11-23 15:59:22,353 - utils - INFO - QueryPreprocessor initialized
+2025-11-23 15:59:22,353 - utils - INFO - QueryClassifier initialized
+2025-11-23 15:59:23,310 - utils - INFO - QueryPreprocessor initialized
+2025-11-23 15:59:23,310 - utils - INFO - QueryExpander initialized
+2025-11-23 15:59:23,311 - utils - INFO - SpellCorrector initialized
+2025-11-23 15:59:23,311 - utils - INFO - QueryProcessor initialized
+2025-11-23 15:59:23,311 - utils - INFO - BM25Indexer initialized with k1=1.5, b=0.75
+2025-11-23 15:59:23,311 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-11-23 15:59:23,663 - utils - INFO - BM25 index loaded successfully
+2025-11-23 15:59:23,664 - utils - INFO - BM25Retriever initialized and index loaded
+2025-11-23 15:59:23,664 - utils - INFO - ColBERTIndexer initialized
+2025-11-23 15:59:23,672 - utils - ERROR - Error loading ColBERT index: No module named 'langchain.retrievers'
+2025-11-23 15:59:23,672 - utils - INFO - ColBERTRetriever initialized and index loaded
+2025-11-23 15:59:23,672 - utils - INFO - ReciprocalRankFusion initialized with k=60
+2025-11-23 15:59:23,672 - utils - INFO - HybridRetriever initialized
+2025-11-23 15:59:23,672 - utils - ERROR - ❌ Error initializing pipeline: module 'config' has no attribute 'CROSS_ENCODER_MODEL'
+Traceback (most recent call last):
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/gradio_app.py", line 38, in __init__
+    self.pipeline = CortexIRPipeline()
+                    ^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/main.py", line 40, in __init__
+    self.reranker = EnsembleReranker()
+                    ^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/reranker.py", line 207, in __init__
+    self.neural_reranker = NeuralReranker()
+                           ^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/reranker.py", line 29, in __init__
+    model_name = config.CROSS_ENCODER_MODEL
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'config' has no attribute 'CROSS_ENCODER_MODEL'
+2025-11-23 15:59:23,727 - utils - INFO - 🎉 Cortex IR System initialized and ready!
+2025-11-23 16:04:03,936 - utils - INFO - Initializing Cortex IR System...
+2025-11-23 16:04:03,936 - utils - INFO - Checking system readiness...
+2025-11-23 16:04:03,937 - utils - INFO - ✅ Preprocessed data found
+2025-11-23 16:04:03,937 - utils - INFO - ✅ Search indices found
+2025-11-23 16:04:03,937 - utils - INFO - ✅ All components ready - launching UI...
+2025-11-23 16:04:10,202 - utils - INFO - Loading IR pipeline...
+2025-11-23 16:04:10,202 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-11-23 16:04:10,203 - utils - WARNING - Missing indices:
+2025-11-23 16:04:10,203 - utils - WARNING -   bm25: ✓
+2025-11-23 16:04:10,203 - utils - WARNING -   processed_data: ✓
+2025-11-23 16:04:10,203 - utils - WARNING -   metadata: ✓
+2025-11-23 16:04:10,203 - utils - WARNING -   dense_embeddings: ✗
+2025-11-23 16:04:11,163 - utils - INFO - QueryPreprocessor initialized
+2025-11-23 16:04:11,164 - utils - INFO - QueryClassifier initialized
+2025-11-23 16:04:11,872 - utils - INFO - QueryPreprocessor initialized
+2025-11-23 16:04:11,872 - utils - INFO - QueryExpander initialized
+2025-11-23 16:04:11,872 - utils - INFO - SpellCorrector initialized
+2025-11-23 16:04:11,872 - utils - INFO - QueryProcessor initialized
+2025-11-23 16:04:11,872 - utils - INFO - BM25Indexer initialized with k1=1.5, b=0.75
+2025-11-23 16:04:11,873 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-11-23 16:04:12,070 - utils - INFO - BM25 index loaded successfully
+2025-11-23 16:04:12,070 - utils - INFO - BM25Retriever initialized and index loaded
+2025-11-23 16:04:12,070 - utils - INFO - ColBERTIndexer initialized
+2025-11-23 16:04:12,072 - utils - ERROR - Error loading ColBERT index: No module named 'langchain.retrievers'
+2025-11-23 16:04:12,072 - utils - INFO - ColBERTRetriever initialized and index loaded
+2025-11-23 16:04:12,072 - utils - INFO - ReciprocalRankFusion initialized with k=60
+2025-11-23 16:04:12,072 - utils - INFO - HybridRetriever initialized
+2025-11-23 16:04:12,072 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-11-23 16:04:14,872 - utils - INFO - Neural reranker initialized successfully
+2025-11-23 16:04:14,872 - utils - INFO - EnsembleReranker initialized
+2025-11-23 16:04:14,872 - utils - INFO - Loading embedding model: sentence-transformers/all-MiniLM-L6-v2
+2025-11-23 16:04:18,144 - utils - INFO - DiversityReranker initialized
+2025-11-23 16:04:18,144 - utils - INFO - TemporalProcessor initialized
+2025-11-23 16:04:18,144 - utils - INFO - EntityDeduplicator initialized
+2025-11-23 16:04:18,144 - utils - INFO - CategoryBalancer initialized
+2025-11-23 16:04:18,144 - utils - INFO - ResultClusterer initialized
+2025-11-23 16:04:18,144 - utils - INFO - PostProcessor initialized
+2025-11-23 16:04:18,145 - utils - INFO - Cortex IR Pipeline initialized successfully
+2025-11-23 16:04:18,145 - utils - INFO - ✅ Pipeline loaded successfully!
+2025-11-23 16:04:18,145 - utils - INFO - 🎉 Cortex IR System initialized and ready!
+2025-11-23 16:04:53,665 - utils - INFO - Initializing Cortex IR System...
+2025-11-23 16:04:53,665 - utils - INFO - Checking system readiness...
+2025-11-23 16:04:53,666 - utils - INFO - ✅ Preprocessed data found
+2025-11-23 16:04:53,666 - utils - INFO - ✅ Search indices found
+2025-11-23 16:04:53,666 - utils - INFO - ✅ All components ready - launching UI...
+2025-11-23 16:04:59,668 - utils - INFO - Loading IR pipeline...
+2025-11-23 16:04:59,668 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-11-23 16:04:59,668 - utils - WARNING - Missing indices:
+2025-11-23 16:04:59,669 - utils - WARNING -   bm25: ✓
+2025-11-23 16:04:59,669 - utils - WARNING -   processed_data: ✓
+2025-11-23 16:04:59,669 - utils - WARNING -   metadata: ✓
+2025-11-23 16:04:59,669 - utils - WARNING -   dense_embeddings: ✗
+2025-11-23 16:05:00,314 - utils - INFO - QueryPreprocessor initialized
+2025-11-23 16:05:00,314 - utils - INFO - QueryClassifier initialized
+2025-11-23 16:05:01,013 - utils - INFO - QueryPreprocessor initialized
+2025-11-23 16:05:01,013 - utils - INFO - QueryExpander initialized
+2025-11-23 16:05:01,013 - utils - INFO - SpellCorrector initialized
+2025-11-23 16:05:01,013 - utils - INFO - QueryProcessor initialized
+2025-11-23 16:05:01,013 - utils - INFO - BM25Indexer initialized with k1=1.5, b=0.75
+2025-11-23 16:05:01,014 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-11-23 16:05:01,209 - utils - INFO - BM25 index loaded successfully
+2025-11-23 16:05:01,209 - utils - INFO - BM25Retriever initialized and index loaded
+2025-11-23 16:05:01,209 - utils - INFO - ColBERTIndexer initialized
+2025-11-23 16:05:01,211 - utils - ERROR - Error loading ColBERT index: No module named 'langchain.retrievers'
+2025-11-23 16:05:01,211 - utils - INFO - ColBERTRetriever initialized and index loaded
+2025-11-23 16:05:01,211 - utils - INFO - ReciprocalRankFusion initialized with k=60
+2025-11-23 16:05:01,211 - utils - INFO - HybridRetriever initialized
+2025-11-23 16:05:01,211 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-11-23 16:05:03,821 - utils - INFO - Neural reranker initialized successfully
+2025-11-23 16:05:03,821 - utils - INFO - EnsembleReranker initialized
+2025-11-23 16:05:03,821 - utils - INFO - Loading embedding model: sentence-transformers/all-MiniLM-L6-v2
+2025-11-23 16:05:06,971 - utils - INFO - DiversityReranker initialized
+2025-11-23 16:05:06,971 - utils - INFO - TemporalProcessor initialized
+2025-11-23 16:05:06,971 - utils - INFO - EntityDeduplicator initialized
+2025-11-23 16:05:06,971 - utils - INFO - CategoryBalancer initialized
+2025-11-23 16:05:06,972 - utils - INFO - ResultClusterer initialized
+2025-11-23 16:05:06,972 - utils - INFO - PostProcessor initialized
+2025-11-23 16:05:06,972 - utils - INFO - Cortex IR Pipeline initialized successfully
+2025-11-23 16:05:06,972 - utils - INFO - ✅ Pipeline loaded successfully!
+2025-11-23 16:05:06,972 - utils - INFO - 🎉 Cortex IR System initialized and ready!
+2025-11-23 16:06:12,924 - utils - INFO - Processing query: 'impact of inflation on economy'
+2025-11-23 16:06:12,952 - utils - INFO - Query processed: 'impact of inflation on economy' -> type='analytical'
+2025-11-23 16:06:12,954 - utils - ERROR - Error in ColBERT retrieval: 'NoneType' object has no attribute 'search'
+2025-11-23 16:06:12,956 - utils - INFO - retrieve completed in 3.62ms
+2025-11-23 16:06:12,957 - utils - INFO - retrieve completed in 2.95ms
+2025-11-23 16:06:12,958 - utils - INFO - Hybrid retrieval returned 100 documents
+2025-11-23 16:06:12,958 - utils - INFO - retrieve completed in 5.76ms
+2025-11-23 16:06:12,958 - utils - INFO - retrieve_with_documents completed in 6.16ms
+2025-11-23 16:06:12,959 - utils - INFO - Reranking 100 documents with cross-encoder
+2025-11-23 16:06:12,959 - utils - ERROR - Search error: module 'config' has no attribute 'RERANK_BATCH_SIZE'
+Traceback (most recent call last):
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/gradio_app.py", line 154, in search
+    result = self.pipeline.search(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/main.py", line 101, in search
+    documents = self.reranker.rerank(
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/utils.py", line 366, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/reranker.py", line 239, in rerank
+    documents = self.neural_reranker.rerank(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/utils.py", line 366, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/reranker.py", line 114, in rerank
+    batch_size = config.RERANK_BATCH_SIZE
+                 ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'config' has no attribute 'RERANK_BATCH_SIZE'
+2025-11-23 16:08:57,716 - utils - INFO - Initializing Cortex IR System...
+2025-11-23 16:08:57,717 - utils - INFO - Checking system readiness...
+2025-11-23 16:08:57,717 - utils - INFO - ✅ Preprocessed data found
+2025-11-23 16:08:57,717 - utils - INFO - ✅ Search indices found
+2025-11-23 16:08:57,717 - utils - INFO - ✅ All components ready - launching UI...
+2025-11-23 16:09:03,667 - utils - INFO - Loading IR pipeline...
+2025-11-23 16:09:03,667 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-11-23 16:09:03,667 - utils - WARNING - Missing indices:
+2025-11-23 16:09:03,667 - utils - WARNING -   bm25: ✓
+2025-11-23 16:09:03,667 - utils - WARNING -   processed_data: ✓
+2025-11-23 16:09:03,668 - utils - WARNING -   metadata: ✓
+2025-11-23 16:09:03,668 - utils - WARNING -   dense_embeddings: ✗
+2025-11-23 16:09:04,316 - utils - INFO - QueryPreprocessor initialized
+2025-11-23 16:09:04,317 - utils - INFO - QueryClassifier initialized
+2025-11-23 16:09:05,008 - utils - INFO - QueryPreprocessor initialized
+2025-11-23 16:09:05,009 - utils - INFO - QueryExpander initialized
+2025-11-23 16:09:05,009 - utils - INFO - SpellCorrector initialized
+2025-11-23 16:09:05,009 - utils - INFO - QueryProcessor initialized
+2025-11-23 16:09:05,009 - utils - INFO - BM25Indexer initialized with k1=1.5, b=0.75
+2025-11-23 16:09:05,009 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-11-23 16:09:05,214 - utils - INFO - BM25 index loaded successfully
+2025-11-23 16:09:05,214 - utils - INFO - BM25Retriever initialized and index loaded
+2025-11-23 16:09:05,215 - utils - INFO - ColBERTIndexer initialized
+2025-11-23 16:09:05,216 - utils - ERROR - Error loading ColBERT index: No module named 'langchain.retrievers'
+2025-11-23 16:09:05,216 - utils - INFO - ColBERTRetriever initialized and index loaded
+2025-11-23 16:09:05,217 - utils - INFO - ReciprocalRankFusion initialized with k=60
+2025-11-23 16:09:05,217 - utils - INFO - HybridRetriever initialized
+2025-11-23 16:09:05,217 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-11-23 16:09:07,879 - utils - INFO - Neural reranker initialized successfully
+2025-11-23 16:09:07,880 - utils - INFO - EnsembleReranker initialized
+2025-11-23 16:09:07,880 - utils - INFO - Loading embedding model: sentence-transformers/all-MiniLM-L6-v2
+2025-11-23 16:09:10,980 - utils - INFO - DiversityReranker initialized
+2025-11-23 16:09:10,980 - utils - INFO - TemporalProcessor initialized
+2025-11-23 16:09:10,980 - utils - INFO - EntityDeduplicator initialized
+2025-11-23 16:09:10,980 - utils - INFO - CategoryBalancer initialized
+2025-11-23 16:09:10,980 - utils - INFO - ResultClusterer initialized
+2025-11-23 16:09:10,980 - utils - INFO - PostProcessor initialized
+2025-11-23 16:09:10,980 - utils - INFO - Cortex IR Pipeline initialized successfully
+2025-11-23 16:09:10,980 - utils - INFO - ✅ Pipeline loaded successfully!
+2025-11-23 16:09:10,981 - utils - INFO - 🎉 Cortex IR System initialized and ready!
+2025-11-23 16:09:37,752 - utils - INFO - Processing query: 'who won the championship?'
+2025-11-23 16:09:37,786 - utils - INFO - Query processed: 'who won the championship?' -> type='factual'
+2025-11-23 16:09:37,788 - utils - ERROR - Error in ColBERT retrieval: 'NoneType' object has no attribute 'search'
+2025-11-23 16:09:37,790 - utils - INFO - retrieve completed in 1.30ms
+2025-11-23 16:09:37,790 - utils - INFO - retrieve completed in 3.95ms
+2025-11-23 16:09:37,793 - utils - INFO - Hybrid retrieval returned 100 documents
+2025-11-23 16:09:37,793 - utils - INFO - retrieve completed in 7.26ms
+2025-11-23 16:09:37,794 - utils - INFO - retrieve_with_documents completed in 7.89ms
+2025-11-23 16:09:37,795 - utils - INFO - Reranking 100 documents with cross-encoder
+2025-11-23 16:09:56,777 - utils - INFO - Reranking complete. Top score: 1.9647
+2025-11-23 16:09:56,778 - utils - INFO - rerank completed in 18983.10ms
+2025-11-23 16:09:56,779 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.8052
+2025-11-23 16:09:56,779 - utils - INFO - rerank completed in 18983.90ms
+2025-11-23 16:09:56,779 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-11-23 16:09:56,779 - utils - ERROR - Search error: module 'config' has no attribute 'DIVERSITY_LAMBDA_FACTUAL'
+Traceback (most recent call last):
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/gradio_app.py", line 154, in search
+    result = self.pipeline.search(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/main.py", line 115, in search
+    documents, clusters = self.post_processor.process(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/utils.py", line 366, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/post_processor.py", line 495, in process
+    config.DIVERSITY_LAMBDA_FACTUAL
+AttributeError: module 'config' has no attribute 'DIVERSITY_LAMBDA_FACTUAL'
+2025-11-23 16:13:51,791 - utils - INFO - Initializing Cortex IR System...
+2025-11-23 16:13:51,791 - utils - INFO - Checking system readiness...
+2025-11-23 16:13:51,792 - utils - INFO - ✅ Preprocessed data found
+2025-11-23 16:13:51,792 - utils - INFO - ✅ Search indices found
+2025-11-23 16:13:51,793 - utils - INFO - ✅ All components ready - launching UI...
+2025-11-23 16:14:00,052 - utils - INFO - Loading IR pipeline...
+2025-11-23 16:14:00,052 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-11-23 16:14:00,053 - utils - WARNING - Missing indices:
+2025-11-23 16:14:00,053 - utils - WARNING -   bm25: ✓
+2025-11-23 16:14:00,053 - utils - WARNING -   processed_data: ✓
+2025-11-23 16:14:00,053 - utils - WARNING -   metadata: ✓
+2025-11-23 16:14:00,053 - utils - WARNING -   dense_embeddings: ✗
+2025-11-23 16:14:00,855 - utils - INFO - QueryPreprocessor initialized
+2025-11-23 16:14:00,855 - utils - INFO - QueryClassifier initialized
+2025-11-23 16:14:01,868 - utils - INFO - QueryPreprocessor initialized
+2025-11-23 16:14:01,869 - utils - INFO - QueryExpander initialized
+2025-11-23 16:14:01,869 - utils - INFO - SpellCorrector initialized
+2025-11-23 16:14:01,869 - utils - INFO - QueryProcessor initialized
+2025-11-23 16:14:01,869 - utils - INFO - BM25Indexer initialized with k1=1.5, b=0.75
+2025-11-23 16:14:01,869 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-11-23 16:14:02,134 - utils - INFO - BM25 index loaded successfully
+2025-11-23 16:14:02,134 - utils - INFO - BM25Retriever initialized and index loaded
+2025-11-23 16:14:02,134 - utils - INFO - ColBERTIndexer initialized
+2025-11-23 16:14:02,136 - utils - ERROR - Error loading ColBERT index: No module named 'langchain.retrievers'
+2025-11-23 16:14:02,136 - utils - INFO - ColBERTRetriever initialized and index loaded
+2025-11-23 16:14:02,136 - utils - INFO - ReciprocalRankFusion initialized with k=60
+2025-11-23 16:14:02,136 - utils - INFO - HybridRetriever initialized
+2025-11-23 16:14:02,137 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-11-23 16:14:04,682 - utils - INFO - Neural reranker initialized successfully
+2025-11-23 16:14:04,682 - utils - INFO - EnsembleReranker initialized
+2025-11-23 16:14:04,682 - utils - INFO - Loading embedding model: sentence-transformers/all-MiniLM-L6-v2
+2025-11-23 16:14:08,362 - utils - INFO - DiversityReranker initialized
+2025-11-23 16:14:08,363 - utils - INFO - TemporalProcessor initialized
+2025-11-23 16:14:08,363 - utils - INFO - EntityDeduplicator initialized
+2025-11-23 16:14:08,363 - utils - INFO - CategoryBalancer initialized
+2025-11-23 16:14:08,363 - utils - INFO - ResultClusterer initialized
+2025-11-23 16:14:08,363 - utils - INFO - PostProcessor initialized
+2025-11-23 16:14:08,363 - utils - INFO - Cortex IR Pipeline initialized successfully
+2025-11-23 16:14:08,363 - utils - INFO - ✅ Pipeline loaded successfully!
+2025-11-23 16:14:08,363 - utils - INFO - 🎉 Cortex IR System initialized and ready!
+2025-11-23 16:15:01,429 - utils - INFO - Processing query: 'sports team performance 2023'
+2025-11-23 16:15:01,458 - utils - INFO - Query processed: 'sports team performance 2023' -> type='analytical'
+2025-11-23 16:15:01,462 - utils - ERROR - Error in ColBERT retrieval: 'NoneType' object has no attribute 'search'
+2025-11-23 16:15:01,463 - utils - INFO - retrieve completed in 1.65ms
+2025-11-23 16:15:01,463 - utils - INFO - retrieve completed in 4.29ms
+2025-11-23 16:15:01,466 - utils - INFO - Hybrid retrieval returned 100 documents
+2025-11-23 16:15:01,466 - utils - INFO - retrieve completed in 7.85ms
+2025-11-23 16:15:01,467 - utils - INFO - retrieve_with_documents completed in 8.26ms
+2025-11-23 16:15:01,468 - utils - INFO - Reranking 100 documents with cross-encoder
+2025-11-23 16:15:19,139 - utils - INFO - Reranking complete. Top score: 0.1430
+2025-11-23 16:15:19,140 - utils - INFO - rerank completed in 17671.94ms
+2025-11-23 16:15:19,143 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7027
+2025-11-23 16:15:19,144 - utils - INFO - rerank completed in 17675.99ms
+2025-11-23 16:15:19,144 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-11-23 16:15:19,144 - utils - ERROR - Search error: module 'config' has no attribute 'DIVERSITY_LAMBDA_EXPLORATORY'
+Traceback (most recent call last):
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/gradio_app.py", line 154, in search
+    result = self.pipeline.search(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/main.py", line 115, in search
+    documents, clusters = self.post_processor.process(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/utils.py", line 366, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/post_processor.py", line 497, in process
+    else config.DIVERSITY_LAMBDA_EXPLORATORY
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'config' has no attribute 'DIVERSITY_LAMBDA_EXPLORATORY'. Did you mean: 'DIVERSITY_LAMBDA_HISTORICAL'?
+2025-11-23 16:22:35,320 - utils - INFO - Starting indexing pipeline...
+2025-11-23 16:22:35,320 - utils - INFO - Loading processed articles from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/processed_articles.pkl
+2025-11-23 16:22:35,600 - utils - INFO - Loaded 2692 processed articles
+2025-11-23 16:22:35,601 - utils - INFO - ======================================================================
+2025-11-23 16:22:35,601 - utils - INFO - BUILDING ALL INDICES
+2025-11-23 16:22:35,601 - utils - INFO - ======================================================================
+2025-11-23 16:22:35,601 - utils - INFO - 
+1. Building BM25 Index...
+2025-11-23 16:22:35,601 - utils - INFO - Building BM25 index for 2692 articles...
+2025-11-23 16:22:35,618 - utils - INFO - Tokenizing corpus for BM25S...
+2025-11-23 16:22:35,618 - utils - INFO - Building BM25 index...
+2025-11-23 16:22:36,307 - utils - INFO - BM25 index built with 2692 documents
+2025-11-23 16:22:36,311 - utils - INFO - build_index completed in 710.32ms
+2025-11-23 16:22:36,312 - utils - INFO - Saving BM25 index to /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-11-23 16:22:36,331 - utils - INFO - BM25 index saved successfully
+2025-11-23 16:22:36,331 - utils - INFO - 
+2. Building Dense Embeddings...
+2025-11-23 16:22:36,331 - utils - INFO - Building dense embeddings for 2692 articles...
+2025-11-23 16:22:36,331 - utils - INFO - Loading embedding model: sentence-transformers/all-MiniLM-L6-v2
+2025-11-23 16:22:41,023 - utils - INFO - Generating embeddings...
+2025-11-23 16:24:33,039 - utils - INFO - Dense embeddings created: shape=(2692, 384)
+2025-11-23 16:24:33,041 - utils - INFO - build_index completed in 116709.15ms
+2025-11-23 16:24:33,042 - utils - INFO - Saving dense embeddings to /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-11-23 16:24:33,045 - utils - INFO - Dense embeddings saved successfully
+2025-11-23 16:24:33,045 - utils - INFO - 
+3. Building Metadata Index...
+2025-11-23 16:24:33,045 - utils - INFO - Building metadata index for 2692 articles...
+2025-11-23 16:27:29,945 - utils - INFO - Starting indexing pipeline...
+2025-11-23 16:27:29,945 - utils - INFO - Loading processed articles from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/processed_articles.pkl
+2025-11-23 16:27:30,166 - utils - INFO - Loaded 2692 processed articles
+2025-11-23 16:27:30,166 - utils - INFO - ======================================================================
+2025-11-23 16:27:30,167 - utils - INFO - BUILDING ALL INDICES
+2025-11-23 16:27:30,167 - utils - INFO - ======================================================================
+2025-11-23 16:27:30,167 - utils - INFO - 
+1. Building BM25 Index...
+2025-11-23 16:27:30,167 - utils - INFO - Building BM25 index for 2692 articles...
+2025-11-23 16:27:30,181 - utils - INFO - Tokenizing corpus for BM25S...
+2025-11-23 16:27:30,182 - utils - INFO - Building BM25 index...
+2025-11-23 16:27:30,813 - utils - INFO - BM25 index built with 2692 documents
+2025-11-23 16:27:30,817 - utils - INFO - build_index completed in 650.23ms
+2025-11-23 16:27:30,818 - utils - INFO - Saving BM25 index to /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-11-23 16:27:30,831 - utils - INFO - BM25 index saved successfully
+2025-11-23 16:27:30,833 - utils - INFO - 
+2. Building Dense Embeddings...
+2025-11-23 16:27:30,834 - utils - INFO - Building dense embeddings for 2692 articles...
+2025-11-23 16:27:30,835 - utils - INFO - Loading embedding model: sentence-transformers/all-MiniLM-L6-v2
+2025-11-23 16:27:35,830 - utils - INFO - Generating embeddings...
+2025-11-23 16:29:15,745 - utils - INFO - Dense embeddings created: shape=(2692, 384)
+2025-11-23 16:29:15,749 - utils - INFO - build_index completed in 104915.43ms
+2025-11-23 16:29:15,750 - utils - INFO - Saving dense embeddings to /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-11-23 16:29:15,769 - utils - INFO - Dense embeddings saved successfully
+2025-11-23 16:29:15,770 - utils - INFO - 
+3. Building Metadata Index...
+2025-11-23 16:29:15,770 - utils - INFO - Building metadata index for 2692 articles...
+2025-11-23 16:29:15,770 - utils - INFO - Removing old database: /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/metadata.db
+2025-11-23 16:29:17,758 - utils - INFO - Metadata index built successfully
+2025-11-23 16:29:17,758 - utils - INFO - build_index completed in 1988.44ms
+2025-11-23 16:29:17,759 - utils - INFO - 
+======================================================================
+2025-11-23 16:29:17,759 - utils - INFO - ALL INDICES BUILT SUCCESSFULLY
+2025-11-23 16:29:17,759 - utils - INFO - ======================================================================
+2025-11-23 16:29:17,779 - utils - INFO - 
+Indexing complete!
+2025-11-23 16:29:46,058 - utils - INFO - Initializing Cortex IR System...
+2025-11-23 16:29:46,058 - utils - INFO - Checking system readiness...
+2025-11-23 16:29:46,058 - utils - INFO - ✅ Preprocessed data found
+2025-11-23 16:29:46,059 - utils - INFO - ✅ Search indices found
+2025-11-23 16:29:46,059 - utils - INFO - ✅ All components ready - launching UI...
+2025-11-23 16:29:52,494 - utils - INFO - Loading IR pipeline...
+2025-11-23 16:29:52,495 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-11-23 16:29:53,423 - utils - INFO - QueryPreprocessor initialized
+2025-11-23 16:29:53,423 - utils - INFO - QueryClassifier initialized
+2025-11-23 16:29:54,335 - utils - INFO - QueryPreprocessor initialized
+2025-11-23 16:29:54,335 - utils - INFO - QueryExpander initialized
+2025-11-23 16:29:54,335 - utils - INFO - SpellCorrector initialized
+2025-11-23 16:29:54,335 - utils - INFO - QueryProcessor initialized
+2025-11-23 16:29:54,336 - utils - ERROR - ❌ Error initializing pipeline: HybridRetriever.__init__() missing 1 required positional argument: 'config'
+Traceback (most recent call last):
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/gradio_app.py", line 38, in __init__
+    self.pipeline = CortexIRPipeline()
+                    ^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/main.py", line 39, in __init__
+    self.retriever = HybridRetriever()
+                     ^^^^^^^^^^^^^^^^^
+TypeError: HybridRetriever.__init__() missing 1 required positional argument: 'config'
+2025-11-23 16:29:54,340 - utils - INFO - 🎉 Cortex IR System initialized and ready!
+2025-11-23 16:46:35,551 - utils - INFO - Initializing Cortex IR System...
+2025-11-23 16:46:35,551 - utils - INFO - Checking system readiness...
+2025-11-23 16:46:35,552 - utils - INFO - ✅ Preprocessed data found
+2025-11-23 16:46:35,552 - utils - INFO - ✅ Search indices found
+2025-11-23 16:46:35,552 - utils - INFO - ✅ All components ready - launching UI...
+2025-11-23 16:46:37,960 - utils - ERROR - Failed to start application: No module named 'spellchecker'
+Traceback (most recent call last):
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/gradio_app.py", line 733, in main
+    app = CortexGradioApp()
+          ^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/gradio_app.py", line 35, in __init__
+    from main import CortexIRPipeline
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/main.py", line 10, in <module>
+    from query_processor import QueryProcessor
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/query_processor.py", line 8, in <module>
+    from spellchecker import SpellChecker
+ModuleNotFoundError: No module named 'spellchecker'
+2025-11-23 16:48:44,114 - utils - INFO - Initializing Cortex IR System...
+2025-11-23 16:48:44,114 - utils - INFO - Checking system readiness...
+2025-11-23 16:48:44,114 - utils - INFO - ✅ Preprocessed data found
+2025-11-23 16:48:44,114 - utils - INFO - ✅ Search indices found
+2025-11-23 16:48:44,115 - utils - INFO - ✅ All components ready - launching UI...
+2025-11-23 16:48:50,316 - utils - INFO - Loading IR pipeline...
+2025-11-23 16:48:50,316 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-11-23 16:48:50,316 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-11-23 16:48:51,181 - utils - INFO - Query processor initialized
+2025-11-23 16:48:51,181 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-11-23 16:48:51,182 - utils - INFO - Using device: cpu
+2025-11-23 16:48:54,122 - utils - INFO - Neural reranker initialized
+2025-11-23 16:48:54,123 - utils - INFO - Ensemble reranker initialized
+2025-11-23 16:48:54,123 - utils - INFO - Post-processor initialized
+2025-11-23 16:48:54,123 - utils - INFO - Loading indices...
+2025-11-23 16:48:54,123 - utils - INFO - Loading BM25 index...
+2025-11-23 16:48:54,123 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-11-23 16:48:54,138 - utils - INFO - BM25 index loaded successfully
+2025-11-23 16:48:54,138 - utils - INFO - Loading article metadata...
+2025-11-23 16:48:54,360 - utils - INFO - Loading dense embeddings...
+2025-11-23 16:48:54,360 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-11-23 16:48:54,363 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-11-23 16:48:58,895 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-11-23 16:49:03,820 - utils - INFO - Retriever loaded with 2692 articles
+2025-11-23 16:49:03,821 - utils - INFO - Indices loaded: 2692 articles indexed
+2025-11-23 16:49:03,821 - utils - INFO - Pipeline initialized successfully!
+2025-11-23 16:49:03,821 - utils - INFO - ✅ Pipeline loaded successfully!
+2025-11-23 16:49:03,821 - utils - INFO - 🎉 Cortex IR System initialized and ready!
+2025-11-23 16:50:38,083 - utils - INFO - Processing query: 'sports team performance 2023'
+2025-11-23 16:50:38,124 - utils - INFO - Query processed: 'sports team performance 2023' -> type='exploratory'
+2025-11-23 16:50:38,125 - utils - INFO - process completed in 41.64ms
+2025-11-23 16:50:38,125 - utils - INFO - Query Processing completed in 42.40ms
+2025-11-23 16:50:38,128 - utils - INFO - Retrieval completed in 1.67ms
+2025-11-23 16:50:38,130 - utils - ERROR - Search error: 'list' object has no attribute 'lower'
+Traceback (most recent call last):
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/gradio_app.py", line 154, in search
+    result = self.pipeline.search(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/main.py", line 100, in search
+    documents = self.retriever.retrieve_with_documents(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/utils.py", line 366, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/retrieval.py", line 188, in retrieve_with_documents
+    results = self.base_retriever.retrieve(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/utils.py", line 366, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/retrieval.py", line 57, in retrieve
+    return self._hybrid_retrieve(query_tokens, query_text, top_k)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/utils.py", line 366, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/retrieval.py", line 94, in _hybrid_retrieve
+    bm25_results = self._bm25_retrieve(query_tokens, top_k)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/utils.py", line 366, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/implementation/retrieval.py", line 68, in _bm25_retrieve
+    query_tokens_array = bm25s.tokenize([query_tokens], stopwords=None)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/haseeb-raza/Desktop/IR_Assignment_3/venv/lib/python3.12/site-packages/bm25s/tokenization.py", line 642, in tokenize
+    text = text.lower()
+           ^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'lower'
+2025-11-23 16:53:54,352 - utils - INFO - Starting indexing pipeline...
+2025-11-23 16:53:54,352 - utils - INFO - Loading processed articles from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/processed_articles.pkl
+2025-11-23 16:53:54,758 - utils - INFO - Loaded 2692 processed articles
+2025-11-23 16:53:54,758 - utils - INFO - ======================================================================
+2025-11-23 16:53:54,758 - utils - INFO - BUILDING ALL INDICES
+2025-11-23 16:53:54,759 - utils - INFO - ======================================================================
+2025-11-23 16:53:54,759 - utils - INFO - 
+1. Building BM25 Index...
+2025-11-23 16:53:54,759 - utils - INFO - Building BM25 index for 2692 articles...
+2025-11-23 16:53:54,781 - utils - INFO - Tokenizing corpus for BM25...
+2025-11-23 16:53:56,300 - utils - INFO - Building BM25 index...
+2025-11-23 16:53:57,015 - utils - INFO - BM25 index built with 2692 documents
+2025-11-23 16:53:57,020 - utils - INFO - build_index completed in 2260.99ms
+2025-11-23 16:53:57,020 - utils - INFO - Saving BM25 index to /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-11-23 16:53:57,035 - utils - INFO - BM25 index saved successfully
+2025-11-23 16:53:57,035 - utils - INFO - 
+2. Building Dense Embeddings...
+2025-11-23 16:53:57,036 - utils - INFO - Building dense embeddings for 2692 articles...
+2025-11-23 16:53:57,036 - utils - INFO - Loading embedding model: sentence-transformers/all-MiniLM-L6-v2
+2025-11-23 16:54:04,720 - utils - INFO - Generating embeddings...
+2025-11-23 16:55:49,731 - utils - INFO - Dense embeddings created: shape=(2692, 384)
+2025-11-23 16:55:49,732 - utils - INFO - build_index completed in 112696.68ms
+2025-11-23 16:55:49,741 - utils - INFO - Saving dense embeddings to /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-11-23 16:55:49,752 - utils - INFO - Dense embeddings saved successfully
+2025-11-23 16:55:49,753 - utils - INFO - 
+3. Building Metadata Index...
+2025-11-23 16:55:49,754 - utils - INFO - Building metadata index for 2692 articles...
+2025-11-23 16:55:49,754 - utils - INFO - Removing old database: /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/metadata.db
+2025-11-23 16:55:51,514 - utils - INFO - Metadata index built successfully
+2025-11-23 16:55:51,514 - utils - INFO - build_index completed in 1760.83ms
+2025-11-23 16:55:51,515 - utils - INFO - 
+======================================================================
+2025-11-23 16:55:51,515 - utils - INFO - ALL INDICES BUILT SUCCESSFULLY
+2025-11-23 16:55:51,515 - utils - INFO - ======================================================================
+2025-11-23 16:55:51,532 - utils - INFO - 
+Indexing complete!
+2025-11-23 16:56:04,091 - utils - INFO - Initializing Cortex IR System...
+2025-11-23 16:56:04,091 - utils - INFO - Checking system readiness...
+2025-11-23 16:56:04,092 - utils - INFO - ✅ Preprocessed data found
+2025-11-23 16:56:04,092 - utils - INFO - ✅ Search indices found
+2025-11-23 16:56:04,092 - utils - INFO - ✅ All components ready - launching UI...
+2025-11-23 16:56:11,213 - utils - INFO - Loading IR pipeline...
+2025-11-23 16:56:11,213 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-11-23 16:56:11,213 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-11-23 16:56:12,211 - utils - INFO - Query processor initialized
+2025-11-23 16:56:12,212 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-11-23 16:56:12,212 - utils - INFO - Using device: cpu
+2025-11-23 16:56:14,650 - utils - INFO - Neural reranker initialized
+2025-11-23 16:56:14,651 - utils - INFO - Ensemble reranker initialized
+2025-11-23 16:56:14,651 - utils - INFO - Post-processor initialized
+2025-11-23 16:56:14,651 - utils - INFO - Loading indices...
+2025-11-23 16:56:14,651 - utils - INFO - Loading BM25 index...
+2025-11-23 16:56:14,651 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-11-23 16:56:14,672 - utils - INFO - BM25 index loaded successfully
+2025-11-23 16:56:14,673 - utils - INFO - Loading article metadata...
+2025-11-23 16:56:14,888 - utils - INFO - Loading dense embeddings...
+2025-11-23 16:56:14,888 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-11-23 16:56:14,891 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-11-23 16:56:17,834 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-11-23 16:56:21,399 - utils - INFO - Retriever loaded with 2692 articles
+2025-11-23 16:56:21,399 - utils - INFO - Indices loaded: 2692 articles indexed
+2025-11-23 16:56:21,399 - utils - INFO - Pipeline initialized successfully!
+2025-11-23 16:56:21,399 - utils - INFO - ✅ Pipeline loaded successfully!
+2025-11-23 16:56:21,399 - utils - INFO - 🎉 Cortex IR System initialized and ready!
+2025-11-23 16:56:42,671 - utils - INFO - Processing query: 'company merger announcements'
+2025-11-23 16:56:42,711 - utils - INFO - Query processed: 'company merger announcements' -> type='exploratory'
+2025-11-23 16:56:42,712 - utils - INFO - process completed in 41.47ms
+2025-11-23 16:56:42,712 - utils - INFO - Query Processing completed in 41.65ms
+2025-11-23 16:56:42,723 - utils - INFO - _bm25_retrieve completed in 10.02ms
+2025-11-23 16:56:42,786 - utils - INFO - _dense_retrieve completed in 63.27ms
+2025-11-23 16:56:42,787 - utils - INFO - _hybrid_retrieve completed in 74.12ms
+2025-11-23 16:56:42,788 - utils - INFO - retrieve completed in 75.94ms
+2025-11-23 16:56:42,789 - utils - INFO - retrieve_with_documents completed in 76.90ms
+2025-11-23 16:56:42,791 - utils - INFO - Retrieval completed in 78.51ms
+2025-11-23 16:56:42,791 - utils - INFO - Reranking 170 documents with cross-encoder
+2025-11-23 16:57:17,688 - utils - INFO - Reranking complete. Top score: 0.3180
+2025-11-23 16:57:17,689 - utils - INFO - rerank completed in 34897.88ms
+2025-11-23 16:57:17,690 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7912
+2025-11-23 16:57:17,690 - utils - INFO - rerank completed in 34898.71ms
+2025-11-23 16:57:17,690 - utils - INFO - Reranking completed in 34899.25ms
+2025-11-23 16:57:17,691 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-11-23 16:57:17,730 - utils - INFO - Deduplication: 50 -> 47 documents
+2025-11-23 16:57:17,777 - utils - INFO - rerank completed in 45.76ms
+2025-11-23 16:57:17,778 - utils - INFO - Post-processing complete: 10 final results
+2025-11-23 16:57:17,778 - utils - INFO - process completed in 87.23ms
+2025-11-23 16:57:17,779 - utils - INFO - Post-Processing completed in 88.14ms
+2025-11-23 16:57:51,936 - utils - INFO - Processing query: 'who won the championship?'
+2025-11-23 16:57:52,024 - utils - INFO - Query processed: 'who won the championship?' -> type='factual'
+2025-11-23 16:57:52,027 - utils - INFO - process completed in 91.53ms
+2025-11-23 16:57:52,029 - utils - INFO - Query Processing completed in 92.83ms
+2025-11-23 16:57:52,047 - utils - INFO - _bm25_retrieve completed in 17.51ms
+2025-11-23 16:57:52,097 - utils - INFO - _dense_retrieve completed in 47.97ms
+2025-11-23 16:57:52,098 - utils - INFO - _hybrid_retrieve completed in 68.08ms
+2025-11-23 16:57:52,098 - utils - INFO - retrieve completed in 68.23ms
+2025-11-23 16:57:52,103 - utils - INFO - retrieve_with_documents completed in 72.92ms
+2025-11-23 16:57:52,103 - utils - INFO - Retrieval completed in 73.19ms
+2025-11-23 16:57:52,103 - utils - INFO - Reranking 185 documents with cross-encoder
+2025-11-23 16:58:32,286 - utils - INFO - Reranking complete. Top score: 3.8268
+2025-11-23 16:58:32,287 - utils - INFO - rerank completed in 40183.66ms
+2025-11-23 16:58:32,288 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7315
+2025-11-23 16:58:32,288 - utils - INFO - rerank completed in 40184.97ms
+2025-11-23 16:58:32,288 - utils - INFO - Reranking completed in 40185.26ms
+2025-11-23 16:58:32,289 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-11-23 16:58:32,336 - utils - INFO - Deduplication: 50 -> 50 documents
+2025-11-23 16:58:32,380 - utils - INFO - rerank completed in 42.90ms
+2025-11-23 16:58:32,381 - utils - INFO - Post-processing complete: 10 final results
+2025-11-23 16:58:32,381 - utils - INFO - process completed in 92.14ms
+2025-11-23 16:58:32,381 - utils - INFO - Post-Processing completed in 92.32ms
+2025-11-23 16:59:00,979 - utils - INFO - Processing query: 'latest business news'
+2025-11-23 16:59:01,079 - utils - INFO - Query processed: 'latest business news' -> type='breaking'
+2025-11-23 16:59:01,093 - utils - INFO - process completed in 113.61ms
+2025-11-23 16:59:01,093 - utils - INFO - Query Processing completed in 113.83ms
+2025-11-23 16:59:01,108 - utils - INFO - _bm25_retrieve completed in 14.94ms
+2025-11-23 16:59:01,229 - utils - INFO - _dense_retrieve completed in 120.31ms
+2025-11-23 16:59:01,232 - utils - INFO - _hybrid_retrieve completed in 138.23ms
+2025-11-23 16:59:01,233 - utils - INFO - retrieve completed in 139.85ms
+2025-11-23 16:59:01,236 - utils - INFO - retrieve_with_documents completed in 142.74ms
+2025-11-23 16:59:01,244 - utils - INFO - Retrieval completed in 150.22ms
+2025-11-23 16:59:01,258 - utils - INFO - Reranking 173 documents with cross-encoder
+2025-11-23 16:59:38,660 - utils - INFO - Reranking complete. Top score: -2.9163
+2025-11-23 16:59:38,664 - utils - INFO - rerank completed in 37405.49ms
+2025-11-23 16:59:38,665 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7948
+2025-11-23 16:59:38,665 - utils - INFO - rerank completed in 37407.21ms
+2025-11-23 16:59:38,666 - utils - INFO - Reranking completed in 37407.52ms
+2025-11-23 16:59:38,666 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-11-23 16:59:38,739 - utils - INFO - Deduplication: 50 -> 47 documents
+2025-11-23 16:59:38,772 - utils - INFO - rerank completed in 32.12ms
+2025-11-23 16:59:38,772 - utils - INFO - Post-processing complete: 5 final results
+2025-11-23 16:59:38,774 - utils - INFO - process completed in 107.72ms
+2025-11-23 16:59:38,774 - utils - INFO - Post-Processing completed in 107.98ms
+2025-11-23 17:01:07,170 - utils - INFO - Processing query: 'impact of inflation on economy'
+2025-11-23 17:01:07,223 - utils - INFO - Query processed: 'impact of inflation on economy' -> type='analytical'
+2025-11-23 17:01:07,224 - utils - INFO - process completed in 54.29ms
+2025-11-23 17:01:07,224 - utils - INFO - Query Processing completed in 54.51ms
+2025-11-23 17:01:07,233 - utils - INFO - _bm25_retrieve completed in 8.30ms
+2025-11-23 17:01:07,326 - utils - INFO - _dense_retrieve completed in 92.15ms
+2025-11-23 17:01:07,326 - utils - INFO - _hybrid_retrieve completed in 101.49ms
+2025-11-23 17:01:07,326 - utils - INFO - retrieve completed in 101.64ms
+2025-11-23 17:01:07,337 - utils - INFO - retrieve_with_documents completed in 112.83ms
+2025-11-23 17:01:07,338 - utils - INFO - Retrieval completed in 113.11ms
+2025-11-23 17:01:07,338 - utils - INFO - Reranking 166 documents with cross-encoder
+2025-11-23 17:02:03,826 - utils - INFO - Reranking complete. Top score: -0.9954
+2025-11-23 17:02:03,834 - utils - INFO - rerank completed in 56495.72ms
+2025-11-23 17:02:03,834 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7361
+2025-11-23 17:02:03,834 - utils - INFO - rerank completed in 56496.48ms
+2025-11-23 17:02:03,835 - utils - INFO - Reranking completed in 56497.03ms
+2025-11-23 17:02:03,835 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-11-23 17:02:03,926 - utils - INFO - Deduplication: 50 -> 47 documents
+2025-11-23 17:02:04,100 - utils - INFO - rerank completed in 171.40ms
+2025-11-23 17:02:04,100 - utils - INFO - Post-processing complete: 15 final results
+2025-11-23 17:02:04,101 - utils - INFO - process completed in 265.53ms
+2025-11-23 17:02:04,101 - utils - INFO - Post-Processing completed in 265.67ms
+2025-11-23 17:02:29,280 - utils - INFO - Processing query: 'latest business news'
+2025-11-23 17:02:29,398 - utils - INFO - Query processed: 'latest business news' -> type='breaking'
+2025-11-23 17:02:29,411 - utils - INFO - process completed in 131.41ms
+2025-11-23 17:02:29,413 - utils - INFO - Query Processing completed in 133.52ms
+2025-11-23 17:02:29,434 - utils - INFO - _bm25_retrieve completed in 14.55ms
+2025-11-23 17:02:29,662 - utils - INFO - _dense_retrieve completed in 228.27ms
+2025-11-23 17:02:29,663 - utils - INFO - _hybrid_retrieve completed in 243.57ms
+2025-11-23 17:02:29,663 - utils - INFO - retrieve completed in 244.16ms
+2025-11-23 17:02:29,664 - utils - INFO - retrieve_with_documents completed in 244.94ms
+2025-11-23 17:02:29,665 - utils - INFO - Retrieval completed in 245.65ms
+2025-11-23 17:02:29,665 - utils - INFO - Reranking 173 documents with cross-encoder
+2025-11-23 17:03:33,235 - utils - INFO - Reranking complete. Top score: -2.9163
+2025-11-23 17:03:33,240 - utils - INFO - rerank completed in 63575.05ms
+2025-11-23 17:03:33,241 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7948
+2025-11-23 17:03:33,242 - utils - INFO - rerank completed in 63576.71ms
+2025-11-23 17:03:33,242 - utils - INFO - Reranking completed in 63576.97ms
+2025-11-23 17:03:33,242 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-11-23 17:03:33,310 - utils - INFO - Deduplication: 50 -> 47 documents
+2025-11-23 17:03:33,340 - utils - INFO - rerank completed in 28.57ms
+2025-11-23 17:03:33,341 - utils - INFO - Post-processing complete: 5 final results
+2025-11-23 17:03:33,343 - utils - INFO - process completed in 100.64ms
+2025-11-23 17:03:33,344 - utils - INFO - Post-Processing completed in 101.32ms

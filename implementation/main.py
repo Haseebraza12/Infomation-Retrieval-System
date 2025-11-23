@@ -1,254 +1,234 @@
 """
-Main Pipeline for Cortex IR System
-Orchestrates the complete retrieval pipeline
+Main Pipeline - Orchestrates the complete IR system
 """
 
+from typing import Dict, List, Optional
 import time
-from typing import Dict, List, Tuple
-from pathlib import Path
 
-import config
-from utils import setup_logging, timer, index_exists, generate_snippet
+from config import Config
+from utils import logger, Timer
 from query_processor import QueryProcessor
-from retrieval import HybridRetriever
+from retrieval import ParallelRetriever
 from reranker import EnsembleReranker
 from post_processor import PostProcessor
-
-logger = setup_logging(__name__)
+from indexing import IndexBuilder
 
 
 class CortexIRPipeline:
     """
-    Complete IR pipeline orchestrator
+    Main IR pipeline orchestrator
     """
     
-    def __init__(self):
-        """Initialize the complete IR pipeline"""
+    def __init__(self, config: Config = None):
+        """Initialize pipeline with all components"""
+        if config is None:
+            config = Config()
+        
+        self.config = config
+        
         logger.info("Initializing Cortex IR Pipeline...")
         
-        # Check if indices exist
-        if not self._check_indices():
-            logger.error("Indices not found. Please run preprocessing and indexing first.")
-            raise FileNotFoundError(
-                "Indices not found. Run: python preprocessing.py && python indexing.py"
-            )
-        
         # Initialize components
-        self.query_processor = QueryProcessor()
-        self.retriever = HybridRetriever()
-        self.reranker = EnsembleReranker()
-        self.post_processor = PostProcessor()
+        self.query_processor = QueryProcessor(config)
+        self.retriever = ParallelRetriever(config)
+        self.reranker = EnsembleReranker(config)
+        self.post_processor = PostProcessor(config)
         
-        logger.info("Cortex IR Pipeline initialized successfully")
+        # Load indices
+        self._load_indices()
+        
+        logger.info("Pipeline initialized successfully!")
     
-    def _check_indices(self) -> bool:
-        """Check if all required indices exist"""
-        checks = {
-            'BM25': index_exists('bm25'),
-            'Processed Data': index_exists('processed'),
-            'Metadata': index_exists('metadata')
-        }
+    def _load_indices(self):
+        """Load all pre-built indices"""
+        logger.info("Loading indices...")
         
-        all_exist = all(checks.values())
+        builder = IndexBuilder(self.config)
         
-        if not all_exist:
-            logger.warning("Missing indices:")
-            for name, exists in checks.items():
-                logger.warning(f"  {name}: {'✓' if exists else '✗'}")
+        # Load BM25 index
+        logger.info("Loading BM25 index...")
+        bm25_index = builder.load_bm25_index()
         
-        return checks['BM25'] and checks['Processed Data']  # Minimum required
+        # Load articles
+        logger.info("Loading article metadata...")
+        articles = builder.load_metadata()
+        
+        # Load dense embeddings (optional)
+        try:
+            logger.info("Loading dense embeddings...")
+            dense_embeddings = builder.load_dense_embeddings()
+        except FileNotFoundError:
+            logger.warning("Dense embeddings not found, using BM25 only")
+            dense_embeddings = None
+        
+        # Initialize retriever with indices
+        self.retriever.load_indices(bm25_index, articles, dense_embeddings)
+        
+        logger.info(f"Indices loaded: {len(articles)} articles indexed")
     
-    @timer
     def search(
         self,
         query: str,
-        top_k: int = None,
+        top_k: int = 10,
         enable_reranking: bool = True,
-        enable_post_processing: bool = True
+        enable_post_processing: bool = True,
+        return_metadata: bool = True
     ) -> Dict:
         """
-        Execute complete search pipeline
+        Execute end-to-end search pipeline
         
         Args:
-            query: User query
-            top_k: Number of results to return
+            query: Search query string
+            top_k: Number of final results to return
             enable_reranking: Whether to use neural reranking
             enable_post_processing: Whether to apply post-processing
+            return_metadata: Whether to include performance metadata
             
         Returns:
             Dictionary with results and metadata
         """
-        if top_k is None:
-            top_k = config.FINAL_TOP_K
-        
         start_time = time.time()
-        
-        logger.info(f"Processing query: '{query}'")
+        stage_times = {}
         
         # Stage 1: Query Processing
-        stage1_start = time.time()
-        query_info = self.query_processor.process(query)
-        stage1_time = (time.time() - stage1_start) * 1000
+        with Timer("Query Processing") as t:
+            processed_query = self.query_processor.process(query)
+        stage_times['query_processing'] = t.elapsed * 1000
         
-        # Stage 2: Hybrid Retrieval
-        stage2_start = time.time()
-        results, documents = self.retriever.retrieve_with_documents(
-            query=query_info['corrected'],
-            query_tokens=query_info['tokens'],
-            k=100  # Retrieve more for reranking
-        )
-        stage2_time = (time.time() - stage2_start) * 1000
-        
-        # Stage 3: Neural Reranking (optional)
-        if enable_reranking and self.reranker.neural_reranker.available:
-            stage3_start = time.time()
-            documents = self.reranker.rerank(
-                query_info['corrected'],
-                documents,
-                top_k=50
+        # Stage 2: Retrieval
+        with Timer("Retrieval") as t:
+            documents = self.retriever.retrieve_with_documents(
+                query_tokens=processed_query['tokens'],
+                query_text=processed_query['corrected'],
+                top_k=self.config.TOP_K_RETRIEVAL,
+                use_hybrid=self.config.USE_DENSE_RETRIEVAL
             )
-            stage3_time = (time.time() - stage3_start) * 1000
+        stage_times['retrieval'] = t.elapsed * 1000
+        
+        # Stage 3: Reranking (optional)
+        if enable_reranking and documents:
+            with Timer("Reranking") as t:
+                documents = self.reranker.rerank(
+                    query=processed_query['corrected'],
+                    documents=documents,
+                    top_k=self.config.RERANK_TOP_K
+                )
+            stage_times['reranking'] = t.elapsed * 1000
         else:
-            stage3_time = 0
-            documents = documents[:50]
+            stage_times['reranking'] = 0
         
         # Stage 4: Post-Processing (optional)
-        clusters = {}
-        if enable_post_processing:
-            stage4_start = time.time()
-            documents, clusters = self.post_processor.process(
-                query=query_info['corrected'],
-                query_type=query_info['type'],
-                documents=documents,
-                top_k=top_k
-            )
-            stage4_time = (time.time() - stage4_start) * 1000
+        clusters = None
+        if enable_post_processing and documents:
+            with Timer("Post-Processing") as t:
+                documents, clusters = self.post_processor.process(
+                    documents=documents,
+                    query=processed_query,
+                    top_k=top_k
+                )
+            stage_times['post_processing'] = t.elapsed * 1000
         else:
-            stage4_time = 0
+            stage_times['post_processing'] = 0
             documents = documents[:top_k]
         
-        total_time = (time.time() - start_time) * 1000
-        
-        # Generate snippets
-        for doc in documents:
-            doc['snippet'] = generate_snippet(
-                doc.get('content', ''),
-                query_info['corrected'],
-                max_length=200
-            )
+        # Calculate total time
+        total_time = time.time() - start_time
         
         # Prepare result
         result = {
-            'query': {
-                'original': query,
-                'corrected': query_info['corrected'],
-                'type': query_info['type'],
-                'tokens': query_info['tokens'],
-                'entities': query_info['entities']
-            },
             'results': documents,
-            'clusters': clusters,
-            'metadata': {
-                'total_results': len(documents),
-                'total_time_ms': total_time,
-                'stage_times': {
-                    'query_processing': stage1_time,
-                    'retrieval': stage2_time,
-                    'reranking': stage3_time,
-                    'post_processing': stage4_time
-                },
+            'query': processed_query,
+            'clusters': clusters
+        }
+        
+        # Add metadata if requested
+        if return_metadata:
+            result['metadata'] = {
+                'total_time_ms': total_time * 1000,
+                'stage_times': stage_times,
+                'num_results': len(documents),
                 'reranking_enabled': enable_reranking,
                 'post_processing_enabled': enable_post_processing
             }
-        }
-        
-        logger.info(f"Search completed in {total_time:.2f}ms")
-        logger.info(f"  Retrieval: {stage2_time:.2f}ms")
-        if enable_reranking:
-            logger.info(f"  Reranking: {stage3_time:.2f}ms")
-        if enable_post_processing:
-            logger.info(f"  Post-processing: {stage4_time:.2f}ms")
         
         return result
     
-    def batch_search(self, queries: List[str], **kwargs) -> List[Dict]:
+    def batch_search(
+        self,
+        queries: List[str],
+        top_k: int = 10,
+        enable_reranking: bool = True,
+        enable_post_processing: bool = True
+    ) -> List[Dict]:
         """
         Execute batch search for multiple queries
         
         Args:
-            queries: List of queries
-            **kwargs: Arguments for search()
+            queries: List of query strings
+            top_k: Number of results per query
+            enable_reranking: Whether to use reranking
+            enable_post_processing: Whether to use post-processing
             
         Returns:
             List of result dictionaries
         """
-        logger.info(f"Batch searching {len(queries)} queries")
-        
         results = []
+        
         for query in queries:
-            result = self.search(query, **kwargs)
+            result = self.search(
+                query=query,
+                top_k=top_k,
+                enable_reranking=enable_reranking,
+                enable_post_processing=enable_post_processing
+            )
             results.append(result)
         
         return results
 
 
 def main():
-    """Test the pipeline"""
-    print("\n" + "="*70)
-    print(" "*20 + "CORTEX IR SYSTEM")
-    print("="*70 + "\n")
-    
+    """Example usage of the pipeline"""
     # Initialize pipeline
-    print("Initializing pipeline...")
     pipeline = CortexIRPipeline()
-    print("✓ Pipeline ready\n")
     
     # Test queries
     test_queries = [
-        "latest COVID updates",
-        "who won the super bowl?",
-        "impact of inflation on economy",
-        "sports team performance"
+        "latest sports news",
+        "economic impact of inflation",
+        "who won the championship?",
+        "business merger announcements"
     ]
     
-    for i, query in enumerate(test_queries, 1):
+    print("\n" + "="*70)
+    print("CORTEX IR SYSTEM - DEMO")
+    print("="*70)
+    
+    for query in test_queries:
         print(f"\n{'='*70}")
-        print(f"Query {i}/{len(test_queries)}: {query}")
+        print(f"Query: {query}")
         print('='*70)
         
         # Execute search
-        result = pipeline.search(query, top_k=5)
+        result = pipeline.search(
+            query=query,
+            top_k=5,
+            enable_reranking=True,
+            enable_post_processing=True
+        )
         
         # Display results
         print(f"\nQuery Type: {result['query']['type']}")
-        print(f"Total Time: {result['metadata']['total_time_ms']:.2f}ms")
-        print(f"\nTop {len(result['results'])} Results:\n")
+        print(f"Total Time: {result['metadata']['total_time_ms']:.0f}ms")
+        print(f"\nTop {len(result['results'])} Results:")
+        print("-"*70)
         
-        for j, doc in enumerate(result['results'], 1):
-            print(f"{j}. {doc['title']}")
-            print(f"   Category: {doc['category']}")
-            
-            # Show score
-            score = doc.get('ensemble_score', 
-                           doc.get('rerank_score', 
-                                  doc.get('retrieval_score', 0.0)))
-            print(f"   Score: {score:.4f}")
-            
-            # Show snippet
-            print(f"   {doc['snippet'][:100]}...")
-            print()
+        for i, doc in enumerate(result['results'], 1):
+            score = doc.get('ensemble_score', doc.get('rerank_score', doc.get('retrieval_score', 0)))
+            print(f"\n{i}. {doc['title']}")
+            print(f"   Category: {doc['category']} | Score: {score:.4f}")
+            print(f"   {doc['content'][:150]}...")
         
-        # Show clusters if available
-        if result['clusters']:
-            print(f"Topic Clusters:")
-            for cluster_name, cluster_docs in result['clusters'].items():
-                print(f"  • {cluster_name}: {len(cluster_docs)} documents")
-        
-        print()
-    
-    print("\n" + "="*70)
-    print("Pipeline test complete!")
-    print("="*70 + "\n")
+        print("\n" + "="*70)
 
 
 if __name__ == "__main__":

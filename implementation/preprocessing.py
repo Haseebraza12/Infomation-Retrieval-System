@@ -11,10 +11,11 @@ import spacy
 from spacy.language import Language
 from tqdm import tqdm
 
-import config
-from utils import setup_logging, timer, save_pickle, clean_text
+from config import Config
+from utils import logger
 
-logger = setup_logging(__name__)
+# Initialize config
+config = Config()
 
 
 class ArticlePreprocessor:
@@ -22,16 +23,20 @@ class ArticlePreprocessor:
     Preprocesses articles with tokenization, lemmatization, and NER
     """
     
-    def __init__(self):
+    def __init__(self, config: Config = None):
         """Initialize preprocessor with spaCy model"""
-        logger.info(f"Loading spaCy model: {config.SPACY_MODEL}")
+        if config is None:
+            config = Config()
+        self.config = config
+        
+        logger.info(f"Loading spaCy model: {self.config.SPACY_MODEL}")
         try:
-            self.nlp = spacy.load(config.SPACY_MODEL)
+            self.nlp = spacy.load(self.config.SPACY_MODEL)
         except OSError:
-            logger.warning(f"Model {config.SPACY_MODEL} not found. Downloading...")
+            logger.warning(f"Model {self.config.SPACY_MODEL} not found. Downloading...")
             import os
-            os.system(f"python -m spacy download {config.SPACY_MODEL}")
-            self.nlp = spacy.load(config.SPACY_MODEL)
+            os.system(f"python -m spacy download {self.config.SPACY_MODEL}")
+            self.nlp = spacy.load(self.config.SPACY_MODEL)
         
         # Add custom stopwords for query-adaptive removal
         self.query_stopwords = set([
@@ -41,7 +46,28 @@ class ArticlePreprocessor:
         
         logger.info("ArticlePreprocessor initialized")
     
-    @timer
+    def clean_text(self, text: str) -> str:
+        """Clean and normalize text"""
+        if not text or pd.isna(text):
+            return ""
+        
+        # Convert to string
+        text = str(text)
+        
+        # Remove URLs
+        text = re.sub(r'http\S+|www\S+', '', text)
+        
+        # Remove emails
+        text = re.sub(r'\S+@\S+', '', text)
+        
+        # Remove extra whitespace
+        text = re.sub(r'\s+', ' ', text)
+        
+        # Remove special characters but keep basic punctuation
+        text = re.sub(r'[^\w\s\.\,\!\?\-\']', '', text)
+        
+        return text.strip()
+    
     def preprocess_article(self, article: Dict) -> Dict:
         """
         Preprocess a single article
@@ -52,35 +78,57 @@ class ArticlePreprocessor:
         Returns:
             Preprocessed article dictionary with additional fields
         """
-        # Extract basic fields
-        title = str(article.get('Title', '')).strip()
-        content = str(article.get('Content', '')).strip()
-        date = article.get('Date', '')
-        category = article.get('Category', 'Unknown')
+        # Extract basic fields with safe handling
+        # Handle both column naming conventions
+        title = str(article.get('Heading', article.get('Title', ''))).strip() if pd.notna(article.get('Heading', article.get('Title'))) else ''
+        content = str(article.get('Article', article.get('Content', ''))).strip() if pd.notna(article.get('Article', article.get('Content'))) else ''
+        date = str(article.get('Date', '')) if pd.notna(article.get('Date')) else ''
+        category = str(article.get('NewsType', article.get('Category', 'Unknown'))) if pd.notna(article.get('NewsType', article.get('Category'))) else 'Unknown'
         
         # Clean text
-        title_clean = clean_text(title)
-        content_clean = clean_text(content)
+        title_clean = self.clean_text(title)
+        content_clean = self.clean_text(content)
         
-        # Process with spaCy
-        doc_title = self.nlp(title_clean)
-        doc_content = self.nlp(content_clean[:1000000])  # Limit to 1M chars for spaCy
+        # Skip empty articles
+        if not title_clean and not content_clean:
+            logger.warning(f"Skipping empty article: {article.get('id', 'unknown')}")
+            return None
+        
+        # Process with spaCy (limit content length)
+        try:
+            # Disable some pipes for speed
+            doc_title = self.nlp(title_clean[:1000]) if title_clean else self.nlp("")  
+            doc_content = self.nlp(content_clean[:50000]) if content_clean else self.nlp("")  # Limit to 50k chars
+        except Exception as e:
+            logger.warning(f"Error processing article with spaCy: {e}")
+            # Continue with simple tokenization
+            title_tokens = title_clean.lower().split()
+            content_tokens = content_clean.lower().split()
+            doc_title = None
+            doc_content = None
         
         # Tokenization and lemmatization
-        title_tokens = [
-            token.lemma_.lower() 
-            for token in doc_title 
-            if not token.is_stop and not token.is_punct and token.is_alpha
-        ]
-        
-        content_tokens = [
-            token.lemma_.lower() 
-            for token in doc_content 
-            if not token.is_stop and not token.is_punct and token.is_alpha
-        ]
-        
-        # Named Entity Recognition with confidence filtering
-        entities = self._extract_entities(doc_title, doc_content)
+        if doc_title is not None and doc_content is not None:
+            title_tokens = [
+                token.lemma_.lower() 
+                for token in doc_title 
+                if not token.is_stop and not token.is_punct and token.is_alpha
+            ]
+            
+            content_tokens = [
+                token.lemma_.lower() 
+                for token in doc_content 
+                if not token.is_stop and not token.is_punct and token.is_alpha
+            ]
+            
+            # Named Entity Recognition with confidence filtering
+            entities = self._extract_entities(doc_title, doc_content)
+        else:
+            # Fallback to simple tokenization
+            import re
+            title_tokens = [w.lower() for w in re.findall(r'\b[a-z]+\b', title_clean.lower()) if len(w) > 2]
+            content_tokens = [w.lower() for w in re.findall(r'\b[a-z]+\b', content_clean.lower()) if len(w) > 2]
+            entities = []
         
         # Date parsing
         parsed_date = self._parse_date(date)
@@ -138,7 +186,7 @@ class ArticlePreprocessor:
                 # Simple confidence estimation based on entity properties
                 confidence = self._estimate_entity_confidence(ent)
                 
-                if confidence >= config.ENTITY_CONFIDENCE_THRESHOLD:
+                if confidence >= self.config.ENTITY_CONFIDENCE_THRESHOLD:
                     entities.append({
                         'text': ent.text,
                         'label': ent.label_,
@@ -185,12 +233,14 @@ class ArticlePreprocessor:
         Returns:
             datetime object or None
         """
+        if not date_string or pd.isna(date_string):
+            return None
+            
         try:
             return pd.to_datetime(date_string)
         except:
             return None
     
-    @timer
     def preprocess_corpus(self, df: pd.DataFrame) -> List[Dict]:
         """
         Preprocess entire corpus of articles
@@ -204,6 +254,7 @@ class ArticlePreprocessor:
         logger.info(f"Preprocessing {len(df)} articles...")
         
         processed_articles = []
+        skipped_count = 0
         
         for idx, row in tqdm(df.iterrows(), total=len(df), desc="Preprocessing articles"):
             article = row.to_dict()
@@ -211,28 +262,35 @@ class ArticlePreprocessor:
             
             try:
                 processed = self.preprocess_article(article)
-                processed_articles.append(processed)
+                if processed is not None:
+                    processed_articles.append(processed)
+                else:
+                    skipped_count += 1
             except Exception as e:
                 logger.error(f"Error preprocessing article {idx}: {e}")
+                skipped_count += 1
                 continue
         
         logger.info(f"Successfully preprocessed {len(processed_articles)} articles")
+        if skipped_count > 0:
+            logger.warning(f"Skipped {skipped_count} articles due to errors")
         
         return processed_articles
     
-    @timer
-    def save_processed_articles(self, processed_articles: List[Dict], filepath: str = None):
+    def save_processed_articles(self, processed_articles: List[Dict]):
         """
         Save preprocessed articles to pickle file
         
         Args:
             processed_articles: List of preprocessed articles
-            filepath: Output file path (default: from config)
         """
-        if filepath is None:
-            filepath = config.PROCESSED_DATA_PATH
+        import pickle
         
-        save_pickle(processed_articles, filepath)
+        filepath = self.config.PROCESSED_DATA_PATH
+        
+        with open(filepath, 'wb') as f:
+            pickle.dump(processed_articles, f)
+        
         logger.info(f"Saved {len(processed_articles)} preprocessed articles to {filepath}")
 
 
@@ -241,14 +299,27 @@ class QueryPreprocessor:
     Preprocesses queries for retrieval
     """
     
-    def __init__(self, nlp: Language = None):
+    def __init__(self, config: Config = None):
         """Initialize query preprocessor"""
-        if nlp is None:
-            self.nlp = spacy.load(config.SPACY_MODEL)
-        else:
-            self.nlp = nlp
+        if config is None:
+            config = Config()
+        self.config = config
+        self.nlp = spacy.load(self.config.SPACY_MODEL)
         
         logger.info("QueryPreprocessor initialized")
+    
+    def clean_text(self, text: str) -> str:
+        """Clean and normalize text"""
+        if not text or pd.isna(text):
+            return ""
+        
+        text = str(text)
+        text = re.sub(r'http\S+|www\S+', '', text)
+        text = re.sub(r'\S+@\S+', '', text)
+        text = re.sub(r'\s+', ' ', text)
+        text = re.sub(r'[^\w\s\.\,\!\?\-\']', '', text)
+        
+        return text.strip()
     
     def preprocess_query(self, query: str, remove_stopwords: bool = False) -> Dict:
         """
@@ -262,7 +333,7 @@ class QueryPreprocessor:
             Dictionary with processed query components
         """
         # Clean query
-        query_clean = clean_text(query)
+        query_clean = self.clean_text(query)
         
         # Process with spaCy
         doc = self.nlp(query_clean)
@@ -294,53 +365,50 @@ class QueryPreprocessor:
             'entities': entities,
             'token_string': ' '.join(tokens)
         }
-    
-    def expand_query_with_synonyms(self, query: str, synonyms: Dict[str, List[str]] = None) -> str:
-        """
-        Expand query with synonyms
-        
-        Args:
-            query: Original query
-            synonyms: Dictionary of word -> synonyms
-            
-        Returns:
-            Expanded query string
-        """
-        if synonyms is None:
-            # Default synonyms for common terms
-            synonyms = {
-                'win': ['victory', 'triumph', 'success'],
-                'lose': ['defeat', 'loss', 'fail'],
-                'company': ['corporation', 'business', 'firm'],
-                'increase': ['rise', 'growth', 'surge'],
-                'decrease': ['fall', 'decline', 'drop']
-            }
-        
-        processed = self.preprocess_query(query)
-        expanded_terms = []
-        
-        for token in processed['tokens']:
-            expanded_terms.append(token)
-            if token in synonyms:
-                expanded_terms.extend(synonyms[token][:2])  # Add top 2 synonyms
-        
-        return ' '.join(expanded_terms)
 
 
 def main():
     """Main function to run preprocessing pipeline"""
     logger.info("Starting preprocessing pipeline...")
     
-    # Load dataset
-    logger.info(f"Loading dataset from {config.DATA_PATH}")
-    df = pd.read_csv(config.DATA_PATH)
+    # Initialize config
+    cfg = Config()
+    
+    # Load dataset with encoding handling
+    logger.info(f"Loading dataset from {cfg.DATA_PATH}")
+    
+    # Try different encodings
+    encodings = ['utf-8', 'latin-1', 'iso-8859-1', 'cp1252']
+    df = None
+    
+    for encoding in encodings:
+        try:
+            logger.info(f"Trying encoding: {encoding}")
+            df = pd.read_csv(cfg.DATA_PATH, encoding=encoding, on_bad_lines='skip')
+            logger.info(f"Successfully loaded with {encoding} encoding")
+            break
+        except UnicodeDecodeError:
+            continue
+        except Exception as e:
+            logger.error(f"Error with {encoding}: {e}")
+            continue
+    
+    if df is None:
+        logger.error("Failed to load dataset with any encoding")
+        return
+    
     logger.info(f"Loaded {len(df)} articles")
+    logger.info(f"Columns: {df.columns.tolist()}")
     
     # Initialize preprocessor
-    preprocessor = ArticlePreprocessor()
+    preprocessor = ArticlePreprocessor(cfg)
     
     # Preprocess corpus
     processed_articles = preprocessor.preprocess_corpus(df)
+    
+    if not processed_articles:
+        logger.error("No articles were successfully preprocessed!")
+        return
     
     # Save processed articles
     preprocessor.save_processed_articles(processed_articles)

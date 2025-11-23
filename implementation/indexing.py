@@ -1,479 +1,350 @@
 """
-Indexing Module for Cortex IR System
-Handles BM25, ColBERT, and SQLite metadata index construction
+Indexing Module - Builds BM25 and dense retrieval indices
 """
 
+import pickle
 import sqlite3
-import json
+import numpy as np
 from pathlib import Path
 from typing import List, Dict
-import numpy as np
-
-import bm25s
 from tqdm import tqdm
 
-import config
-from utils import setup_logging, timer, load_pickle, save_pickle
+import bm25s
+from sentence_transformers import SentenceTransformer
 
-logger = setup_logging(__name__)
+from config import Config
+from utils import logger, timer, save_pickle, load_pickle
+
+config = Config()
 
 
 class BM25Indexer:
-    """
-    BM25 sparse index construction using bm25s library
-    """
+    """BM25 index builder using bm25s library"""
     
-    def __init__(self, k1: float = None, b: float = None):
-        """
-        Initialize BM25 indexer
+    def __init__(self, config: Config = None):
+        if config is None:
+            config = Config()
+        self.config = config
+        self.index = None
         
-        Args:
-            k1: BM25 k1 parameter (default from config)
-            b: BM25 b parameter (default from config)
-        """
-        self.k1 = k1 if k1 is not None else config.BM25_K1
-        self.b = b if b is not None else config.BM25_B
-        self.retriever = None
-        self.corpus = None
-        
-        logger.info(f"BM25Indexer initialized with k1={self.k1}, b={self.b}")
-    
     @timer
-    def build_index(self, processed_articles: List[Dict], save_path: str = None):
+    def build_index(self, processed_articles: List[Dict]):
         """
-        Build BM25 index from preprocessed articles
+        Build BM25 index from processed articles
         
         Args:
-            processed_articles: List of preprocessed article dictionaries
-            save_path: Path to save index (default from config)
+            processed_articles: List of preprocessed articles with tokens
         """
         logger.info(f"Building BM25 index for {len(processed_articles)} articles...")
         
-        # Store corpus reference
-        self.corpus = processed_articles
-        
-        # Prepare corpus tokens with field boosting
-        corpus_tokens = []
+        # Prepare corpus as raw text (bm25s will tokenize internally)
+        corpus_texts = []
         for article in tqdm(processed_articles, desc="Preparing corpus"):
-            # Combine title (weighted) and content tokens
-            title_tokens = article['title_tokens'] * int(config.TITLE_BOOST)
-            content_tokens = article['content_tokens']
+            # Create text by repeating title for boosting
+            title = article['title']
+            content = article['content']
             
-            # Boost entity tokens
-            entity_tokens = []
-            for entity in article['entities']:
-                if entity['confidence'] >= config.ENTITY_CONFIDENCE_THRESHOLD:
-                    entity_tokens.extend(
-                        entity['text'].lower().split() * int(config.ENTITY_BOOST)
-                    )
-            
-            combined_tokens = title_tokens + content_tokens + entity_tokens
-            corpus_tokens.append(combined_tokens)
+            # Repeat title for boosting
+            boosted_text = ' '.join([title] * self.config.BM25_TITLE_BOOST) + ' ' + content
+            corpus_texts.append(boosted_text)
         
-        # Build BM25 index
-        self.retriever = bm25s.BM25()
+        # Tokenize corpus with bm25s
+        logger.info("Tokenizing corpus for BM25...")
+        corpus_tokens = bm25s.tokenize(corpus_texts, stopwords='en', show_progress=True)
         
-        # Tokenize and create index
-        logger.info("Creating BM25 index...")
-        corpus_tokens_array = bm25s.tokenize(corpus_tokens, stopwords=None)
-        self.retriever.index(corpus_tokens_array)
+        # Build index
+        logger.info("Building BM25 index...")
+        self.index = bm25s.BM25()
+        self.index.index(corpus_tokens)
         
-        # Save index
-        if save_path is None:
-            save_path = config.BM25_INDEX_PATH
+        logger.info(f"BM25 index built with {len(corpus_texts)} documents")
         
-        self._save_index(save_path)
-        
-        logger.info(f"BM25 index built and saved to {save_path}")
+        return self.index
     
-    def _save_index(self, save_path: str):
+    def save_index(self):
         """Save BM25 index to disk"""
-        Path(save_path).parent.mkdir(parents=True, exist_ok=True)
+        index_path = self.config.INDEX_DIR / "bm25_index"
+        index_path.mkdir(parents=True, exist_ok=True)
         
-        # Save BM25 index
-        self.retriever.save(save_path)
-        
-        # Save corpus reference
-        corpus_path = Path(save_path) / "corpus_ref.pkl"
-        save_pickle(self.corpus, str(corpus_path))
-        
-        logger.info(f"BM25 index saved to {save_path}")
+        logger.info(f"Saving BM25 index to {index_path}")
+        self.index.save(str(index_path))
+        logger.info("BM25 index saved successfully")
     
-    def load_index(self, load_path: str = None):
+    def load_index(self):
         """Load BM25 index from disk"""
-        if load_path is None:
-            load_path = config.BM25_INDEX_PATH
+        index_path = self.config.INDEX_DIR / "bm25_index"
         
-        logger.info(f"Loading BM25 index from {load_path}")
+        if not index_path.exists():
+            raise FileNotFoundError(f"BM25 index not found at {index_path}")
         
-        # Load BM25 index
-        self.retriever = bm25s.BM25.load(load_path, load_corpus=False)
+        logger.info(f"Loading BM25 index from {index_path}")
+        self.index = bm25s.BM25.load(str(index_path), mmap=True)
+        logger.info("BM25 index loaded successfully")
         
-        # Load corpus reference
-        corpus_path = Path(load_path) / "corpus_ref.pkl"
-        self.corpus = load_pickle(str(corpus_path))
-        
-        logger.info(f"BM25 index loaded successfully")
+        return self.index
 
 
-class ColBERTIndexer:
-    """
-    ColBERT dense index construction using RAGatouille
-    """
+class DenseEmbeddingIndexer:
+    """Dense embedding index builder using sentence-transformers"""
     
-    def __init__(self):
-        """Initialize ColBERT indexer"""
+    def __init__(self, config: Config = None):
+        if config is None:
+            config = Config()
+        self.config = config
         self.model = None
-        self.index_name = "news_colbert_index"
+        self.embeddings = None
         
-        logger.info("ColBERTIndexer initialized")
-    
     @timer
-    def build_index(self, processed_articles: List[Dict], save_path: str = None):
+    def build_index(self, processed_articles: List[Dict]):
         """
-        Build ColBERT index from preprocessed articles
+        Build dense embedding index
         
         Args:
-            processed_articles: List of preprocessed article dictionaries
-            save_path: Path to save index (default from config)
+            processed_articles: List of preprocessed articles
         """
-        try:
-            from ragatouille import RAGPretrainedModel
-            
-            logger.info(f"Building ColBERT index for {len(processed_articles)} articles...")
-            logger.info("This may take 2-3 minutes...")
-            
-            # Initialize ColBERT model
-            self.model = RAGPretrainedModel.from_pretrained("colbert-ir/colbertv2.0")
-            
-            # Prepare documents for indexing
-            documents = []
-            doc_ids = []
-            
-            for article in tqdm(processed_articles, desc="Preparing documents"):
-                # Combine title and content (truncate to 512 tokens)
-                title = article['title']
-                content = article['content'][:2000]  # Limit content length
-                doc_text = f"{title}. {content}"
-                
-                documents.append(doc_text)
-                doc_ids.append(str(article['id']))
-            
-            # Determine save path
-            if save_path is None:
-                save_path = config.COLBERT_INDEX_PATH
-            
-            # Index with ColBERT
-            logger.info("Indexing with ColBERT (this takes time)...")
-            self.model.index(
-                collection=documents,
-                document_ids=doc_ids,
-                index_name=self.index_name,
-                max_document_length=512,
-                split_documents=False
-            )
-            
-            logger.info(f"ColBERT index built successfully")
-            
-        except ImportError:
-            logger.warning("RAGatouille not installed. Skipping ColBERT indexing.")
-            logger.info("Install with: pip install ragatouille")
-        except Exception as e:
-            logger.error(f"Error building ColBERT index: {e}")
-            logger.info("Continuing without ColBERT index...")
+        logger.info(f"Building dense embeddings for {len(processed_articles)} articles...")
+        
+        # Load model
+        logger.info(f"Loading embedding model: {self.config.EMBEDDING_MODEL}")
+        self.model = SentenceTransformer(self.config.EMBEDDING_MODEL)
+        
+        # Prepare texts (title + snippet of content)
+        texts = []
+        for article in tqdm(processed_articles, desc="Preparing texts"):
+            title = article['title']
+            content = article['content'][:500]  # First 500 chars
+            text = f"{title}. {content}"
+            texts.append(text)
+        
+        # Generate embeddings
+        logger.info("Generating embeddings...")
+        self.embeddings = self.model.encode(
+            texts,
+            batch_size=self.config.BATCH_SIZE,
+            show_progress_bar=True,
+            normalize_embeddings=True  # Normalize for cosine similarity
+        )
+        
+        logger.info(f"Dense embeddings created: shape={self.embeddings.shape}")
+        
+        return self.embeddings
     
-    def load_index(self, index_name: str = None):
-        """Load ColBERT index"""
-        try:
-            from ragatouille import RAGPretrainedModel
-            
-            if index_name is None:
-                index_name = self.index_name
-            
-            logger.info(f"Loading ColBERT index: {index_name}")
-            self.model = RAGPretrainedModel.from_index(index_name)
-            logger.info("ColBERT index loaded successfully")
-            
-        except Exception as e:
-            logger.error(f"Error loading ColBERT index: {e}")
-            self.model = None
+    def save_index(self):
+        """Save embeddings to disk"""
+        embeddings_path = self.config.INDEX_DIR / "dense_embeddings.npy"
+        
+        logger.info(f"Saving dense embeddings to {embeddings_path}")
+        np.save(embeddings_path, self.embeddings)
+        logger.info("Dense embeddings saved successfully")
+    
+    def load_index(self):
+        """Load embeddings from disk"""
+        embeddings_path = self.config.INDEX_DIR / "dense_embeddings.npy"
+        
+        if not embeddings_path.exists():
+            raise FileNotFoundError(f"Dense embeddings not found at {embeddings_path}")
+        
+        logger.info(f"Loading dense embeddings from {embeddings_path}")
+        self.embeddings = np.load(embeddings_path)
+        logger.info(f"Dense embeddings loaded: shape={self.embeddings.shape}")
+        
+        # Load model for query encoding
+        self.model = SentenceTransformer(self.config.EMBEDDING_MODEL)
+        
+        return self.embeddings
 
 
 class MetadataIndexer:
-    """
-    SQLite metadata store for fast filtering
-    """
+    """SQLite-based metadata indexer for fast lookups"""
     
-    def __init__(self, db_path: str = None):
-        """
-        Initialize metadata indexer
-        
-        Args:
-            db_path: Path to SQLite database (default from config)
-        """
-        self.db_path = db_path if db_path is not None else config.METADATA_DB_PATH
+    def __init__(self, config: Config = None):
+        if config is None:
+            config = Config()
+        self.config = config
+        self.db_path = self.config.INDEX_DIR / "metadata.db"
         self.conn = None
         
-        logger.info(f"MetadataIndexer initialized with db_path={self.db_path}")
+    def _create_tables(self):
+        """Create database tables"""
+        cursor = self.conn.cursor()
+        
+        # Drop existing tables to start fresh
+        cursor.execute('DROP TABLE IF EXISTS entities')
+        cursor.execute('DROP TABLE IF EXISTS articles')
+        
+        # Articles table
+        cursor.execute('''
+            CREATE TABLE articles (
+                id INTEGER PRIMARY KEY,
+                title TEXT,
+                content TEXT,
+                date TEXT,
+                parsed_date TEXT,
+                category TEXT,
+                doc_length INTEGER
+            )
+        ''')
+        
+        # Entities table
+        cursor.execute('''
+            CREATE TABLE entities (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                article_id INTEGER,
+                text TEXT,
+                label TEXT,
+                confidence REAL,
+                in_title INTEGER,
+                FOREIGN KEY (article_id) REFERENCES articles(id)
+            )
+        ''')
+        
+        # Create indices for faster lookups
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_article_category ON articles(category)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_article_date ON articles(parsed_date)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_entity_article ON entities(article_id)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_entity_text ON entities(text)')
+        
+        self.conn.commit()
     
     @timer
     def build_index(self, processed_articles: List[Dict]):
         """
-        Build SQLite metadata index
+        Build metadata index
         
         Args:
-            processed_articles: List of preprocessed article dictionaries
+            processed_articles: List of preprocessed articles
         """
         logger.info(f"Building metadata index for {len(processed_articles)} articles...")
         
-        # Create database directory
-        Path(self.db_path).parent.mkdir(parents=True, exist_ok=True)
+        # Remove old database if exists
+        if self.db_path.exists():
+            logger.info(f"Removing old database: {self.db_path}")
+            self.db_path.unlink()
         
         # Connect to database
         self.conn = sqlite3.connect(self.db_path)
+        self._create_tables()
+        
         cursor = self.conn.cursor()
         
-        # Create table
-        cursor.execute('''
-        CREATE TABLE IF NOT EXISTS articles (
-            id INTEGER PRIMARY KEY,
-            title TEXT NOT NULL,
-            content TEXT NOT NULL,
-            date TEXT,
-            parsed_date TIMESTAMP,
-            category TEXT,
-            doc_length INTEGER,
-            title_length INTEGER,
-            entities TEXT,
-            entity_count INTEGER,
-            topic_id INTEGER,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-        ''')
-        
-        # Insert articles
-        for article in tqdm(processed_articles, desc="Building metadata store"):
-            # Serialize entities as JSON
-            entities_json = json.dumps(article['entities'])
+        # Insert articles and entities
+        for article in tqdm(processed_articles, desc="Indexing metadata"):
+            # Convert parsed_date to string if it exists
+            parsed_date_str = None
+            if article.get('parsed_date'):
+                try:
+                    parsed_date_str = str(article['parsed_date'])
+                except:
+                    pass
             
+            # Insert article
             cursor.execute('''
-            INSERT OR REPLACE INTO articles (
-                id, title, content, date, parsed_date, category,
-                doc_length, title_length, entities, entity_count, topic_id
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO articles (id, title, content, date, parsed_date, category, doc_length)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
             ''', (
                 article['id'],
                 article['title'],
                 article['content'],
                 article['date'],
-                article['parsed_date'],
+                parsed_date_str,
                 article['category'],
-                article['doc_length'],
-                article['title_length'],
-                entities_json,
-                len(article['entities']),
-                article.get('topic_id', -1)
+                article['doc_length']
             ))
+            
+            # Insert entities
+            for entity in article.get('entities', []):
+                cursor.execute('''
+                    INSERT INTO entities (article_id, text, label, confidence, in_title)
+                    VALUES (?, ?, ?, ?, ?)
+                ''', (
+                    article['id'],
+                    entity['text'],
+                    entity['label'],
+                    entity['confidence'],
+                    1 if entity.get('in_title', False) else 0
+                ))
         
-        # Create indices for fast filtering
-        logger.info("Creating B-tree indices...")
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_category ON articles(category)')
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_date ON articles(date)')
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_parsed_date ON articles(parsed_date)')
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_doc_length ON articles(doc_length)')
-        cursor.execute('CREATE INDEX IF NOT EXISTS idx_topic_id ON articles(topic_id)')
-        
-        # Commit and close
         self.conn.commit()
-        
-        logger.info(f"Metadata index built successfully at {self.db_path}")
-        
-        # Print statistics
-        cursor.execute("SELECT COUNT(*) FROM articles")
-        count = cursor.fetchone()[0]
-        logger.info(f"Total articles in metadata store: {count}")
-        
-        cursor.execute("SELECT category, COUNT(*) FROM articles GROUP BY category")
-        categories = cursor.fetchall()
-        logger.info(f"Articles by category: {dict(categories)}")
-    
-    def get_article_metadata(self, article_id: int) -> Dict:
-        """Get metadata for a specific article"""
-        if self.conn is None:
-            self.conn = sqlite3.connect(self.db_path)
-        
-        cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM articles WHERE id = ?", (article_id,))
-        row = cursor.fetchone()
-        
-        if row is None:
-            return None
-        
-        columns = [desc[0] for desc in cursor.description]
-        metadata = dict(zip(columns, row))
-        
-        # Parse entities JSON
-        metadata['entities'] = json.loads(metadata['entities'])
-        
-        return metadata
-    
-    def filter_by_category(self, category: str) -> List[int]:
-        """Get article IDs by category"""
-        if self.conn is None:
-            self.conn = sqlite3.connect(self.db_path)
-        
-        cursor = self.conn.cursor()
-        cursor.execute("SELECT id FROM articles WHERE category = ?", (category,))
-        return [row[0] for row in cursor.fetchall()]
-    
-    def filter_by_date_range(self, start_date: str, end_date: str) -> List[int]:
-        """Get article IDs within date range"""
-        if self.conn is None:
-            self.conn = sqlite3.connect(self.db_path)
-        
-        cursor = self.conn.cursor()
-        cursor.execute(
-            "SELECT id FROM articles WHERE parsed_date BETWEEN ? AND ?",
-            (start_date, end_date)
-        )
-        return [row[0] for row in cursor.fetchall()]
+        logger.info("Metadata index built successfully")
     
     def close(self):
         """Close database connection"""
         if self.conn:
             self.conn.close()
-            logger.info("Metadata database connection closed")
 
 
-class TopicIndexer:
-    """
-    Topic modeling using BERTopic
-    """
+class IndexBuilder:
+    """Main index builder orchestrator"""
     
-    def __init__(self):
-        """Initialize topic indexer"""
-        self.topic_model = None
-        logger.info("TopicIndexer initialized")
-    
-    @timer
-    def build_topic_model(self, processed_articles: List[Dict], save_path: str = None):
-        """
-        Build topic model using BERTopic
+    def __init__(self, config: Config = None):
+        if config is None:
+            config = Config()
+        self.config = config
         
-        Args:
-            processed_articles: List of preprocessed article dictionaries
-            save_path: Path to save model (default from config)
-        """
-        try:
-            from bertopic import BERTopic
-            from sklearn.feature_extraction.text import CountVectorizer
-            
-            logger.info(f"Building topic model for {len(processed_articles)} articles...")
-            
-            # Prepare documents for topic modeling
-            documents = [
-                article['content'][:1000] 
-                for article in processed_articles
-            ]
-            
-            # Initialize BERTopic with optimized settings
-            vectorizer_model = CountVectorizer(
-                stop_words='english',
-                max_features=1000
-            )
-            
-            self.topic_model = BERTopic(
-                embedding_model=config.EMBEDDING_MODEL,
-                vectorizer_model=vectorizer_model,
-                min_topic_size=10,
-                nr_topics='auto'
-            )
-            
-            # Fit topic model
-            logger.info("Fitting topic model (this may take a minute)...")
-            topics, probs = self.topic_model.fit_transform(documents)
-            
-            # Add topics to processed articles
-            for idx, (topic, prob) in enumerate(zip(topics, probs)):
-                processed_articles[idx]['topic_id'] = int(topic)
-                processed_articles[idx]['topic_prob'] = float(prob)
-            
-            # Save topic model
-            if save_path is None:
-                save_path = config.TOPIC_MODEL_PATH
-            
-            Path(save_path).parent.mkdir(parents=True, exist_ok=True)
-            self.topic_model.save(save_path)
-            
-            # Save updated processed articles
-            save_pickle(processed_articles, config.PROCESSED_DATA_PATH)
-            
-            logger.info(f"Topic model built and saved to {save_path}")
-            logger.info(f"Found {len(set(topics))} topics")
-            
-            # Print topic info
-            topic_info = self.topic_model.get_topic_info()
-            logger.info(f"\nTop 5 topics:\n{topic_info.head()}")
-            
-            return processed_articles
-            
-        except ImportError:
-            logger.warning("BERTopic not installed. Skipping topic modeling.")
-            logger.info("Install with: pip install bertopic")
-            return processed_articles
-        except Exception as e:
-            logger.error(f"Error building topic model: {e}")
-            return processed_articles
+    def build_all_indices(self, processed_articles: List[Dict]):
+        """Build all indices"""
+        logger.info("="*70)
+        logger.info("BUILDING ALL INDICES")
+        logger.info("="*70)
+        
+        # 1. Build BM25 index
+        logger.info("\n1. Building BM25 Index...")
+        bm25_indexer = BM25Indexer(self.config)
+        bm25_indexer.build_index(processed_articles)
+        bm25_indexer.save_index()
+        
+        # 2. Build dense embeddings
+        logger.info("\n2. Building Dense Embeddings...")
+        dense_indexer = DenseEmbeddingIndexer(self.config)
+        dense_indexer.build_index(processed_articles)
+        dense_indexer.save_index()
+        
+        # 3. Build metadata index
+        logger.info("\n3. Building Metadata Index...")
+        metadata_indexer = MetadataIndexer(self.config)
+        metadata_indexer.build_index(processed_articles)
+        metadata_indexer.close()
+        
+        logger.info("\n" + "="*70)
+        logger.info("ALL INDICES BUILT SUCCESSFULLY")
+        logger.info("="*70)
     
-    def load_topic_model(self, load_path: str = None):
-        """Load topic model from disk"""
-        try:
-            from bertopic import BERTopic
-            
-            if load_path is None:
-                load_path = config.TOPIC_MODEL_PATH
-            
-            logger.info(f"Loading topic model from {load_path}")
-            self.topic_model = BERTopic.load(load_path)
-            logger.info("Topic model loaded successfully")
-            
-        except Exception as e:
-            logger.error(f"Error loading topic model: {e}")
-            self.topic_model = None
+    def load_bm25_index(self):
+        """Load BM25 index"""
+        bm25_indexer = BM25Indexer(self.config)
+        return bm25_indexer.load_index()
+    
+    def load_dense_embeddings(self):
+        """Load dense embeddings"""
+        dense_indexer = DenseEmbeddingIndexer(self.config)
+        return dense_indexer.load_index()
+    
+    def load_metadata(self):
+        """Load metadata (articles list)"""
+        return load_pickle(self.config.PROCESSED_DATA_PATH)
 
 
 def main():
-    """Main function to run indexing pipeline"""
+    """Main indexing pipeline"""
     logger.info("Starting indexing pipeline...")
     
-    # Load preprocessed articles
-    logger.info(f"Loading preprocessed articles from {config.PROCESSED_DATA_PATH}")
-    processed_articles = load_pickle(config.PROCESSED_DATA_PATH)
-    logger.info(f"Loaded {len(processed_articles)} preprocessed articles")
+    cfg = Config()
     
-    # Build BM25 index
-    logger.info("\n=== Building BM25 Index ===")
-    bm25_indexer = BM25Indexer()
-    bm25_indexer.build_index(processed_articles)
+    # Load processed articles
+    logger.info(f"Loading processed articles from {cfg.PROCESSED_DATA_PATH}")
     
-    # Build topic model first (adds topic_id to articles)
-    logger.info("\n=== Building Topic Model ===")
-    topic_indexer = TopicIndexer()
-    processed_articles = topic_indexer.build_topic_model(processed_articles)
+    if not cfg.PROCESSED_DATA_PATH.exists():
+        logger.error("Preprocessed data not found. Please run preprocessing first.")
+        return
     
-    # Build metadata index
-    logger.info("\n=== Building Metadata Index ===")
-    metadata_indexer = MetadataIndexer()
-    metadata_indexer.build_index(processed_articles)
-    metadata_indexer.close()
+    processed_articles = load_pickle(cfg.PROCESSED_DATA_PATH)
+    logger.info(f"Loaded {len(processed_articles)} processed articles")
     
-    # Build ColBERT index (optional, takes longer)
-    logger.info("\n=== Building ColBERT Index ===")
-    colbert_indexer = ColBERTIndexer()
-    colbert_indexer.build_index(processed_articles)
+    # Build all indices
+    builder = IndexBuilder(cfg)
+    builder.build_all_indices(processed_articles)
     
-    logger.info("\n=== Indexing Complete ===")
-    logger.info("All indices have been built successfully!")
+    logger.info("\nIndexing complete!")
 
 
 if __name__ == "__main__":
