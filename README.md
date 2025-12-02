@@ -2,6 +2,8 @@
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<img width="1920" height="922" alt="image" src="https://github.com/user-attachments/assets/b93b3ec2-47ae-4009-a67b-245bcc84b1bd" />
+
 
 A state-of-the-art hybrid information retrieval system for news articles, combining BM25, ColBERT, neural reranking, and intelligent post-processing for superior search performance.
 
