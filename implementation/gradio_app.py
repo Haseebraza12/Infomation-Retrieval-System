@@ -167,6 +167,10 @@ class CortexGradioApp:
                 'query_type': result['query']['type']
             })
             
+            logger.info(f"Search Query: '{query}'")
+            logger.info(f"Corrected Query: '{result['query']['corrected']}'")
+            logger.info(f"Correction diff: {query.strip() != result['query']['corrected'].strip()}")
+            
             # Format results
             results_html = self._format_results(result)
             query_info = self._format_query_info(result['query'])
@@ -174,7 +178,28 @@ class CortexGradioApp:
             category_chart = self._create_category_chart(result['results'])
             timeline_chart = self._create_timeline_chart(result['results'])
             
-            return results_html, query_info, performance_chart, category_chart, timeline_chart
+            # Check for spelling correction
+            original_query = result['query']['original']
+            corrected_query = result['query']['corrected']
+            
+            did_you_mean_visible = False
+            did_you_mean_val = ""
+            did_you_mean_state_val = ""
+            
+            # Simple check: if they differ (ignoring case/space if needed, but strict is fine)
+            if original_query.strip() != corrected_query.strip():
+                did_you_mean_visible = True
+                did_you_mean_val = corrected_query
+                did_you_mean_state_val = corrected_query
+            
+            # Generate highlighted query
+            highlighted_html = self._generate_highlighted_query(original_query, corrected_query)
+            
+            return (results_html, query_info, performance_chart, category_chart, 
+                    timeline_chart, 
+                    gr.Group(visible=did_you_mean_visible), 
+                    gr.Button(value=did_you_mean_val),
+                    highlighted_html)
             
         except Exception as e:
             logger.error(f"Search error: {e}", exc_info=True)
@@ -184,7 +209,66 @@ class CortexGradioApp:
                 <p>{str(e)}</p>
             </div>
             """
-            return error_html, "", None, None, None
+            return error_html, "", None, None, None, gr.Group(visible=False), gr.Button(), ""
+    
+    def advanced_search(
+        self,
+        query: str,
+        category: str,
+        start_date: str,
+        end_date: str,
+        entity: str,
+        num_results: int,
+        enable_reranking: bool,
+        enable_post_processing: bool
+    ):
+        """
+        Execute advanced hybrid search
+        """
+        if not self.pipeline_ready:
+            return "Pipeline not ready", "", None
+            
+        if not query or not query.strip():
+            return "Please enter a query", "", None
+            
+        try:
+            # Execute hybrid search
+            result = self.pipeline.hybrid_search(
+                query=query,
+                category=category if category != "All" else None,
+                start_date=start_date,
+                end_date=end_date,
+                entity=entity,
+                top_k=num_results,
+                enable_reranking=enable_reranking,
+                enable_post_processing=enable_post_processing
+            )
+            
+            # Save to history
+            self.search_history.append({
+                'timestamp': datetime.now(),
+                'query': query,
+                'num_results': len(result['results']),
+                'time_ms': result['metadata']['total_time_ms'],
+                'query_type': result['query']['type']
+            })
+            
+            # Format results
+            results_html = self._format_results(result)
+            query_info = self._format_query_info(result['query'])
+            performance_chart = self._create_performance_chart(result['metadata'])
+            
+            return results_html, query_info, performance_chart
+            
+        except Exception as e:
+            logger.error(f"Advanced search error: {e}", exc_info=True)
+            error_html = f"""
+            <div style='padding: 20px; background: #fee; border: 2px solid #c33; border-radius: 8px;'>
+                <h3>❌ Search Error</h3>
+                <p>{str(e)}</p>
+            </div>
+            """
+            return error_html, "", None
     
     def _format_results(self, result: dict) -> str:
         """Format search results as HTML"""
@@ -383,6 +467,30 @@ class CortexGradioApp:
         
         return info
     
+    def _generate_highlighted_query(self, original: str, corrected: str) -> str:
+        """Generate HTML with highlighted errors"""
+        if original.strip() == corrected.strip():
+            return ""
+            
+        orig_words = original.split()
+        corr_words = corrected.split()
+        
+        if len(orig_words) != len(corr_words):
+            # Fallback if token counts differ
+            return f"<div style='color: #d32f2f; margin-top: 4px;'>Spelling errors detected</div>"
+            
+        html_parts = []
+        for ow, cw in zip(orig_words, corr_words):
+            if ow != cw:
+                html_parts.append(
+                    f"<span style='color: #d32f2f; text-decoration: underline; font-weight: bold; cursor: help;' "
+                    f"title='Did you mean: {cw}'>{ow}</span>"
+                )
+            else:
+                html_parts.append(ow)
+                
+        return f"<div style='margin-top: 4px; color: #666;'>Detected errors: {' '.join(html_parts)}</div>"
+    
     def _create_performance_chart(self, metadata: dict) -> go.Figure:
         """Create performance breakdown chart"""
         stages = ['Query\nProcessing', 'Retrieval', 'Reranking', 'Post\nProcessing']
@@ -575,6 +683,7 @@ class CortexGradioApp:
                             placeholder="Enter your search query here... (e.g., 'latest sports news', 'economic impact of inflation')",
                             lines=2
                         )
+                        highlighted_query_output = gr.HTML()
                     
                     with gr.Column(scale=1):
                         num_results = gr.Slider(
@@ -596,6 +705,14 @@ class CortexGradioApp:
                     )
                 
                 search_btn = gr.Button("🚀 Search", variant="primary")
+                
+                # Did you mean component
+                with gr.Group(visible=False) as did_you_mean_group:
+                    with gr.Row():
+                        gr.Markdown("### Did you mean:")
+                        did_you_mean_btn = gr.Button("", variant="secondary", size="sm")
+                
+                did_you_mean_state = gr.State("")
                 
                 # Results
                 gr.Markdown("## Results")
@@ -622,9 +739,16 @@ class CortexGradioApp:
                         ["who won the championship?"],
                         ["impact of inflation on economy"],
                         ["sports team performance 2023"],
-                        ["company merger announcements"]
+                        ["company merger announcements"],
+                        ["explin machine lerning"],
+                        ["sindh transport fares"],
+                        ["asian markets 2015"],
+                        ["china manufacturing growth"],
+                        ["dollar exchange rate"],
+                        ["gold price analysis"]
                     ],
-                    inputs=query_input
+                    inputs=query_input,
+                    label="Example Queries"
                 )
                 
                 # Connect search button
@@ -632,7 +756,109 @@ class CortexGradioApp:
                     fn=self.search,
                     inputs=[query_input, num_results, reranking_check, post_processing_check],
                     outputs=[results_output, query_info_output, performance_chart, 
-                            category_chart, timeline_chart]
+                            category_chart, timeline_chart, did_you_mean_group, did_you_mean_btn,
+                            highlighted_query_output]
+                )
+                
+                # Did you mean handler
+                def apply_correction(corrected_query):
+                    return corrected_query
+                
+                did_you_mean_btn.click(
+                    fn=apply_correction,
+                    inputs=[did_you_mean_state],
+                    outputs=[query_input]
+                ).then(
+                    fn=self.search,
+                    inputs=[query_input, num_results, reranking_check, post_processing_check],
+                    outputs=[results_output, query_info_output, performance_chart, 
+                            category_chart, timeline_chart, did_you_mean_group, did_you_mean_btn,
+                            highlighted_query_output]
+                )
+
+            # Advanced Search Tab
+            with gr.Tab("🔬 Advanced Search"):
+                gr.Markdown("### Boolean Search & Filters")
+                
+                with gr.Row():
+                    with gr.Column(scale=3):
+                        adv_query_input = gr.Textbox(
+                            label="Boolean Query",
+                            placeholder="e.g. 'economy AND (growth OR inflation) NOT recession'",
+                            lines=2
+                        )
+                    
+                    with gr.Column(scale=1):
+                        adv_num_results = gr.Slider(
+                            minimum=5,
+                            maximum=50,
+                            value=10,
+                            step=5,
+                            label="Number of Results"
+                        )
+                
+                with gr.Row():
+                    category_filter = gr.Dropdown(
+                        choices=["All", "Business", "Sports", "Technology"],
+                        label="Category",
+                        value="All"
+                    )
+                    entity_filter = gr.Textbox(
+                        label="Entity Filter",
+                        placeholder="e.g. Tesla, Apple"
+                    )
+                
+                with gr.Row():
+                    start_date = gr.Textbox(
+                        label="Start Date (YYYY-MM-DD)",
+                        placeholder="2023-01-01"
+                    )
+                    end_date = gr.Textbox(
+                        label="End Date (YYYY-MM-DD)",
+                        placeholder="2023-12-31"
+                    )
+                
+                with gr.Row():
+                    adv_reranking_check = gr.Checkbox(
+                        label="Enable Neural Reranking",
+                        value=True
+                    )
+                    adv_post_processing_check = gr.Checkbox(
+                        label="Enable Post-Processing",
+                        value=True
+                    )
+                
+                adv_search_btn = gr.Button("🚀 Advanced Search", variant="primary")
+                
+                # Results
+                gr.Markdown("## Results")
+                adv_results_output = gr.HTML(label="Search Results")
+                
+                # Analytics
+                with gr.Row():
+                    with gr.Column():
+                        adv_query_info_output = gr.Markdown(label="Query Analysis")
+                    with gr.Column():
+                        adv_performance_chart = gr.Plot(label="Performance")
+                
+                # Example Boolean Queries
+                gr.Markdown("### 💡 Example Boolean Queries")
+                gr.Examples(
+                    examples=[
+                        ["technology AND innovation"],
+                        ["business AND (merger OR acquisition)"],
+                        ["sports NOT football"],
+                        ["economy AND inflation NOT recession"]
+                    ],
+                    inputs=adv_query_input
+                )
+                
+                # Connect advanced search button
+                adv_search_btn.click(
+                    fn=self.advanced_search,
+                    inputs=[adv_query_input, category_filter, start_date, end_date, 
+                           entity_filter, adv_num_results, adv_reranking_check, adv_post_processing_check],
+                    outputs=[adv_results_output, adv_query_info_output, adv_performance_chart]
                 )
             
             # Analytics tab
@@ -647,6 +873,46 @@ class CortexGradioApp:
                     outputs=analytics_output
                 )
             
+            # System Metrics Tab
+            with gr.Tab("System Metrics"):
+                gr.Markdown("## System Evaluation Metrics")
+                
+                try:
+                    import json
+                    report_path = self.config.INDEX_DIR / "evaluation_report.json"
+                    if report_path.exists():
+                        with open(report_path, 'r') as f:
+                            report = json.load(f)
+                        
+                        summary = report['summary']
+                        
+                        with gr.Row():
+                            gr.Number(value=summary.get('map', 0), label="MAP (Mean Average Precision)")
+                            gr.Number(value=summary.get('mrr', 0), label="MRR (Mean Reciprocal Rank)")
+                            gr.Number(value=summary.get('avg_response_time_ms', 0), label="Avg Response Time (ms)")
+                        
+                        gr.Markdown("### Precision, Recall & F1-Score @ K")
+                        
+                        # Create data for dataframe
+                        metrics_data = []
+                        for k in [5, 10, 20]:
+                            metrics_data.append([
+                                f"@{k}",
+                                f"{summary.get(f'precision@{k}', 0):.4f}",
+                                f"{summary.get(f'recall@{k}', 0):.4f}",
+                                f"{summary.get(f'f1@{k}', 0):.4f}"
+                            ])
+                        
+                        gr.Dataframe(
+                            headers=["K", "Precision", "Recall", "F1-Score"],
+                            value=metrics_data,
+                            interactive=False
+                        )
+                    else:
+                        gr.Markdown("*Evaluation report not found. Run evaluation to generate metrics.*")
+                except Exception as e:
+                    gr.Markdown(f"Error loading metrics: {e}")
+
             # About tab
             with gr.Tab("ℹ️ About"):
                 gr.Markdown("""

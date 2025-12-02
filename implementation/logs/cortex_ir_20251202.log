@@ -1,0 +1,1742 @@
+2025-12-02 08:21:55,743 - utils - INFO - Initializing Cortex IR System...
+2025-12-02 08:21:55,747 - utils - INFO - Checking system readiness...
+2025-12-02 08:21:55,747 - utils - INFO - ✅ Preprocessed data found
+2025-12-02 08:21:55,747 - utils - INFO - ✅ Search indices found
+2025-12-02 08:21:55,747 - utils - INFO - ✅ All components ready - launching UI...
+2025-12-02 08:22:02,143 - utils - INFO - Loading IR pipeline...
+2025-12-02 08:22:02,143 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-12-02 08:22:02,143 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-12-02 08:22:02,941 - utils - INFO - Query processor initialized
+2025-12-02 08:22:02,942 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-12-02 08:22:02,942 - utils - INFO - Using device: cpu
+2025-12-02 08:22:05,951 - utils - INFO - Neural reranker initialized
+2025-12-02 08:22:05,952 - utils - INFO - Ensemble reranker initialized
+2025-12-02 08:22:05,952 - utils - INFO - Post-processor initialized
+2025-12-02 08:22:06,575 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-02 08:22:06,741 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-02 08:22:07,557 - utils - INFO - Inverted index built with 21795 terms
+2025-12-02 08:22:07,557 - utils - INFO - build_index completed in 815.97ms
+2025-12-02 08:22:07,580 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 08:22:07,594 - utils - INFO - BM25 index loaded successfully
+2025-12-02 08:22:07,733 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 08:22:07,735 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 08:22:10,903 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 08:22:14,293 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 08:22:14,293 - utils - INFO - Loading indices...
+2025-12-02 08:22:14,294 - utils - INFO - Loading BM25 index...
+2025-12-02 08:22:14,294 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 08:22:14,332 - utils - INFO - BM25 index loaded successfully
+2025-12-02 08:22:14,332 - utils - INFO - Loading article metadata...
+2025-12-02 08:22:14,656 - utils - INFO - Loading dense embeddings...
+2025-12-02 08:22:14,656 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 08:22:14,658 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 08:22:17,861 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 08:22:22,319 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 08:22:22,319 - utils - INFO - Indices loaded: 2692 articles indexed
+2025-12-02 08:22:22,319 - utils - INFO - Pipeline initialized successfully!
+2025-12-02 08:22:22,320 - utils - INFO - ✅ Pipeline loaded successfully!
+2025-12-02 08:22:22,320 - utils - INFO - 🎉 Cortex IR System initialized and ready!
+2025-12-02 08:29:09,445 - utils - INFO - Processing query: 'company merger announcements'
+2025-12-02 08:29:09,472 - utils - INFO - Query processed: 'company merger announcements' -> type='exploratory'
+2025-12-02 08:29:09,473 - utils - INFO - process completed in 27.65ms
+2025-12-02 08:29:09,473 - utils - INFO - Query Processing completed in 28.32ms
+2025-12-02 08:29:09,482 - utils - INFO - _bm25_retrieve completed in 8.68ms
+2025-12-02 08:29:09,535 - utils - INFO - _dense_retrieve completed in 50.48ms
+2025-12-02 08:29:09,536 - utils - INFO - _hybrid_retrieve completed in 62.58ms
+2025-12-02 08:29:09,538 - utils - INFO - retrieve completed in 63.74ms
+2025-12-02 08:29:09,541 - utils - INFO - retrieve_with_documents completed in 66.56ms
+2025-12-02 08:29:09,541 - utils - INFO - Retrieval completed in 67.73ms
+2025-12-02 08:29:09,541 - utils - INFO - Reranking 170 documents with cross-encoder
+2025-12-02 08:29:39,028 - utils - INFO - Reranking complete. Top score: 0.3180
+2025-12-02 08:29:39,029 - utils - INFO - rerank completed in 29487.18ms
+2025-12-02 08:29:39,029 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7912
+2025-12-02 08:29:39,030 - utils - INFO - rerank completed in 29488.23ms
+2025-12-02 08:29:39,030 - utils - INFO - Reranking completed in 29488.44ms
+2025-12-02 08:29:39,030 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 08:29:39,064 - utils - INFO - Deduplication: 50 -> 47 documents
+2025-12-02 08:29:39,106 - utils - INFO - rerank completed in 41.91ms
+2025-12-02 08:29:39,106 - utils - INFO - Post-processing complete: 10 final results
+2025-12-02 08:29:39,107 - utils - INFO - process completed in 76.47ms
+2025-12-02 08:29:39,107 - utils - INFO - Post-Processing completed in 76.64ms
+2025-12-02 08:29:58,657 - utils - INFO - Processing query: 'sports NOT football'
+2025-12-02 08:29:58,694 - utils - INFO - Query processed: 'sports NOT football' -> type='exploratory'
+2025-12-02 08:29:58,695 - utils - INFO - process completed in 37.73ms
+2025-12-02 08:29:58,695 - utils - INFO - Query Processing completed in 37.92ms
+2025-12-02 08:29:58,761 - utils - INFO - search_with_documents completed in 66.51ms
+2025-12-02 08:29:58,762 - utils - INFO - Retrieval completed in 67.59ms
+2025-12-02 08:30:11,585 - utils - INFO - Processing query: 'sports NOT football'
+2025-12-02 08:30:11,617 - utils - INFO - Query processed: 'sports NOT football' -> type='exploratory'
+2025-12-02 08:30:11,618 - utils - INFO - process completed in 32.07ms
+2025-12-02 08:30:11,619 - utils - INFO - Query Processing completed in 33.30ms
+2025-12-02 08:30:11,674 - utils - INFO - search_with_documents completed in 54.59ms
+2025-12-02 08:30:11,677 - utils - INFO - Retrieval completed in 57.74ms
+2025-12-02 08:30:28,585 - utils - INFO - Processing query: 'sports NOT football'
+2025-12-02 08:30:28,610 - utils - INFO - Query processed: 'sports NOT football' -> type='exploratory'
+2025-12-02 08:30:28,611 - utils - INFO - process completed in 26.16ms
+2025-12-02 08:30:28,611 - utils - INFO - Query Processing completed in 26.70ms
+2025-12-02 08:30:28,659 - utils - INFO - search_with_documents completed in 47.15ms
+2025-12-02 08:30:28,659 - utils - INFO - Retrieval completed in 48.05ms
+2025-12-02 08:30:28,660 - utils - INFO - Reranking 100 documents with cross-encoder
+2025-12-02 08:30:46,812 - utils - INFO - Reranking complete. Top score: -2.8664
+2025-12-02 08:30:46,813 - utils - INFO - rerank completed in 18152.98ms
+2025-12-02 08:30:46,813 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7353
+2025-12-02 08:30:46,814 - utils - INFO - rerank completed in 18153.99ms
+2025-12-02 08:30:46,814 - utils - INFO - Reranking completed in 18154.15ms
+2025-12-02 08:30:46,814 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 08:30:46,814 - utils - INFO - Deduplication: 50 -> 50 documents
+2025-12-02 08:30:46,815 - utils - INFO - rerank completed in 0.54ms
+2025-12-02 08:30:46,815 - utils - INFO - Post-processing complete: 5 final results
+2025-12-02 08:30:46,815 - utils - INFO - process completed in 1.50ms
+2025-12-02 08:30:46,816 - utils - INFO - Post-Processing completed in 1.64ms
+2025-12-02 08:31:47,907 - utils - INFO - Processing query: 'economy AND inflation NOT US'
+2025-12-02 08:31:47,942 - utils - INFO - Query processed: 'economy AND inflation NOT US' -> type='exploratory'
+2025-12-02 08:31:47,943 - utils - INFO - process completed in 36.14ms
+2025-12-02 08:31:47,945 - utils - INFO - Query Processing completed in 38.07ms
+2025-12-02 08:31:48,058 - utils - INFO - search_with_documents completed in 111.40ms
+2025-12-02 08:31:48,063 - utils - INFO - Retrieval completed in 116.95ms
+2025-12-02 08:31:48,065 - utils - INFO - Reranking 100 documents with cross-encoder
+2025-12-02 08:32:05,941 - utils - INFO - Reranking complete. Top score: -1.5109
+2025-12-02 08:32:05,942 - utils - INFO - rerank completed in 17876.75ms
+2025-12-02 08:32:05,942 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.8000
+2025-12-02 08:32:05,943 - utils - INFO - rerank completed in 17877.82ms
+2025-12-02 08:32:05,943 - utils - INFO - Reranking completed in 17877.98ms
+2025-12-02 08:32:05,943 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 08:32:05,943 - utils - INFO - Deduplication: 50 -> 43 documents
+2025-12-02 08:32:05,944 - utils - INFO - rerank completed in 0.60ms
+2025-12-02 08:32:05,945 - utils - INFO - Post-processing complete: 5 final results
+2025-12-02 08:32:05,945 - utils - INFO - process completed in 1.82ms
+2025-12-02 08:32:05,945 - utils - INFO - Post-Processing completed in 1.94ms
+2025-12-02 08:32:29,755 - utils - INFO - Processing query: 'economy AND inflation NOT US'
+2025-12-02 08:32:29,779 - utils - INFO - Query processed: 'economy AND inflation NOT US' -> type='exploratory'
+2025-12-02 08:32:29,780 - utils - INFO - process completed in 24.41ms
+2025-12-02 08:32:29,780 - utils - INFO - Query Processing completed in 24.61ms
+2025-12-02 08:32:29,815 - utils - INFO - search_with_documents completed in 34.88ms
+2025-12-02 08:32:29,815 - utils - INFO - Retrieval completed in 35.06ms
+2025-12-02 08:32:44,505 - utils - INFO - Processing query: 'economy AND inflation NOT US'
+2025-12-02 08:32:44,539 - utils - INFO - Query processed: 'economy AND inflation NOT US' -> type='exploratory'
+2025-12-02 08:32:44,541 - utils - INFO - process completed in 35.40ms
+2025-12-02 08:32:44,541 - utils - INFO - Query Processing completed in 36.15ms
+2025-12-02 08:32:44,606 - utils - INFO - search_with_documents completed in 64.56ms
+2025-12-02 08:32:44,607 - utils - INFO - Retrieval completed in 64.78ms
+2025-12-02 08:32:52,749 - utils - INFO - Processing query: 'economy AND inflation '
+2025-12-02 08:32:52,785 - utils - INFO - Query processed: 'economy AND inflation ' -> type='exploratory'
+2025-12-02 08:32:52,786 - utils - INFO - process completed in 36.17ms
+2025-12-02 08:32:52,786 - utils - INFO - Query Processing completed in 36.33ms
+2025-12-02 08:32:52,842 - utils - INFO - search_with_documents completed in 56.62ms
+2025-12-02 08:32:52,843 - utils - INFO - Retrieval completed in 56.90ms
+2025-12-02 08:32:59,913 - utils - INFO - Processing query: 'economy AND inflation '
+2025-12-02 08:32:59,947 - utils - INFO - Query processed: 'economy AND inflation ' -> type='exploratory'
+2025-12-02 08:32:59,947 - utils - INFO - process completed in 33.96ms
+2025-12-02 08:32:59,947 - utils - INFO - Query Processing completed in 34.16ms
+2025-12-02 08:32:59,970 - utils - INFO - search_with_documents completed in 22.78ms
+2025-12-02 08:32:59,971 - utils - INFO - Retrieval completed in 22.96ms
+2025-12-02 08:33:05,186 - utils - INFO - Processing query: 'economy AND inflation '
+2025-12-02 08:33:05,216 - utils - INFO - Query processed: 'economy AND inflation ' -> type='exploratory'
+2025-12-02 08:33:05,216 - utils - INFO - process completed in 29.98ms
+2025-12-02 08:33:05,216 - utils - INFO - Query Processing completed in 30.22ms
+2025-12-02 08:33:05,268 - utils - INFO - search_with_documents completed in 51.20ms
+2025-12-02 08:33:05,268 - utils - INFO - Retrieval completed in 51.46ms
+2025-12-02 08:33:05,268 - utils - INFO - Reranking 53 documents with cross-encoder
+2025-12-02 08:33:14,680 - utils - INFO - Reranking complete. Top score: -1.7254
+2025-12-02 08:33:14,680 - utils - INFO - rerank completed in 9412.21ms
+2025-12-02 08:33:14,681 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7845
+2025-12-02 08:33:14,681 - utils - INFO - rerank completed in 9412.60ms
+2025-12-02 08:33:14,681 - utils - INFO - Reranking completed in 9412.73ms
+2025-12-02 08:33:14,681 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 08:33:14,681 - utils - INFO - Deduplication: 50 -> 48 documents
+2025-12-02 08:33:14,682 - utils - INFO - rerank completed in 0.73ms
+2025-12-02 08:33:14,683 - utils - INFO - Post-processing complete: 5 final results
+2025-12-02 08:33:14,683 - utils - INFO - process completed in 2.02ms
+2025-12-02 08:33:14,683 - utils - INFO - Post-Processing completed in 2.12ms
+2025-12-02 08:33:36,968 - utils - INFO - Processing query: 'economy AND inflation '
+2025-12-02 08:33:36,998 - utils - INFO - Query processed: 'economy AND inflation ' -> type='exploratory'
+2025-12-02 08:33:36,998 - utils - INFO - process completed in 30.01ms
+2025-12-02 08:33:36,999 - utils - INFO - Query Processing completed in 30.20ms
+2025-12-02 08:33:37,024 - utils - INFO - search_with_documents completed in 25.34ms
+2025-12-02 08:33:37,024 - utils - INFO - Retrieval completed in 25.68ms
+2025-12-02 17:29:49,662 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-02 17:29:49,696 - utils - INFO - IRMetrics initialized
+2025-12-02 17:29:49,699 - utils - INFO - IRMetrics initialized
+2025-12-02 17:29:49,700 - utils - INFO - IRMetrics initialized
+2025-12-02 17:29:49,700 - utils - INFO - IRMetrics initialized
+2025-12-02 17:29:49,700 - utils - INFO - IRMetrics initialized
+2025-12-02 17:30:53,302 - utils - INFO - Initializing Cortex IR System...
+2025-12-02 17:30:53,302 - utils - INFO - Checking system readiness...
+2025-12-02 17:30:53,303 - utils - INFO - ✅ Preprocessed data found
+2025-12-02 17:30:53,303 - utils - INFO - ✅ Search indices found
+2025-12-02 17:30:53,303 - utils - INFO - ✅ All components ready - launching UI...
+2025-12-02 17:31:00,264 - utils - INFO - Loading IR pipeline...
+2025-12-02 17:31:00,265 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-12-02 17:31:00,265 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-12-02 17:31:01,042 - utils - INFO - Loading vocabulary for spell checker...
+2025-12-02 17:31:01,329 - utils - INFO - Loaded 21795 terms into spell checker
+2025-12-02 17:31:01,329 - utils - INFO - Query processor initialized
+2025-12-02 17:31:01,354 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-12-02 17:31:01,354 - utils - INFO - Using device: cpu
+2025-12-02 17:31:03,738 - utils - INFO - Neural reranker initialized
+2025-12-02 17:31:03,739 - utils - INFO - Ensemble reranker initialized
+2025-12-02 17:31:03,739 - utils - INFO - Post-processor initialized
+2025-12-02 17:31:04,268 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-02 17:31:04,409 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-02 17:31:05,120 - utils - INFO - Inverted index built with 21795 terms
+2025-12-02 17:31:05,120 - utils - INFO - build_index completed in 710.50ms
+2025-12-02 17:31:05,151 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 17:31:05,168 - utils - INFO - BM25 index loaded successfully
+2025-12-02 17:31:05,314 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 17:31:05,315 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 17:31:09,751 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 17:31:13,115 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 17:31:13,115 - utils - INFO - Loading indices...
+2025-12-02 17:31:13,116 - utils - INFO - Loading BM25 index...
+2025-12-02 17:31:13,116 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 17:31:13,135 - utils - INFO - BM25 index loaded successfully
+2025-12-02 17:31:13,136 - utils - INFO - Loading article metadata...
+2025-12-02 17:31:13,424 - utils - INFO - Loading dense embeddings...
+2025-12-02 17:31:13,425 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 17:31:13,427 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 17:31:16,924 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 17:31:19,798 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 17:31:19,799 - utils - INFO - Indices loaded: 2692 articles indexed
+2025-12-02 17:31:19,799 - utils - INFO - Pipeline initialized successfully!
+2025-12-02 17:31:19,799 - utils - INFO - ✅ Pipeline loaded successfully!
+2025-12-02 17:31:19,799 - utils - INFO - 🎉 Cortex IR System initialized and ready!
+2025-12-02 17:31:54,493 - utils - INFO - Processing query: 'explin machine lerning'
+2025-12-02 17:31:54,550 - utils - INFO - Query processed: 'explin machine lerning' -> type='factual'
+2025-12-02 17:31:54,550 - utils - INFO - process completed in 57.03ms
+2025-12-02 17:31:54,550 - utils - INFO - Query Processing completed in 57.25ms
+2025-12-02 17:31:54,560 - utils - INFO - _bm25_retrieve completed in 9.34ms
+2025-12-02 17:31:54,601 - utils - INFO - _dense_retrieve completed in 41.13ms
+2025-12-02 17:31:54,603 - utils - INFO - _hybrid_retrieve completed in 52.77ms
+2025-12-02 17:31:54,605 - utils - INFO - retrieve completed in 55.21ms
+2025-12-02 17:31:54,607 - utils - INFO - retrieve_with_documents completed in 57.11ms
+2025-12-02 17:31:54,611 - utils - INFO - Retrieval completed in 60.64ms
+2025-12-02 17:31:54,612 - utils - INFO - Reranking 196 documents with cross-encoder
+2025-12-02 17:32:31,435 - utils - INFO - Reranking complete. Top score: -8.2773
+2025-12-02 17:32:31,435 - utils - INFO - rerank completed in 36822.80ms
+2025-12-02 17:32:31,435 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7094
+2025-12-02 17:32:31,435 - utils - INFO - rerank completed in 36823.23ms
+2025-12-02 17:32:31,436 - utils - INFO - Reranking completed in 36823.49ms
+2025-12-02 17:37:34,658 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-02 17:37:38,127 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-12-02 17:37:39,338 - utils - INFO - Loading vocabulary for spell checker...
+2025-12-02 17:37:40,172 - utils - INFO - Loaded 21795 terms into spell checker
+2025-12-02 17:37:40,172 - utils - INFO - Query processor initialized
+2025-12-02 17:38:53,096 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-02 17:38:56,949 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-12-02 17:38:57,937 - utils - INFO - Loading vocabulary for spell checker...
+2025-12-02 17:38:58,776 - utils - INFO - Loaded 21795 terms into spell checker
+2025-12-02 17:38:58,777 - utils - INFO - Query processor initialized
+2025-12-02 17:40:05,859 - utils - INFO - Processing query: 'sports NOT football'
+2025-12-02 17:40:05,893 - utils - INFO - Query processed: 'sports NOT football' -> type='exploratory'
+2025-12-02 17:40:05,894 - utils - INFO - process completed in 35.22ms
+2025-12-02 17:40:05,894 - utils - INFO - Query Processing completed in 35.42ms
+2025-12-02 17:40:05,981 - utils - INFO - search_with_documents completed in 86.45ms
+2025-12-02 17:40:05,982 - utils - INFO - Retrieval completed in 87.95ms
+2025-12-02 17:40:05,982 - utils - INFO - Reranking 100 documents with cross-encoder
+2025-12-02 17:40:28,275 - utils - INFO - Reranking complete. Top score: -2.8664
+2025-12-02 17:40:28,276 - utils - INFO - rerank completed in 22293.81ms
+2025-12-02 17:40:28,277 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7353
+2025-12-02 17:40:28,277 - utils - INFO - rerank completed in 22294.90ms
+2025-12-02 17:40:28,279 - utils - INFO - Reranking completed in 22296.14ms
+2025-12-02 17:40:28,279 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 17:40:28,280 - utils - INFO - Deduplication: 50 -> 50 documents
+2025-12-02 17:40:28,283 - utils - INFO - rerank completed in 1.52ms
+2025-12-02 17:40:28,283 - utils - INFO - Post-processing complete: 10 final results
+2025-12-02 17:40:28,284 - utils - INFO - process completed in 4.72ms
+2025-12-02 17:40:28,284 - utils - INFO - Post-Processing completed in 5.14ms
+2025-12-02 17:40:36,566 - utils - INFO - Starting preprocessing pipeline...
+2025-12-02 17:40:36,567 - utils - INFO - Loading dataset from /home/haseeb-raza/Desktop/IR_Assignment_3/Articles.csv
+2025-12-02 17:40:36,567 - utils - INFO - Trying encoding: utf-8
+2025-12-02 17:40:36,603 - utils - INFO - Trying encoding: latin-1
+2025-12-02 17:40:36,676 - utils - INFO - Successfully loaded with latin-1 encoding
+2025-12-02 17:40:36,676 - utils - INFO - Loaded 2692 articles
+2025-12-02 17:40:36,676 - utils - INFO - Columns: ['Article', 'Date', 'Heading', 'NewsType']
+2025-12-02 17:40:36,676 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-12-02 17:40:37,855 - utils - INFO - ArticlePreprocessor initialized
+2025-12-02 17:40:37,855 - utils - INFO - Preprocessing 2692 articles...
+2025-12-02 17:40:50,272 - utils - INFO - Processing query: 'sports NOT football'
+2025-12-02 17:40:50,393 - utils - INFO - Query processed: 'sports NOT football' -> type='exploratory'
+2025-12-02 17:40:50,393 - utils - INFO - process completed in 120.78ms
+2025-12-02 17:40:50,393 - utils - INFO - Query Processing completed in 120.96ms
+2025-12-02 17:40:50,953 - utils - INFO - search_with_documents completed in 559.18ms
+2025-12-02 17:40:50,953 - utils - INFO - Retrieval completed in 559.44ms
+2025-12-02 17:41:04,846 - utils - INFO - Processing query: 'explin machine lerning'
+2025-12-02 17:41:04,947 - utils - INFO - Query processed: 'explin machine lerning' -> type='factual'
+2025-12-02 17:41:04,947 - utils - INFO - process completed in 101.51ms
+2025-12-02 17:41:04,948 - utils - INFO - Query Processing completed in 102.00ms
+2025-12-02 17:41:04,956 - utils - INFO - _bm25_retrieve completed in 7.31ms
+2025-12-02 17:41:05,117 - utils - INFO - _dense_retrieve completed in 158.20ms
+2025-12-02 17:41:05,118 - utils - INFO - _hybrid_retrieve completed in 169.14ms
+2025-12-02 17:41:05,119 - utils - INFO - retrieve completed in 169.92ms
+2025-12-02 17:41:05,124 - utils - INFO - retrieve_with_documents completed in 174.71ms
+2025-12-02 17:41:05,124 - utils - INFO - Retrieval completed in 175.00ms
+2025-12-02 17:41:18,140 - utils - INFO - Processing query: 'company merger announcements'
+2025-12-02 17:41:18,208 - utils - INFO - Query processed: 'company merger announcements' -> type='exploratory'
+2025-12-02 17:41:18,210 - utils - INFO - process completed in 69.64ms
+2025-12-02 17:41:18,210 - utils - INFO - Query Processing completed in 70.03ms
+2025-12-02 17:41:18,213 - utils - INFO - _bm25_retrieve completed in 1.44ms
+2025-12-02 17:41:18,384 - utils - INFO - _dense_retrieve completed in 170.96ms
+2025-12-02 17:41:18,389 - utils - INFO - _hybrid_retrieve completed in 177.61ms
+2025-12-02 17:41:18,389 - utils - INFO - retrieve completed in 177.75ms
+2025-12-02 17:41:18,390 - utils - INFO - retrieve_with_documents completed in 179.02ms
+2025-12-02 17:41:18,393 - utils - INFO - Retrieval completed in 181.62ms
+2025-12-02 17:41:59,529 - utils - INFO - Processing query: 'explin machine lerning'
+2025-12-02 17:41:59,620 - utils - INFO - Query processed: 'explin machine lerning' -> type='factual'
+2025-12-02 17:41:59,623 - utils - INFO - process completed in 93.40ms
+2025-12-02 17:41:59,626 - utils - INFO - Query Processing completed in 96.56ms
+2025-12-02 17:41:59,635 - utils - INFO - _bm25_retrieve completed in 6.74ms
+2025-12-02 17:41:59,758 - utils - INFO - _dense_retrieve completed in 119.93ms
+2025-12-02 17:41:59,759 - utils - INFO - _hybrid_retrieve completed in 130.98ms
+2025-12-02 17:41:59,761 - utils - INFO - retrieve completed in 132.99ms
+2025-12-02 17:41:59,763 - utils - INFO - retrieve_with_documents completed in 134.48ms
+2025-12-02 17:41:59,764 - utils - INFO - Retrieval completed in 136.00ms
+2025-12-02 17:45:11,756 - utils - INFO - Successfully preprocessed 2692 articles
+2025-12-02 17:45:12,372 - utils - INFO - Saved 2692 preprocessed articles to /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/processed_articles.pkl
+2025-12-02 17:45:12,373 - utils - INFO - 
+=== Preprocessing Statistics ===
+2025-12-02 17:45:12,373 - utils - INFO - Total articles: 2692
+2025-12-02 17:45:12,374 - utils - INFO - Average document length: 161.1 tokens
+2025-12-02 17:45:12,375 - utils - INFO - Categories: {'business': 1284, 'sports': 1408}
+2025-12-02 17:45:12,376 - utils - INFO - Total entities extracted: 91829
+2025-12-02 17:45:12,376 - utils - INFO - Average entities per article: 34.1
+2025-12-02 17:45:12,377 - utils - INFO - 
+Preprocessing complete!
+2025-12-02 17:45:26,037 - utils - INFO - Starting indexing pipeline...
+2025-12-02 17:45:26,037 - utils - INFO - Loading processed articles from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/processed_articles.pkl
+2025-12-02 17:45:26,342 - utils - INFO - Loaded 2692 processed articles
+2025-12-02 17:45:26,342 - utils - INFO - ======================================================================
+2025-12-02 17:45:26,342 - utils - INFO - BUILDING ALL INDICES
+2025-12-02 17:45:26,343 - utils - INFO - ======================================================================
+2025-12-02 17:45:26,343 - utils - INFO - 
+1. Building BM25 Index...
+2025-12-02 17:45:26,343 - utils - INFO - Building BM25 index for 2692 articles...
+2025-12-02 17:45:26,359 - utils - INFO - Tokenizing corpus for BM25...
+2025-12-02 17:45:27,295 - utils - INFO - Building BM25 index...
+2025-12-02 17:45:28,271 - utils - INFO - BM25 index built with 2692 documents
+2025-12-02 17:45:28,280 - utils - INFO - build_index completed in 1936.83ms
+2025-12-02 17:45:28,280 - utils - INFO - Saving BM25 index to /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 17:45:28,304 - utils - INFO - BM25 index saved successfully
+2025-12-02 17:45:28,305 - utils - INFO - 
+2. Building Dense Embeddings...
+2025-12-02 17:45:28,305 - utils - INFO - Building dense embeddings for 2692 articles...
+2025-12-02 17:45:28,305 - utils - INFO - Loading embedding model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 17:45:31,857 - utils - INFO - Generating embeddings...
+2025-12-02 17:50:44,229 - utils - INFO - Dense embeddings created: shape=(2692, 384)
+2025-12-02 17:50:44,230 - utils - INFO - build_index completed in 315925.30ms
+2025-12-02 17:50:44,231 - utils - INFO - Saving dense embeddings to /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 17:50:44,257 - utils - INFO - Dense embeddings saved successfully
+2025-12-02 17:50:44,258 - utils - INFO - 
+3. Building Metadata Index...
+2025-12-02 17:50:44,258 - utils - INFO - Building metadata index for 2692 articles...
+2025-12-02 17:50:44,258 - utils - INFO - Removing old database: /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/metadata.db
+2025-12-02 17:50:46,406 - utils - INFO - Metadata index built successfully
+2025-12-02 17:50:46,406 - utils - INFO - build_index completed in 2148.16ms
+2025-12-02 17:50:46,406 - utils - INFO - 
+======================================================================
+2025-12-02 17:50:46,406 - utils - INFO - ALL INDICES BUILT SUCCESSFULLY
+2025-12-02 17:50:46,407 - utils - INFO - ======================================================================
+2025-12-02 17:50:46,433 - utils - INFO - 
+Indexing complete!
+2025-12-02 17:58:59,130 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-02 17:59:00,578 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-02 17:59:01,986 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-02 17:59:03,690 - utils - INFO - Inverted index built with 21795 terms
+2025-12-02 17:59:03,690 - utils - INFO - build_index completed in 1703.91ms
+2025-12-02 19:55:35,890 - utils - INFO - Initializing Cortex IR System...
+2025-12-02 19:55:35,891 - utils - INFO - Checking system readiness...
+2025-12-02 19:55:35,891 - utils - INFO - ✅ Preprocessed data found
+2025-12-02 19:55:35,891 - utils - INFO - ✅ Search indices found
+2025-12-02 19:55:35,892 - utils - INFO - ✅ All components ready - launching UI...
+2025-12-02 19:55:46,258 - utils - INFO - Loading IR pipeline...
+2025-12-02 19:55:46,259 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-12-02 19:55:46,259 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-12-02 19:55:47,167 - utils - INFO - Loading vocabulary for spell checker...
+2025-12-02 19:55:47,530 - utils - INFO - Loaded 21795 terms into spell checker
+2025-12-02 19:55:47,530 - utils - INFO - Query processor initialized
+2025-12-02 19:55:47,625 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-12-02 19:55:47,628 - utils - INFO - Using device: cpu
+2025-12-02 19:55:50,757 - utils - INFO - Neural reranker initialized
+2025-12-02 19:55:50,758 - utils - INFO - Ensemble reranker initialized
+2025-12-02 19:55:50,758 - utils - INFO - Post-processor initialized
+2025-12-02 19:55:51,354 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-02 19:55:51,495 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-02 19:55:52,253 - utils - INFO - Inverted index built with 21795 terms
+2025-12-02 19:55:52,253 - utils - INFO - build_index completed in 757.96ms
+2025-12-02 19:55:52,281 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 19:55:52,296 - utils - INFO - BM25 index loaded successfully
+2025-12-02 19:55:52,445 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 19:55:52,446 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 19:55:56,702 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 19:56:01,904 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 19:56:01,904 - utils - INFO - Loading indices...
+2025-12-02 19:56:01,904 - utils - INFO - Loading BM25 index...
+2025-12-02 19:56:01,905 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 19:56:01,920 - utils - INFO - BM25 index loaded successfully
+2025-12-02 19:56:01,920 - utils - INFO - Loading article metadata...
+2025-12-02 19:56:02,117 - utils - INFO - Loading dense embeddings...
+2025-12-02 19:56:02,117 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 19:56:02,119 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 19:56:08,195 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 19:56:13,959 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 19:56:13,960 - utils - INFO - Indices loaded: 2692 articles indexed
+2025-12-02 19:56:13,960 - utils - INFO - Pipeline initialized successfully!
+2025-12-02 19:56:13,960 - utils - INFO - ✅ Pipeline loaded successfully!
+2025-12-02 19:56:13,960 - utils - INFO - 🎉 Cortex IR System initialized and ready!
+2025-12-02 19:57:28,228 - utils - INFO - Processing query: 'sports team performance 2023'
+2025-12-02 19:57:28,273 - utils - INFO - Query processed: 'sports team performance 2023' -> type='exploratory'
+2025-12-02 19:57:28,273 - utils - INFO - process completed in 44.79ms
+2025-12-02 19:57:28,273 - utils - INFO - Query Processing completed in 44.94ms
+2025-12-02 19:57:28,276 - utils - INFO - _bm25_retrieve completed in 3.23ms
+2025-12-02 19:57:28,457 - utils - INFO - _dense_retrieve completed in 180.10ms
+2025-12-02 19:57:28,458 - utils - INFO - _hybrid_retrieve completed in 184.42ms
+2025-12-02 19:57:28,458 - utils - INFO - retrieve completed in 185.29ms
+2025-12-02 19:57:28,459 - utils - INFO - retrieve_with_documents completed in 186.17ms
+2025-12-02 19:57:28,460 - utils - INFO - Retrieval completed in 187.16ms
+2025-12-02 19:57:28,460 - utils - INFO - Reranking 181 documents with cross-encoder
+2025-12-02 19:58:00,844 - utils - INFO - Reranking complete. Top score: 0.1430
+2025-12-02 19:58:00,845 - utils - INFO - rerank completed in 32384.99ms
+2025-12-02 19:58:00,846 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7478
+2025-12-02 19:58:00,847 - utils - INFO - rerank completed in 32386.51ms
+2025-12-02 19:58:00,847 - utils - INFO - Reranking completed in 32386.73ms
+2025-12-02 19:58:00,847 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 19:58:00,887 - utils - INFO - Deduplication: 50 -> 50 documents
+2025-12-02 19:58:00,927 - utils - INFO - rerank completed in 39.51ms
+2025-12-02 19:58:00,927 - utils - INFO - Post-processing complete: 10 final results
+2025-12-02 19:58:00,927 - utils - INFO - process completed in 80.20ms
+2025-12-02 19:58:00,928 - utils - INFO - Post-Processing completed in 80.37ms
+2025-12-02 19:58:00,928 - utils - INFO - Search Query: 'sports team performance 2023'
+2025-12-02 19:58:00,928 - utils - INFO - Corrected Query: 'sports team performance 2023'
+2025-12-02 19:58:00,928 - utils - INFO - Correction diff: False
+2025-12-02 19:58:22,127 - utils - INFO - Processing query: 'who won the championship?'
+2025-12-02 19:58:22,173 - utils - INFO - Query processed: 'who won the championship?' -> type='factual'
+2025-12-02 19:58:22,174 - utils - INFO - process completed in 46.12ms
+2025-12-02 19:58:22,174 - utils - INFO - Query Processing completed in 46.66ms
+2025-12-02 19:58:22,178 - utils - INFO - _bm25_retrieve completed in 2.68ms
+2025-12-02 19:58:22,204 - utils - INFO - _dense_retrieve completed in 25.67ms
+2025-12-02 19:58:22,205 - utils - INFO - _hybrid_retrieve completed in 30.18ms
+2025-12-02 19:58:22,207 - utils - INFO - retrieve completed in 31.54ms
+2025-12-02 19:58:22,207 - utils - INFO - retrieve_with_documents completed in 32.26ms
+2025-12-02 19:58:22,210 - utils - INFO - Retrieval completed in 34.62ms
+2025-12-02 19:58:22,210 - utils - INFO - Reranking 185 documents with cross-encoder
+2025-12-02 19:58:56,607 - utils - INFO - Reranking complete. Top score: 3.8268
+2025-12-02 19:58:56,608 - utils - INFO - rerank completed in 34397.77ms
+2025-12-02 19:58:56,608 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7315
+2025-12-02 19:58:56,609 - utils - INFO - rerank completed in 34398.78ms
+2025-12-02 19:58:56,609 - utils - INFO - Reranking completed in 34399.30ms
+2025-12-02 19:58:56,609 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 19:58:56,645 - utils - INFO - Deduplication: 50 -> 50 documents
+2025-12-02 19:58:56,674 - utils - INFO - rerank completed in 28.22ms
+2025-12-02 19:58:56,675 - utils - INFO - Post-processing complete: 10 final results
+2025-12-02 19:58:56,675 - utils - INFO - process completed in 65.15ms
+2025-12-02 19:58:56,675 - utils - INFO - Post-Processing completed in 65.31ms
+2025-12-02 19:58:56,675 - utils - INFO - Search Query: 'who won the championship?'
+2025-12-02 19:58:56,675 - utils - INFO - Corrected Query: 'who won the championship'
+2025-12-02 19:58:56,675 - utils - INFO - Correction diff: True
+2025-12-02 19:59:49,063 - utils - INFO - Processing query: 'who won the championship'
+2025-12-02 19:59:49,105 - utils - INFO - Query processed: 'who won the championship' -> type='factual'
+2025-12-02 19:59:49,106 - utils - INFO - process completed in 43.15ms
+2025-12-02 19:59:49,107 - utils - INFO - Query Processing completed in 43.79ms
+2025-12-02 19:59:49,110 - utils - INFO - _bm25_retrieve completed in 2.21ms
+2025-12-02 19:59:49,138 - utils - INFO - _dense_retrieve completed in 28.31ms
+2025-12-02 19:59:49,139 - utils - INFO - _hybrid_retrieve completed in 31.27ms
+2025-12-02 19:59:49,140 - utils - INFO - retrieve completed in 33.06ms
+2025-12-02 19:59:49,141 - utils - INFO - retrieve_with_documents completed in 33.63ms
+2025-12-02 19:59:49,141 - utils - INFO - Retrieval completed in 33.81ms
+2025-12-02 19:59:49,141 - utils - INFO - Search Query: 'who won the championship'
+2025-12-02 19:59:49,141 - utils - INFO - Corrected Query: 'who won the championship'
+2025-12-02 19:59:49,142 - utils - INFO - Correction diff: False
+2025-12-02 20:00:19,394 - utils - INFO - Processing query: 'sports NOT football'
+2025-12-02 20:00:19,438 - utils - INFO - Query processed: 'sports NOT football' -> type='exploratory'
+2025-12-02 20:00:19,438 - utils - INFO - process completed in 44.08ms
+2025-12-02 20:00:19,438 - utils - INFO - Query Processing completed in 44.22ms
+2025-12-02 20:00:19,462 - utils - INFO - search_with_documents completed in 23.98ms
+2025-12-02 20:00:19,463 - utils - INFO - Retrieval completed in 24.28ms
+2025-12-02 20:00:29,342 - utils - INFO - Processing query: 'sports NOT football'
+2025-12-02 20:00:29,375 - utils - INFO - Query processed: 'sports NOT football' -> type='exploratory'
+2025-12-02 20:00:29,376 - utils - INFO - process completed in 34.73ms
+2025-12-02 20:00:29,376 - utils - INFO - Query Processing completed in 34.92ms
+2025-12-02 20:00:29,431 - utils - INFO - search_with_documents completed in 54.12ms
+2025-12-02 20:00:29,441 - utils - INFO - Retrieval completed in 64.29ms
+2025-12-02 20:00:45,310 - utils - INFO - Processing query: 'technology AND innovation'
+2025-12-02 20:00:45,349 - utils - INFO - Query processed: 'technology AND innovation' -> type='exploratory'
+2025-12-02 20:00:45,349 - utils - INFO - process completed in 38.99ms
+2025-12-02 20:00:45,349 - utils - INFO - Query Processing completed in 39.16ms
+2025-12-02 20:00:45,399 - utils - INFO - search_with_documents completed in 49.68ms
+2025-12-02 20:00:45,400 - utils - INFO - Retrieval completed in 49.95ms
+2025-12-02 20:00:50,245 - utils - INFO - Processing query: 'technology AND innovation'
+2025-12-02 20:00:50,276 - utils - INFO - Query processed: 'technology AND innovation' -> type='exploratory'
+2025-12-02 20:00:50,276 - utils - INFO - process completed in 31.48ms
+2025-12-02 20:00:50,277 - utils - INFO - Query Processing completed in 31.69ms
+2025-12-02 20:00:50,328 - utils - INFO - search_with_documents completed in 49.07ms
+2025-12-02 20:00:50,328 - utils - INFO - Retrieval completed in 49.24ms
+2025-12-02 20:01:04,905 - utils - INFO - Processing query: 'technology AND innovation'
+2025-12-02 20:01:04,939 - utils - INFO - Query processed: 'technology AND innovation' -> type='exploratory'
+2025-12-02 20:01:04,940 - utils - INFO - process completed in 34.59ms
+2025-12-02 20:01:04,941 - utils - INFO - Query Processing completed in 35.48ms
+2025-12-02 20:01:04,989 - utils - INFO - search_with_documents completed in 48.24ms
+2025-12-02 20:01:04,991 - utils - INFO - Retrieval completed in 49.53ms
+2025-12-02 20:01:04,991 - utils - INFO - Reranking 6 documents with cross-encoder
+2025-12-02 20:01:05,891 - utils - INFO - Reranking complete. Top score: -4.6233
+2025-12-02 20:01:05,891 - utils - INFO - rerank completed in 900.18ms
+2025-12-02 20:01:05,892 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7326
+2025-12-02 20:01:05,892 - utils - INFO - rerank completed in 900.43ms
+2025-12-02 20:01:05,892 - utils - INFO - Reranking completed in 900.54ms
+2025-12-02 20:01:05,892 - utils - INFO - Starting post-processing pipeline for 6 documents
+2025-12-02 20:01:05,892 - utils - INFO - Deduplication: 6 -> 5 documents
+2025-12-02 20:01:05,892 - utils - INFO - rerank completed in 0.04ms
+2025-12-02 20:01:05,892 - utils - INFO - Post-processing complete: 5 final results
+2025-12-02 20:01:05,892 - utils - INFO - process completed in 0.45ms
+2025-12-02 20:01:05,892 - utils - INFO - Post-Processing completed in 0.53ms
+2025-12-02 20:01:15,780 - utils - INFO - Processing query: 'technology AND innovation'
+2025-12-02 20:01:15,814 - utils - INFO - Query processed: 'technology AND innovation' -> type='exploratory'
+2025-12-02 20:01:15,814 - utils - INFO - process completed in 33.85ms
+2025-12-02 20:01:15,814 - utils - INFO - Query Processing completed in 34.00ms
+2025-12-02 20:01:15,863 - utils - INFO - search_with_documents completed in 48.37ms
+2025-12-02 20:01:15,863 - utils - INFO - Retrieval completed in 48.62ms
+2025-12-02 20:01:15,863 - utils - INFO - Reranking 6 documents with cross-encoder
+2025-12-02 20:01:16,973 - utils - INFO - Reranking complete. Top score: -4.6233
+2025-12-02 20:01:16,973 - utils - INFO - rerank completed in 1110.11ms
+2025-12-02 20:01:16,973 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7326
+2025-12-02 20:01:16,973 - utils - INFO - rerank completed in 1110.38ms
+2025-12-02 20:01:16,974 - utils - INFO - Reranking completed in 1110.50ms
+2025-12-02 20:01:16,974 - utils - INFO - Starting post-processing pipeline for 6 documents
+2025-12-02 20:01:16,974 - utils - INFO - Deduplication: 6 -> 5 documents
+2025-12-02 20:01:16,974 - utils - INFO - rerank completed in 0.05ms
+2025-12-02 20:01:16,974 - utils - INFO - Post-processing complete: 5 final results
+2025-12-02 20:01:16,975 - utils - INFO - process completed in 0.89ms
+2025-12-02 20:01:16,975 - utils - INFO - Post-Processing completed in 1.04ms
+2025-12-02 20:01:32,293 - utils - INFO - Processing query: 'business AND (merger OR acquisition)'
+2025-12-02 20:01:32,332 - utils - INFO - Query processed: 'business AND (merger OR acquisition)' -> type='exploratory'
+2025-12-02 20:01:32,333 - utils - INFO - process completed in 39.76ms
+2025-12-02 20:01:32,333 - utils - INFO - Query Processing completed in 39.93ms
+2025-12-02 20:17:35,293 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-02 20:17:46,550 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-12-02 20:17:46,550 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-12-02 20:17:47,917 - utils - INFO - Loading vocabulary for spell checker...
+2025-12-02 20:17:48,510 - utils - INFO - Loaded 21795 terms into spell checker
+2025-12-02 20:17:48,510 - utils - INFO - Query processor initialized
+2025-12-02 20:17:48,548 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-12-02 20:17:48,548 - utils - INFO - Using device: cpu
+2025-12-02 20:17:51,837 - utils - INFO - Neural reranker initialized
+2025-12-02 20:17:51,837 - utils - INFO - Ensemble reranker initialized
+2025-12-02 20:17:51,838 - utils - INFO - Post-processor initialized
+2025-12-02 20:17:53,148 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-02 20:17:53,361 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-02 20:17:54,891 - utils - INFO - Inverted index built with 21795 terms
+2025-12-02 20:17:54,891 - utils - INFO - build_index completed in 1530.25ms
+2025-12-02 20:17:54,929 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 20:17:54,955 - utils - INFO - BM25 index loaded successfully
+2025-12-02 20:17:55,194 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 20:17:55,196 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 20:17:58,602 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 20:18:02,396 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 20:18:02,396 - utils - INFO - Loading indices...
+2025-12-02 20:18:02,397 - utils - INFO - Loading BM25 index...
+2025-12-02 20:18:02,398 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 20:18:02,417 - utils - INFO - BM25 index loaded successfully
+2025-12-02 20:18:02,417 - utils - INFO - Loading article metadata...
+2025-12-02 20:18:02,684 - utils - INFO - Loading dense embeddings...
+2025-12-02 20:18:02,685 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 20:18:02,686 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 20:18:07,315 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 20:18:12,338 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 20:18:12,338 - utils - INFO - Indices loaded: 2692 articles indexed
+2025-12-02 20:18:12,338 - utils - INFO - Pipeline initialized successfully!
+2025-12-02 20:21:11,916 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-02 20:21:22,986 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-12-02 20:21:22,987 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-12-02 20:21:24,816 - utils - INFO - Loading vocabulary for spell checker...
+2025-12-02 20:21:25,215 - utils - INFO - Loaded 21795 terms into spell checker
+2025-12-02 20:21:25,215 - utils - INFO - Query processor initialized
+2025-12-02 20:21:25,254 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-12-02 20:21:25,255 - utils - INFO - Using device: cpu
+2025-12-02 20:21:27,929 - utils - INFO - Neural reranker initialized
+2025-12-02 20:21:27,929 - utils - INFO - Ensemble reranker initialized
+2025-12-02 20:21:27,929 - utils - INFO - Post-processor initialized
+2025-12-02 20:21:28,930 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-02 20:21:29,165 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-02 20:21:30,720 - utils - INFO - Inverted index built with 21795 terms
+2025-12-02 20:21:30,720 - utils - INFO - build_index completed in 1554.79ms
+2025-12-02 20:21:30,761 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 20:21:30,780 - utils - INFO - BM25 index loaded successfully
+2025-12-02 20:21:31,018 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 20:21:31,021 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 20:21:33,953 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 20:21:37,030 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 20:21:37,030 - utils - INFO - Loading indices...
+2025-12-02 20:21:37,030 - utils - INFO - Loading BM25 index...
+2025-12-02 20:21:37,031 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 20:21:37,047 - utils - INFO - BM25 index loaded successfully
+2025-12-02 20:21:37,047 - utils - INFO - Loading article metadata...
+2025-12-02 20:21:37,292 - utils - INFO - Loading dense embeddings...
+2025-12-02 20:21:37,293 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 20:21:37,299 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 20:21:40,585 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 20:21:46,181 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 20:21:46,184 - utils - INFO - Indices loaded: 2692 articles indexed
+2025-12-02 20:21:46,184 - utils - INFO - Pipeline initialized successfully!
+2025-12-02 20:21:46,185 - utils - INFO - IRMetrics initialized
+2025-12-02 20:21:46,185 - utils - INFO - SystemEvaluator initialized
+2025-12-02 20:21:46,185 - utils - INFO - Evaluating 10 queries
+2025-12-02 20:21:46,185 - utils - INFO - Processing query: 'artificial intelligence'
+2025-12-02 20:21:46,236 - utils - INFO - Query processed: 'artificial intelligence' -> type='exploratory'
+2025-12-02 20:21:46,237 - utils - INFO - process completed in 51.71ms
+2025-12-02 20:21:46,238 - utils - INFO - Query Processing completed in 52.54ms
+2025-12-02 20:21:46,243 - utils - INFO - _bm25_retrieve completed in 4.36ms
+2025-12-02 20:21:46,320 - utils - INFO - _dense_retrieve completed in 76.28ms
+2025-12-02 20:21:46,320 - utils - INFO - _hybrid_retrieve completed in 82.19ms
+2025-12-02 20:21:46,321 - utils - INFO - retrieve completed in 82.37ms
+2025-12-02 20:21:46,321 - utils - INFO - retrieve_with_documents completed in 82.89ms
+2025-12-02 20:21:46,321 - utils - INFO - Retrieval completed in 83.12ms
+2025-12-02 20:21:46,321 - utils - INFO - Reranking 195 documents with cross-encoder
+2025-12-02 20:22:11,698 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-02 20:22:18,541 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-02 20:22:19,969 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-02 20:22:21,548 - utils - INFO - Inverted index built with 21795 terms
+2025-12-02 20:22:21,549 - utils - INFO - build_index completed in 1579.58ms
+2025-12-02 20:22:44,234 - utils - INFO - Reranking complete. Top score: -7.3643
+2025-12-02 20:22:44,235 - utils - INFO - rerank completed in 57913.19ms
+2025-12-02 20:22:44,235 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.6716
+2025-12-02 20:22:44,236 - utils - INFO - rerank completed in 57914.28ms
+2025-12-02 20:22:44,236 - utils - INFO - Reranking completed in 57914.73ms
+2025-12-02 20:22:44,237 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:22:44,266 - utils - INFO - Deduplication: 50 -> 44 documents
+2025-12-02 20:22:44,439 - utils - INFO - rerank completed in 172.62ms
+2025-12-02 20:22:44,440 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:22:44,440 - utils - INFO - process completed in 203.35ms
+2025-12-02 20:22:44,440 - utils - INFO - Post-Processing completed in 203.53ms
+2025-12-02 20:22:44,440 - utils - INFO - Processing query: 'machine learning'
+2025-12-02 20:22:44,456 - utils - INFO - Query processed: 'machine learning' -> type='exploratory'
+2025-12-02 20:22:44,456 - utils - INFO - process completed in 15.67ms
+2025-12-02 20:22:44,456 - utils - INFO - Query Processing completed in 15.77ms
+2025-12-02 20:22:44,457 - utils - INFO - _bm25_retrieve completed in 0.88ms
+2025-12-02 20:22:44,501 - utils - INFO - _dense_retrieve completed in 43.54ms
+2025-12-02 20:22:44,503 - utils - INFO - _hybrid_retrieve completed in 46.42ms
+2025-12-02 20:22:44,503 - utils - INFO - retrieve completed in 46.55ms
+2025-12-02 20:22:44,505 - utils - INFO - retrieve_with_documents completed in 48.89ms
+2025-12-02 20:22:44,507 - utils - INFO - Retrieval completed in 51.06ms
+2025-12-02 20:22:44,509 - utils - INFO - Reranking 194 documents with cross-encoder
+2025-12-02 20:23:26,238 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-02 20:23:44,488 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-02 20:23:44,772 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-02 20:23:47,186 - utils - INFO - Inverted index built with 21795 terms
+2025-12-02 20:23:47,186 - utils - INFO - build_index completed in 2414.17ms
+2025-12-02 20:23:47,223 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 20:23:47,245 - utils - INFO - BM25 index loaded successfully
+2025-12-02 20:23:48,002 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 20:23:48,007 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 20:23:55,337 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 20:23:58,480 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 20:23:58,483 - utils - INFO - search_with_documents completed in 2.80ms
+2025-12-02 20:23:58,638 - utils - INFO - search_with_documents completed in 153.02ms
+2025-12-02 20:23:58,934 - utils - INFO - Reranking complete. Top score: -7.0976
+2025-12-02 20:23:58,935 - utils - INFO - rerank completed in 74426.26ms
+2025-12-02 20:23:58,936 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.6741
+2025-12-02 20:23:58,937 - utils - INFO - rerank completed in 74428.36ms
+2025-12-02 20:23:58,938 - utils - INFO - Reranking completed in 74429.08ms
+2025-12-02 20:23:58,938 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:23:58,982 - utils - INFO - Deduplication: 50 -> 45 documents
+2025-12-02 20:23:59,188 - utils - INFO - rerank completed in 206.28ms
+2025-12-02 20:23:59,190 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:23:59,192 - utils - INFO - process completed in 254.08ms
+2025-12-02 20:23:59,193 - utils - INFO - Post-Processing completed in 255.01ms
+2025-12-02 20:23:59,193 - utils - INFO - Processing query: 'stock market'
+2025-12-02 20:23:59,219 - utils - INFO - Query processed: 'stock market' -> type='exploratory'
+2025-12-02 20:23:59,220 - utils - INFO - process completed in 26.72ms
+2025-12-02 20:23:59,221 - utils - INFO - Query Processing completed in 27.10ms
+2025-12-02 20:23:59,222 - utils - INFO - _bm25_retrieve completed in 1.28ms
+2025-12-02 20:23:59,255 - utils - INFO - _dense_retrieve completed in 32.93ms
+2025-12-02 20:23:59,257 - utils - INFO - _hybrid_retrieve completed in 36.70ms
+2025-12-02 20:23:59,258 - utils - INFO - retrieve completed in 36.99ms
+2025-12-02 20:23:59,258 - utils - INFO - retrieve_with_documents completed in 37.48ms
+2025-12-02 20:23:59,258 - utils - INFO - Retrieval completed in 37.64ms
+2025-12-02 20:23:59,258 - utils - INFO - Reranking 170 documents with cross-encoder
+2025-12-02 20:24:48,212 - utils - INFO - Reranking complete. Top score: 1.2233
+2025-12-02 20:24:48,212 - utils - INFO - rerank completed in 48953.34ms
+2025-12-02 20:24:48,212 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7607
+2025-12-02 20:24:48,213 - utils - INFO - rerank completed in 48954.09ms
+2025-12-02 20:24:48,213 - utils - INFO - Reranking completed in 48954.46ms
+2025-12-02 20:24:48,213 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:24:48,246 - utils - INFO - Deduplication: 50 -> 47 documents
+2025-12-02 20:24:48,453 - utils - INFO - rerank completed in 207.08ms
+2025-12-02 20:24:48,458 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:24:48,458 - utils - INFO - process completed in 244.75ms
+2025-12-02 20:24:48,458 - utils - INFO - Post-Processing completed in 244.92ms
+2025-12-02 20:24:48,458 - utils - INFO - Processing query: 'climate change'
+2025-12-02 20:24:48,523 - utils - INFO - Query processed: 'climate change' -> type='exploratory'
+2025-12-02 20:24:48,526 - utils - INFO - process completed in 67.79ms
+2025-12-02 20:24:48,526 - utils - INFO - Query Processing completed in 67.98ms
+2025-12-02 20:24:48,528 - utils - INFO - _bm25_retrieve completed in 1.20ms
+2025-12-02 20:24:48,705 - utils - INFO - _dense_retrieve completed in 176.72ms
+2025-12-02 20:24:48,705 - utils - INFO - _hybrid_retrieve completed in 178.72ms
+2025-12-02 20:24:48,705 - utils - INFO - retrieve completed in 178.90ms
+2025-12-02 20:24:48,706 - utils - INFO - retrieve_with_documents completed in 179.74ms
+2025-12-02 20:24:48,706 - utils - INFO - Retrieval completed in 179.97ms
+2025-12-02 20:24:48,707 - utils - INFO - Reranking 193 documents with cross-encoder
+2025-12-02 20:25:32,512 - utils - INFO - Reranking complete. Top score: -1.8356
+2025-12-02 20:25:32,512 - utils - INFO - rerank completed in 43805.88ms
+2025-12-02 20:25:32,513 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.6433
+2025-12-02 20:25:32,513 - utils - INFO - rerank completed in 43806.62ms
+2025-12-02 20:25:32,513 - utils - INFO - Reranking completed in 43806.86ms
+2025-12-02 20:25:32,514 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:25:32,554 - utils - INFO - Deduplication: 50 -> 48 documents
+2025-12-02 20:25:32,726 - utils - INFO - rerank completed in 171.99ms
+2025-12-02 20:25:32,726 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:25:32,727 - utils - INFO - process completed in 213.04ms
+2025-12-02 20:25:32,727 - utils - INFO - Post-Processing completed in 213.23ms
+2025-12-02 20:25:32,727 - utils - INFO - Processing query: 'global warming'
+2025-12-02 20:25:32,750 - utils - INFO - Query processed: 'global warming' -> type='exploratory'
+2025-12-02 20:25:32,750 - utils - INFO - process completed in 22.94ms
+2025-12-02 20:25:32,750 - utils - INFO - Query Processing completed in 23.26ms
+2025-12-02 20:25:32,752 - utils - INFO - _bm25_retrieve completed in 1.39ms
+2025-12-02 20:25:32,805 - utils - INFO - _dense_retrieve completed in 52.39ms
+2025-12-02 20:25:32,806 - utils - INFO - _hybrid_retrieve completed in 55.00ms
+2025-12-02 20:25:32,806 - utils - INFO - retrieve completed in 55.52ms
+2025-12-02 20:25:32,807 - utils - INFO - retrieve_with_documents completed in 56.06ms
+2025-12-02 20:25:32,807 - utils - INFO - Retrieval completed in 56.64ms
+2025-12-02 20:25:32,808 - utils - INFO - Reranking 169 documents with cross-encoder
+2025-12-02 20:26:09,511 - utils - INFO - Reranking complete. Top score: -3.8352
+2025-12-02 20:26:09,511 - utils - INFO - rerank completed in 36703.81ms
+2025-12-02 20:26:09,512 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.8000
+2025-12-02 20:26:09,512 - utils - INFO - rerank completed in 36704.43ms
+2025-12-02 20:26:09,512 - utils - INFO - Reranking completed in 36704.63ms
+2025-12-02 20:26:09,512 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:26:09,557 - utils - INFO - Deduplication: 50 -> 49 documents
+2025-12-02 20:26:09,758 - utils - INFO - rerank completed in 200.72ms
+2025-12-02 20:26:09,759 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:26:09,759 - utils - INFO - process completed in 246.44ms
+2025-12-02 20:26:09,759 - utils - INFO - Post-Processing completed in 246.57ms
+2025-12-02 20:26:09,759 - utils - INFO - Processing query: 'technology innovation'
+2025-12-02 20:26:09,778 - utils - INFO - Query processed: 'technology innovation' -> type='exploratory'
+2025-12-02 20:26:09,778 - utils - INFO - process completed in 19.36ms
+2025-12-02 20:26:09,779 - utils - INFO - Query Processing completed in 19.51ms
+2025-12-02 20:26:09,780 - utils - INFO - _bm25_retrieve completed in 1.73ms
+2025-12-02 20:26:09,831 - utils - INFO - _dense_retrieve completed in 50.28ms
+2025-12-02 20:26:09,831 - utils - INFO - _hybrid_retrieve completed in 52.60ms
+2025-12-02 20:26:09,831 - utils - INFO - retrieve completed in 52.71ms
+2025-12-02 20:26:09,832 - utils - INFO - retrieve_with_documents completed in 53.15ms
+2025-12-02 20:26:09,838 - utils - INFO - Retrieval completed in 59.59ms
+2025-12-02 20:26:09,838 - utils - INFO - Reranking 168 documents with cross-encoder
+2025-12-02 20:26:13,845 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-02 20:26:29,801 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-02 20:26:30,271 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-02 20:26:32,299 - utils - INFO - Inverted index built with 21795 terms
+2025-12-02 20:26:32,299 - utils - INFO - build_index completed in 2028.62ms
+2025-12-02 20:26:32,342 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 20:26:32,364 - utils - INFO - BM25 index loaded successfully
+2025-12-02 20:26:32,561 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 20:26:32,563 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 20:26:52,209 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 20:26:52,489 - utils - INFO - Reranking complete. Top score: -3.1553
+2025-12-02 20:26:52,490 - utils - INFO - rerank completed in 42651.71ms
+2025-12-02 20:26:52,491 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7105
+2025-12-02 20:26:52,492 - utils - INFO - rerank completed in 42653.54ms
+2025-12-02 20:26:52,493 - utils - INFO - Reranking completed in 42654.17ms
+2025-12-02 20:26:52,493 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:26:52,520 - utils - INFO - Deduplication: 50 -> 47 documents
+2025-12-02 20:26:52,720 - utils - INFO - rerank completed in 199.17ms
+2025-12-02 20:26:52,720 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:26:52,720 - utils - INFO - process completed in 226.97ms
+2025-12-02 20:26:52,720 - utils - INFO - Post-Processing completed in 227.13ms
+2025-12-02 20:26:52,721 - utils - INFO - Processing query: 'economic growth'
+2025-12-02 20:26:52,738 - utils - INFO - Query processed: 'economic growth' -> type='exploratory'
+2025-12-02 20:26:52,739 - utils - INFO - process completed in 18.46ms
+2025-12-02 20:26:52,740 - utils - INFO - Query Processing completed in 19.26ms
+2025-12-02 20:26:52,741 - utils - INFO - _bm25_retrieve completed in 1.39ms
+2025-12-02 20:26:52,816 - utils - INFO - _dense_retrieve completed in 74.51ms
+2025-12-02 20:26:52,817 - utils - INFO - _hybrid_retrieve completed in 77.24ms
+2025-12-02 20:26:52,818 - utils - INFO - retrieve completed in 77.86ms
+2025-12-02 20:26:52,819 - utils - INFO - retrieve_with_documents completed in 78.84ms
+2025-12-02 20:26:52,820 - utils - INFO - Retrieval completed in 79.86ms
+2025-12-02 20:26:52,823 - utils - INFO - Reranking 157 documents with cross-encoder
+2025-12-02 20:26:59,822 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 20:26:59,857 - utils - INFO - search_with_documents completed in 34.14ms
+2025-12-02 20:27:00,223 - utils - INFO - search_with_documents completed in 364.70ms
+2025-12-02 20:27:26,948 - utils - INFO - Reranking complete. Top score: 6.0562
+2025-12-02 20:27:26,948 - utils - INFO - rerank completed in 34126.25ms
+2025-12-02 20:27:26,949 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.8000
+2025-12-02 20:27:26,949 - utils - INFO - rerank completed in 34126.61ms
+2025-12-02 20:27:26,949 - utils - INFO - Reranking completed in 34126.84ms
+2025-12-02 20:27:26,949 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:27:26,969 - utils - INFO - Deduplication: 50 -> 43 documents
+2025-12-02 20:27:27,070 - utils - INFO - rerank completed in 101.04ms
+2025-12-02 20:27:27,070 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:27:27,070 - utils - INFO - process completed in 121.29ms
+2025-12-02 20:27:27,071 - utils - INFO - Post-Processing completed in 121.50ms
+2025-12-02 20:27:27,071 - utils - INFO - Processing query: 'sports news'
+2025-12-02 20:27:27,086 - utils - INFO - Query processed: 'sports news' -> type='breaking'
+2025-12-02 20:27:27,086 - utils - INFO - process completed in 15.10ms
+2025-12-02 20:27:27,086 - utils - INFO - Query Processing completed in 15.26ms
+2025-12-02 20:27:27,088 - utils - INFO - _bm25_retrieve completed in 1.29ms
+2025-12-02 20:27:27,104 - utils - INFO - _dense_retrieve completed in 16.14ms
+2025-12-02 20:27:27,105 - utils - INFO - _hybrid_retrieve completed in 18.53ms
+2025-12-02 20:27:27,105 - utils - INFO - retrieve completed in 18.66ms
+2025-12-02 20:27:27,105 - utils - INFO - retrieve_with_documents completed in 19.02ms
+2025-12-02 20:27:27,105 - utils - INFO - Retrieval completed in 19.13ms
+2025-12-02 20:27:27,105 - utils - INFO - Reranking 179 documents with cross-encoder
+2025-12-02 20:28:07,931 - utils - INFO - Reranking complete. Top score: -1.7328
+2025-12-02 20:28:07,931 - utils - INFO - rerank completed in 40825.62ms
+2025-12-02 20:28:07,932 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.8000
+2025-12-02 20:28:07,932 - utils - INFO - rerank completed in 40826.60ms
+2025-12-02 20:28:07,932 - utils - INFO - Reranking completed in 40826.82ms
+2025-12-02 20:28:07,932 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:28:07,975 - utils - INFO - Deduplication: 50 -> 50 documents
+2025-12-02 20:28:08,137 - utils - INFO - rerank completed in 161.60ms
+2025-12-02 20:28:08,137 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:28:08,137 - utils - INFO - process completed in 204.96ms
+2025-12-02 20:28:08,139 - utils - INFO - Post-Processing completed in 206.05ms
+2025-12-02 20:28:08,139 - utils - INFO - Processing query: 'football match'
+2025-12-02 20:28:08,159 - utils - INFO - Query processed: 'football match' -> type='exploratory'
+2025-12-02 20:28:08,159 - utils - INFO - process completed in 20.01ms
+2025-12-02 20:28:08,159 - utils - INFO - Query Processing completed in 20.20ms
+2025-12-02 20:28:08,161 - utils - INFO - _bm25_retrieve completed in 1.52ms
+2025-12-02 20:28:08,200 - utils - INFO - _dense_retrieve completed in 38.55ms
+2025-12-02 20:28:08,201 - utils - INFO - _hybrid_retrieve completed in 41.76ms
+2025-12-02 20:28:08,202 - utils - INFO - retrieve completed in 42.59ms
+2025-12-02 20:28:08,202 - utils - INFO - retrieve_with_documents completed in 43.33ms
+2025-12-02 20:28:08,203 - utils - INFO - Retrieval completed in 43.51ms
+2025-12-02 20:28:08,203 - utils - INFO - Reranking 181 documents with cross-encoder
+2025-12-02 20:28:49,202 - utils - INFO - Reranking complete. Top score: 1.7879
+2025-12-02 20:28:49,203 - utils - INFO - rerank completed in 40999.72ms
+2025-12-02 20:28:49,203 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7874
+2025-12-02 20:28:49,203 - utils - INFO - rerank completed in 41000.60ms
+2025-12-02 20:28:49,204 - utils - INFO - Reranking completed in 41000.97ms
+2025-12-02 20:28:49,204 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:28:49,252 - utils - INFO - Deduplication: 50 -> 50 documents
+2025-12-02 20:28:49,394 - utils - INFO - rerank completed in 141.80ms
+2025-12-02 20:28:49,394 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:28:49,394 - utils - INFO - process completed in 190.11ms
+2025-12-02 20:28:49,394 - utils - INFO - Post-Processing completed in 190.25ms
+2025-12-02 20:28:49,394 - utils - INFO - Processing query: 'cricket world cup'
+2025-12-02 20:28:49,415 - utils - INFO - Query processed: 'cricket world cup' -> type='exploratory'
+2025-12-02 20:28:49,416 - utils - INFO - process completed in 21.19ms
+2025-12-02 20:28:49,416 - utils - INFO - Query Processing completed in 21.33ms
+2025-12-02 20:28:49,417 - utils - INFO - _bm25_retrieve completed in 1.26ms
+2025-12-02 20:28:49,468 - utils - INFO - _dense_retrieve completed in 50.95ms
+2025-12-02 20:28:49,469 - utils - INFO - _hybrid_retrieve completed in 52.86ms
+2025-12-02 20:28:49,469 - utils - INFO - retrieve completed in 53.01ms
+2025-12-02 20:28:49,470 - utils - INFO - retrieve_with_documents completed in 53.65ms
+2025-12-02 20:28:49,470 - utils - INFO - Retrieval completed in 53.89ms
+2025-12-02 20:28:49,470 - utils - INFO - Reranking 182 documents with cross-encoder
+2025-12-02 20:29:31,169 - utils - INFO - Reranking complete. Top score: 6.1104
+2025-12-02 20:29:31,169 - utils - INFO - rerank completed in 41698.83ms
+2025-12-02 20:29:31,169 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.8000
+2025-12-02 20:29:31,169 - utils - INFO - rerank completed in 41699.43ms
+2025-12-02 20:29:31,170 - utils - INFO - Reranking completed in 41699.63ms
+2025-12-02 20:29:31,170 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:29:31,202 - utils - INFO - Deduplication: 50 -> 50 documents
+2025-12-02 20:29:31,356 - utils - INFO - rerank completed in 153.36ms
+2025-12-02 20:29:31,357 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:29:31,358 - utils - INFO - process completed in 188.22ms
+2025-12-02 20:29:31,359 - utils - INFO - Post-Processing completed in 189.07ms
+2025-12-02 20:29:31,361 - utils - INFO - Evaluation complete
+2025-12-02 20:29:31,361 - utils - INFO - MAP: 0.0000
+2025-12-02 20:29:31,362 - utils - INFO - MRR: 0.0000
+2025-12-02 20:29:31,363 - utils - INFO - Avg Response Time: 46517.39ms
+2025-12-02 20:29:31,363 - utils - ERROR - Error saving evaluation report: 'SystemEvaluator' object has no attribute 'config'
+2025-12-02 20:35:21,881 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-02 20:35:32,690 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-02 20:35:32,891 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-02 20:35:34,043 - utils - INFO - Inverted index built with 21795 terms
+2025-12-02 20:35:34,043 - utils - INFO - build_index completed in 1151.71ms
+2025-12-02 20:35:34,066 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 20:35:34,080 - utils - INFO - BM25 index loaded successfully
+2025-12-02 20:35:34,253 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 20:35:34,255 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 20:35:37,938 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 20:35:41,208 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 20:35:41,244 - utils - INFO - search_with_documents completed in 36.02ms
+2025-12-02 20:35:41,328 - utils - INFO - search_with_documents completed in 83.09ms
+2025-12-02 20:43:58,027 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-02 20:44:07,139 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-12-02 20:44:07,140 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-12-02 20:44:08,186 - utils - INFO - Loading vocabulary for spell checker...
+2025-12-02 20:44:08,620 - utils - INFO - Loaded 21795 terms into spell checker
+2025-12-02 20:44:08,621 - utils - INFO - Query processor initialized
+2025-12-02 20:44:08,645 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-12-02 20:44:08,645 - utils - INFO - Using device: cpu
+2025-12-02 20:44:10,840 - utils - INFO - Neural reranker initialized
+2025-12-02 20:44:10,840 - utils - INFO - Ensemble reranker initialized
+2025-12-02 20:44:10,841 - utils - INFO - Post-processor initialized
+2025-12-02 20:44:11,704 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-02 20:44:11,864 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-02 20:44:13,003 - utils - INFO - Inverted index built with 21795 terms
+2025-12-02 20:44:13,004 - utils - INFO - build_index completed in 1139.71ms
+2025-12-02 20:44:13,029 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 20:44:13,045 - utils - INFO - BM25 index loaded successfully
+2025-12-02 20:44:13,176 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 20:44:13,177 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 20:44:16,718 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 20:44:20,096 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 20:44:20,097 - utils - INFO - Loading indices...
+2025-12-02 20:44:20,097 - utils - INFO - Loading BM25 index...
+2025-12-02 20:44:20,097 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 20:44:20,110 - utils - INFO - BM25 index loaded successfully
+2025-12-02 20:44:20,110 - utils - INFO - Loading article metadata...
+2025-12-02 20:44:20,346 - utils - INFO - Loading dense embeddings...
+2025-12-02 20:44:20,347 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 20:44:20,349 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 20:44:23,336 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 20:44:27,009 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 20:44:27,009 - utils - INFO - Indices loaded: 2692 articles indexed
+2025-12-02 20:44:27,009 - utils - INFO - Pipeline initialized successfully!
+2025-12-02 20:44:27,009 - utils - INFO - IRMetrics initialized
+2025-12-02 20:44:27,009 - utils - INFO - SystemEvaluator initialized
+2025-12-02 20:44:27,009 - utils - INFO - Evaluating 10 queries
+2025-12-02 20:44:27,009 - utils - INFO - Processing query: 'artificial intelligence'
+2025-12-02 20:44:27,037 - utils - INFO - Query processed: 'artificial intelligence' -> type='exploratory'
+2025-12-02 20:44:27,037 - utils - INFO - process completed in 27.62ms
+2025-12-02 20:44:27,037 - utils - INFO - Query Processing completed in 27.98ms
+2025-12-02 20:44:27,045 - utils - INFO - _bm25_retrieve completed in 6.71ms
+2025-12-02 20:44:27,092 - utils - INFO - _dense_retrieve completed in 46.28ms
+2025-12-02 20:44:27,093 - utils - INFO - _hybrid_retrieve completed in 55.65ms
+2025-12-02 20:44:27,094 - utils - INFO - retrieve completed in 56.64ms
+2025-12-02 20:44:27,095 - utils - INFO - retrieve_with_documents completed in 57.39ms
+2025-12-02 20:44:27,096 - utils - INFO - Retrieval completed in 57.75ms
+2025-12-02 20:44:27,096 - utils - INFO - Reranking 195 documents with cross-encoder
+2025-12-02 20:45:11,590 - utils - INFO - Reranking complete. Top score: -7.3643
+2025-12-02 20:45:11,590 - utils - INFO - rerank completed in 44494.34ms
+2025-12-02 20:45:11,592 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.6716
+2025-12-02 20:45:11,593 - utils - INFO - rerank completed in 44496.83ms
+2025-12-02 20:45:11,593 - utils - INFO - Reranking completed in 44497.19ms
+2025-12-02 20:45:11,593 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:45:11,625 - utils - INFO - Deduplication: 50 -> 44 documents
+2025-12-02 20:45:11,774 - utils - INFO - rerank completed in 148.48ms
+2025-12-02 20:45:11,774 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:45:11,774 - utils - INFO - process completed in 181.02ms
+2025-12-02 20:45:11,775 - utils - INFO - Post-Processing completed in 181.35ms
+2025-12-02 20:45:11,775 - utils - INFO - Processing query: 'machine learning'
+2025-12-02 20:45:11,792 - utils - INFO - Query processed: 'machine learning' -> type='exploratory'
+2025-12-02 20:45:11,792 - utils - INFO - process completed in 16.74ms
+2025-12-02 20:45:11,792 - utils - INFO - Query Processing completed in 16.90ms
+2025-12-02 20:45:11,793 - utils - INFO - _bm25_retrieve completed in 1.02ms
+2025-12-02 20:45:11,815 - utils - INFO - _dense_retrieve completed in 22.19ms
+2025-12-02 20:45:11,816 - utils - INFO - _hybrid_retrieve completed in 23.81ms
+2025-12-02 20:45:11,816 - utils - INFO - retrieve completed in 23.96ms
+2025-12-02 20:45:11,816 - utils - INFO - retrieve_with_documents completed in 24.42ms
+2025-12-02 20:45:11,817 - utils - INFO - Retrieval completed in 24.62ms
+2025-12-02 20:45:11,817 - utils - INFO - Reranking 194 documents with cross-encoder
+2025-12-02 20:45:56,618 - utils - INFO - Reranking complete. Top score: -7.0976
+2025-12-02 20:45:56,618 - utils - INFO - rerank completed in 44801.62ms
+2025-12-02 20:45:56,619 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.6741
+2025-12-02 20:45:56,619 - utils - INFO - rerank completed in 44802.77ms
+2025-12-02 20:45:56,621 - utils - INFO - Reranking completed in 44804.39ms
+2025-12-02 20:45:56,622 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:45:56,668 - utils - INFO - Deduplication: 50 -> 45 documents
+2025-12-02 20:45:56,829 - utils - INFO - rerank completed in 161.19ms
+2025-12-02 20:45:56,830 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:45:56,830 - utils - INFO - process completed in 208.70ms
+2025-12-02 20:45:56,831 - utils - INFO - Post-Processing completed in 209.01ms
+2025-12-02 20:45:56,831 - utils - INFO - Processing query: 'stock market'
+2025-12-02 20:45:56,855 - utils - INFO - Query processed: 'stock market' -> type='exploratory'
+2025-12-02 20:45:56,855 - utils - INFO - process completed in 23.99ms
+2025-12-02 20:45:56,855 - utils - INFO - Query Processing completed in 24.14ms
+2025-12-02 20:45:56,856 - utils - INFO - _bm25_retrieve completed in 1.14ms
+2025-12-02 20:45:56,884 - utils - INFO - _dense_retrieve completed in 28.04ms
+2025-12-02 20:45:56,885 - utils - INFO - _hybrid_retrieve completed in 29.68ms
+2025-12-02 20:45:56,885 - utils - INFO - retrieve completed in 29.79ms
+2025-12-02 20:45:56,885 - utils - INFO - retrieve_with_documents completed in 30.11ms
+2025-12-02 20:45:56,885 - utils - INFO - Retrieval completed in 30.21ms
+2025-12-02 20:45:56,885 - utils - INFO - Reranking 170 documents with cross-encoder
+2025-12-02 20:46:26,386 - utils - INFO - Reranking complete. Top score: 1.2233
+2025-12-02 20:46:26,387 - utils - INFO - rerank completed in 29501.38ms
+2025-12-02 20:46:26,387 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7607
+2025-12-02 20:46:26,387 - utils - INFO - rerank completed in 29502.04ms
+2025-12-02 20:46:26,388 - utils - INFO - Reranking completed in 29502.59ms
+2025-12-02 20:46:26,388 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:46:26,409 - utils - INFO - Deduplication: 50 -> 47 documents
+2025-12-02 20:46:26,506 - utils - INFO - rerank completed in 97.19ms
+2025-12-02 20:46:26,507 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:46:26,507 - utils - INFO - process completed in 118.81ms
+2025-12-02 20:46:26,507 - utils - INFO - Post-Processing completed in 119.00ms
+2025-12-02 20:46:26,507 - utils - INFO - Processing query: 'climate change'
+2025-12-02 20:46:26,521 - utils - INFO - Query processed: 'climate change' -> type='exploratory'
+2025-12-02 20:46:26,521 - utils - INFO - process completed in 13.33ms
+2025-12-02 20:46:26,521 - utils - INFO - Query Processing completed in 13.51ms
+2025-12-02 20:46:26,523 - utils - INFO - _bm25_retrieve completed in 1.56ms
+2025-12-02 20:46:26,545 - utils - INFO - _dense_retrieve completed in 21.72ms
+2025-12-02 20:46:26,545 - utils - INFO - _hybrid_retrieve completed in 24.21ms
+2025-12-02 20:46:26,546 - utils - INFO - retrieve completed in 24.39ms
+2025-12-02 20:46:26,547 - utils - INFO - retrieve_with_documents completed in 25.56ms
+2025-12-02 20:46:26,547 - utils - INFO - Retrieval completed in 26.28ms
+2025-12-02 20:46:26,548 - utils - INFO - Reranking 193 documents with cross-encoder
+2025-12-02 20:47:04,485 - utils - INFO - Reranking complete. Top score: -1.8356
+2025-12-02 20:47:04,486 - utils - INFO - rerank completed in 37938.13ms
+2025-12-02 20:47:04,487 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.6433
+2025-12-02 20:47:04,487 - utils - INFO - rerank completed in 37938.93ms
+2025-12-02 20:47:04,487 - utils - INFO - Reranking completed in 37939.15ms
+2025-12-02 20:47:04,487 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:47:04,514 - utils - INFO - Deduplication: 50 -> 48 documents
+2025-12-02 20:47:04,699 - utils - INFO - rerank completed in 184.23ms
+2025-12-02 20:47:04,699 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:47:04,699 - utils - INFO - process completed in 212.26ms
+2025-12-02 20:47:04,699 - utils - INFO - Post-Processing completed in 212.44ms
+2025-12-02 20:47:04,700 - utils - INFO - Processing query: 'global warming'
+2025-12-02 20:47:04,718 - utils - INFO - Query processed: 'global warming' -> type='exploratory'
+2025-12-02 20:47:04,718 - utils - INFO - process completed in 18.59ms
+2025-12-02 20:47:04,718 - utils - INFO - Query Processing completed in 18.71ms
+2025-12-02 20:47:04,723 - utils - INFO - _bm25_retrieve completed in 4.26ms
+2025-12-02 20:47:04,749 - utils - INFO - _dense_retrieve completed in 25.27ms
+2025-12-02 20:47:04,753 - utils - INFO - _hybrid_retrieve completed in 34.49ms
+2025-12-02 20:47:04,754 - utils - INFO - retrieve completed in 35.87ms
+2025-12-02 20:47:04,756 - utils - INFO - retrieve_with_documents completed in 37.74ms
+2025-12-02 20:47:04,756 - utils - INFO - Retrieval completed in 37.92ms
+2025-12-02 20:47:04,757 - utils - INFO - Reranking 169 documents with cross-encoder
+2025-12-02 20:47:26,494 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-02 20:47:37,024 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-12-02 20:47:37,025 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-12-02 20:47:38,962 - utils - INFO - Loading vocabulary for spell checker...
+2025-12-02 20:47:39,461 - utils - INFO - Loaded 21795 terms into spell checker
+2025-12-02 20:47:39,462 - utils - INFO - Query processor initialized
+2025-12-02 20:47:39,519 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-12-02 20:47:39,519 - utils - INFO - Using device: cpu
+2025-12-02 20:47:41,085 - utils - INFO - Reranking complete. Top score: -3.8352
+2025-12-02 20:47:41,085 - utils - INFO - rerank completed in 36328.30ms
+2025-12-02 20:47:41,085 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.8000
+2025-12-02 20:47:41,085 - utils - INFO - rerank completed in 36328.92ms
+2025-12-02 20:47:41,086 - utils - INFO - Reranking completed in 36329.10ms
+2025-12-02 20:47:41,086 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:47:41,118 - utils - INFO - Deduplication: 50 -> 49 documents
+2025-12-02 20:47:41,321 - utils - INFO - rerank completed in 202.77ms
+2025-12-02 20:47:41,321 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:47:41,321 - utils - INFO - process completed in 235.75ms
+2025-12-02 20:47:41,322 - utils - INFO - Post-Processing completed in 235.90ms
+2025-12-02 20:47:41,322 - utils - INFO - Processing query: 'technology innovation'
+2025-12-02 20:47:41,342 - utils - INFO - Query processed: 'technology innovation' -> type='exploratory'
+2025-12-02 20:47:41,342 - utils - INFO - process completed in 20.59ms
+2025-12-02 20:47:41,343 - utils - INFO - Query Processing completed in 20.98ms
+2025-12-02 20:47:41,345 - utils - INFO - _bm25_retrieve completed in 1.54ms
+2025-12-02 20:47:41,369 - utils - INFO - _dense_retrieve completed in 23.74ms
+2025-12-02 20:47:41,371 - utils - INFO - _hybrid_retrieve completed in 27.80ms
+2025-12-02 20:47:41,371 - utils - INFO - retrieve completed in 27.99ms
+2025-12-02 20:47:41,372 - utils - INFO - retrieve_with_documents completed in 28.76ms
+2025-12-02 20:47:41,372 - utils - INFO - Retrieval completed in 29.01ms
+2025-12-02 20:47:41,373 - utils - INFO - Reranking 168 documents with cross-encoder
+2025-12-02 20:47:41,873 - utils - INFO - Neural reranker initialized
+2025-12-02 20:47:41,874 - utils - INFO - Ensemble reranker initialized
+2025-12-02 20:47:41,874 - utils - INFO - Post-processor initialized
+2025-12-02 20:47:43,177 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-02 20:47:43,402 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-02 20:47:44,820 - utils - INFO - Inverted index built with 21795 terms
+2025-12-02 20:47:44,821 - utils - INFO - build_index completed in 1418.92ms
+2025-12-02 20:47:44,856 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 20:47:44,878 - utils - INFO - BM25 index loaded successfully
+2025-12-02 20:47:45,120 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 20:47:45,121 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 20:47:51,367 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 20:47:54,800 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 20:47:54,801 - utils - INFO - Loading indices...
+2025-12-02 20:47:54,801 - utils - INFO - Loading BM25 index...
+2025-12-02 20:47:54,801 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 20:47:54,821 - utils - INFO - BM25 index loaded successfully
+2025-12-02 20:47:54,821 - utils - INFO - Loading article metadata...
+2025-12-02 20:47:55,161 - utils - INFO - Loading dense embeddings...
+2025-12-02 20:47:55,162 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 20:47:55,164 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 20:47:58,306 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 20:48:05,271 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 20:48:05,278 - utils - INFO - Indices loaded: 2692 articles indexed
+2025-12-02 20:48:05,278 - utils - INFO - Pipeline initialized successfully!
+2025-12-02 20:48:05,279 - utils - INFO - IRMetrics initialized
+2025-12-02 20:48:05,279 - utils - INFO - SystemEvaluator initialized
+2025-12-02 20:48:05,279 - utils - INFO - Evaluating 10 queries
+2025-12-02 20:48:05,279 - utils - INFO - Processing query: 'artificial intelligence'
+2025-12-02 20:48:05,360 - utils - INFO - Query processed: 'artificial intelligence' -> type='exploratory'
+2025-12-02 20:48:05,361 - utils - INFO - process completed in 81.63ms
+2025-12-02 20:48:05,361 - utils - INFO - Query Processing completed in 82.08ms
+2025-12-02 20:48:05,373 - utils - INFO - _bm25_retrieve completed in 11.27ms
+2025-12-02 20:48:05,513 - utils - INFO - _dense_retrieve completed in 137.51ms
+2025-12-02 20:48:05,514 - utils - INFO - _hybrid_retrieve completed in 152.35ms
+2025-12-02 20:48:05,514 - utils - INFO - retrieve completed in 152.58ms
+2025-12-02 20:48:05,521 - utils - INFO - retrieve_with_documents completed in 159.85ms
+2025-12-02 20:48:05,523 - utils - INFO - Retrieval completed in 161.85ms
+2025-12-02 20:48:05,524 - utils - INFO - Reranking 195 documents with cross-encoder
+2025-12-02 20:48:13,260 - utils - INFO - Initializing Cortex IR System...
+2025-12-02 20:48:13,266 - utils - INFO - Checking system readiness...
+2025-12-02 20:48:13,266 - utils - INFO - ✅ Preprocessed data found
+2025-12-02 20:48:13,266 - utils - INFO - ✅ Search indices found
+2025-12-02 20:48:13,266 - utils - INFO - ✅ All components ready - launching UI...
+2025-12-02 20:48:27,690 - utils - INFO - Loading IR pipeline...
+2025-12-02 20:48:27,690 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-12-02 20:48:27,690 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-12-02 20:48:29,998 - utils - INFO - Loading vocabulary for spell checker...
+2025-12-02 20:48:30,855 - utils - INFO - Loaded 21795 terms into spell checker
+2025-12-02 20:48:30,859 - utils - INFO - Query processor initialized
+2025-12-02 20:48:30,961 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-12-02 20:48:30,962 - utils - INFO - Using device: cpu
+2025-12-02 20:48:32,529 - utils - INFO - Reranking complete. Top score: -3.1553
+2025-12-02 20:48:32,529 - utils - INFO - rerank completed in 51156.78ms
+2025-12-02 20:48:32,530 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7105
+2025-12-02 20:48:32,530 - utils - INFO - rerank completed in 51157.50ms
+2025-12-02 20:48:32,530 - utils - INFO - Reranking completed in 51157.92ms
+2025-12-02 20:48:32,531 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:48:32,565 - utils - INFO - Deduplication: 50 -> 47 documents
+2025-12-02 20:48:32,754 - utils - INFO - rerank completed in 187.96ms
+2025-12-02 20:48:32,755 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:48:32,755 - utils - INFO - process completed in 224.37ms
+2025-12-02 20:48:32,755 - utils - INFO - Post-Processing completed in 224.56ms
+2025-12-02 20:48:32,755 - utils - INFO - Processing query: 'economic growth'
+2025-12-02 20:48:32,780 - utils - INFO - Query processed: 'economic growth' -> type='exploratory'
+2025-12-02 20:48:32,780 - utils - INFO - process completed in 24.42ms
+2025-12-02 20:48:32,780 - utils - INFO - Query Processing completed in 24.59ms
+2025-12-02 20:48:32,782 - utils - INFO - _bm25_retrieve completed in 2.30ms
+2025-12-02 20:48:32,835 - utils - INFO - _dense_retrieve completed in 52.16ms
+2025-12-02 20:48:32,837 - utils - INFO - _hybrid_retrieve completed in 56.53ms
+2025-12-02 20:48:32,837 - utils - INFO - retrieve completed in 56.72ms
+2025-12-02 20:48:32,838 - utils - INFO - retrieve_with_documents completed in 57.82ms
+2025-12-02 20:48:32,838 - utils - INFO - Retrieval completed in 58.14ms
+2025-12-02 20:48:32,838 - utils - INFO - Reranking 157 documents with cross-encoder
+2025-12-02 20:48:36,975 - utils - INFO - Neural reranker initialized
+2025-12-02 20:48:36,976 - utils - INFO - Ensemble reranker initialized
+2025-12-02 20:48:36,977 - utils - INFO - Post-processor initialized
+2025-12-02 20:48:38,684 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-02 20:48:39,178 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-02 20:48:41,047 - utils - INFO - Inverted index built with 21795 terms
+2025-12-02 20:48:41,048 - utils - INFO - build_index completed in 1869.58ms
+2025-12-02 20:48:41,093 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 20:48:41,118 - utils - INFO - BM25 index loaded successfully
+2025-12-02 20:48:41,430 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 20:48:41,432 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 20:48:44,980 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 20:48:48,273 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 20:48:48,274 - utils - INFO - Loading indices...
+2025-12-02 20:48:48,275 - utils - INFO - Loading BM25 index...
+2025-12-02 20:48:48,277 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 20:48:48,321 - utils - INFO - BM25 index loaded successfully
+2025-12-02 20:48:48,325 - utils - INFO - Loading article metadata...
+2025-12-02 20:48:48,765 - utils - INFO - Loading dense embeddings...
+2025-12-02 20:48:48,766 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 20:48:48,773 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 20:48:52,712 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 20:48:57,066 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 20:48:57,066 - utils - INFO - Indices loaded: 2692 articles indexed
+2025-12-02 20:48:57,066 - utils - INFO - Pipeline initialized successfully!
+2025-12-02 20:48:57,066 - utils - INFO - ✅ Pipeline loaded successfully!
+2025-12-02 20:48:57,066 - utils - INFO - 🎉 Cortex IR System initialized and ready!
+2025-12-02 20:49:21,917 - utils - INFO - Reranking complete. Top score: -7.3643
+2025-12-02 20:49:21,917 - utils - INFO - rerank completed in 76393.33ms
+2025-12-02 20:49:21,917 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.6716
+2025-12-02 20:49:21,918 - utils - INFO - rerank completed in 76394.04ms
+2025-12-02 20:49:21,918 - utils - INFO - Reranking completed in 76394.56ms
+2025-12-02 20:49:21,918 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:49:21,962 - utils - INFO - Deduplication: 50 -> 44 documents
+2025-12-02 20:49:22,210 - utils - INFO - rerank completed in 247.66ms
+2025-12-02 20:49:22,212 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:49:22,213 - utils - INFO - process completed in 294.94ms
+2025-12-02 20:49:22,214 - utils - INFO - Post-Processing completed in 296.14ms
+2025-12-02 20:49:22,218 - utils - INFO - Processing query: 'machine learning'
+2025-12-02 20:49:22,244 - utils - INFO - Query processed: 'machine learning' -> type='exploratory'
+2025-12-02 20:49:22,246 - utils - INFO - process completed in 28.01ms
+2025-12-02 20:49:22,248 - utils - INFO - Query Processing completed in 29.82ms
+2025-12-02 20:49:22,254 - utils - INFO - _bm25_retrieve completed in 5.85ms
+2025-12-02 20:49:22,342 - utils - INFO - _dense_retrieve completed in 86.78ms
+2025-12-02 20:49:22,348 - utils - INFO - _hybrid_retrieve completed in 99.59ms
+2025-12-02 20:49:22,350 - utils - INFO - retrieve completed in 101.64ms
+2025-12-02 20:49:22,354 - utils - INFO - retrieve_with_documents completed in 105.84ms
+2025-12-02 20:49:22,356 - utils - INFO - Retrieval completed in 107.65ms
+2025-12-02 20:49:22,357 - utils - INFO - Reranking 194 documents with cross-encoder
+2025-12-02 20:49:29,052 - utils - INFO - Reranking complete. Top score: 6.0562
+2025-12-02 20:49:29,052 - utils - INFO - rerank completed in 56214.07ms
+2025-12-02 20:49:29,054 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.8000
+2025-12-02 20:49:29,057 - utils - INFO - rerank completed in 56218.56ms
+2025-12-02 20:49:29,057 - utils - INFO - Reranking completed in 56218.82ms
+2025-12-02 20:49:29,057 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:49:29,135 - utils - INFO - Deduplication: 50 -> 43 documents
+2025-12-02 20:49:29,308 - utils - INFO - rerank completed in 172.25ms
+2025-12-02 20:49:29,308 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:49:29,309 - utils - INFO - process completed in 251.48ms
+2025-12-02 20:49:29,309 - utils - INFO - Post-Processing completed in 251.86ms
+2025-12-02 20:49:29,310 - utils - INFO - Processing query: 'sports news'
+2025-12-02 20:49:29,335 - utils - INFO - Query processed: 'sports news' -> type='breaking'
+2025-12-02 20:49:29,335 - utils - INFO - process completed in 25.64ms
+2025-12-02 20:49:29,336 - utils - INFO - Query Processing completed in 25.99ms
+2025-12-02 20:49:29,337 - utils - INFO - _bm25_retrieve completed in 1.43ms
+2025-12-02 20:49:29,387 - utils - INFO - _dense_retrieve completed in 48.97ms
+2025-12-02 20:49:29,387 - utils - INFO - _hybrid_retrieve completed in 51.50ms
+2025-12-02 20:49:29,388 - utils - INFO - retrieve completed in 51.85ms
+2025-12-02 20:49:29,389 - utils - INFO - retrieve_with_documents completed in 53.15ms
+2025-12-02 20:49:29,389 - utils - INFO - Retrieval completed in 53.41ms
+2025-12-02 20:49:29,390 - utils - INFO - Reranking 179 documents with cross-encoder
+2025-12-02 20:50:35,208 - utils - INFO - Reranking complete. Top score: -7.0976
+2025-12-02 20:50:35,210 - utils - INFO - rerank completed in 72852.51ms
+2025-12-02 20:50:35,211 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.6741
+2025-12-02 20:50:35,214 - utils - INFO - rerank completed in 72856.28ms
+2025-12-02 20:50:35,217 - utils - INFO - Reranking completed in 72857.68ms
+2025-12-02 20:50:35,219 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:50:35,273 - utils - INFO - Deduplication: 50 -> 45 documents
+2025-12-02 20:50:35,494 - utils - INFO - rerank completed in 221.22ms
+2025-12-02 20:50:35,495 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:50:35,495 - utils - INFO - process completed in 276.19ms
+2025-12-02 20:50:35,496 - utils - INFO - Post-Processing completed in 276.62ms
+2025-12-02 20:50:35,496 - utils - INFO - Processing query: 'stock market'
+2025-12-02 20:50:35,521 - utils - INFO - Query processed: 'stock market' -> type='exploratory'
+2025-12-02 20:50:35,522 - utils - INFO - process completed in 25.43ms
+2025-12-02 20:50:35,522 - utils - INFO - Query Processing completed in 25.77ms
+2025-12-02 20:50:35,524 - utils - INFO - _bm25_retrieve completed in 1.87ms
+2025-12-02 20:50:35,568 - utils - INFO - _dense_retrieve completed in 42.40ms
+2025-12-02 20:50:35,570 - utils - INFO - _hybrid_retrieve completed in 47.70ms
+2025-12-02 20:50:35,572 - utils - INFO - retrieve completed in 49.60ms
+2025-12-02 20:50:35,577 - utils - INFO - retrieve_with_documents completed in 54.37ms
+2025-12-02 20:50:35,578 - utils - INFO - Retrieval completed in 55.44ms
+2025-12-02 20:50:35,579 - utils - INFO - Reranking 170 documents with cross-encoder
+2025-12-02 20:50:36,243 - utils - INFO - Reranking complete. Top score: -1.7328
+2025-12-02 20:50:36,246 - utils - INFO - rerank completed in 66856.14ms
+2025-12-02 20:50:36,247 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.8000
+2025-12-02 20:50:36,247 - utils - INFO - rerank completed in 66857.38ms
+2025-12-02 20:50:36,248 - utils - INFO - Reranking completed in 66857.81ms
+2025-12-02 20:50:36,248 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:50:36,298 - utils - INFO - Deduplication: 50 -> 50 documents
+2025-12-02 20:50:36,473 - utils - INFO - rerank completed in 174.85ms
+2025-12-02 20:50:36,474 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:50:36,474 - utils - INFO - process completed in 225.70ms
+2025-12-02 20:50:36,474 - utils - INFO - Post-Processing completed in 225.85ms
+2025-12-02 20:50:36,474 - utils - INFO - Processing query: 'football match'
+2025-12-02 20:50:36,496 - utils - INFO - Query processed: 'football match' -> type='exploratory'
+2025-12-02 20:50:36,496 - utils - INFO - process completed in 21.94ms
+2025-12-02 20:50:36,497 - utils - INFO - Query Processing completed in 22.29ms
+2025-12-02 20:50:36,498 - utils - INFO - _bm25_retrieve completed in 1.34ms
+2025-12-02 20:50:36,544 - utils - INFO - _dense_retrieve completed in 45.58ms
+2025-12-02 20:50:36,546 - utils - INFO - _hybrid_retrieve completed in 48.52ms
+2025-12-02 20:50:36,546 - utils - INFO - retrieve completed in 49.47ms
+2025-12-02 20:50:36,548 - utils - INFO - retrieve_with_documents completed in 50.65ms
+2025-12-02 20:50:36,548 - utils - INFO - Retrieval completed in 50.91ms
+2025-12-02 20:50:36,548 - utils - INFO - Reranking 181 documents with cross-encoder
+2025-12-02 20:51:39,767 - utils - INFO - Reranking complete. Top score: 1.2233
+2025-12-02 20:51:39,768 - utils - INFO - rerank completed in 64188.88ms
+2025-12-02 20:51:39,768 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7607
+2025-12-02 20:51:39,769 - utils - INFO - rerank completed in 64189.96ms
+2025-12-02 20:51:39,769 - utils - INFO - Reranking completed in 64190.31ms
+2025-12-02 20:51:39,769 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:51:39,805 - utils - INFO - Deduplication: 50 -> 47 documents
+2025-12-02 20:51:39,994 - utils - INFO - rerank completed in 188.21ms
+2025-12-02 20:51:39,995 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:51:39,996 - utils - INFO - process completed in 226.47ms
+2025-12-02 20:51:39,996 - utils - INFO - Post-Processing completed in 227.11ms
+2025-12-02 20:51:39,997 - utils - INFO - Processing query: 'climate change'
+2025-12-02 20:51:40,016 - utils - INFO - Query processed: 'climate change' -> type='exploratory'
+2025-12-02 20:51:40,017 - utils - INFO - process completed in 20.05ms
+2025-12-02 20:51:40,018 - utils - INFO - Query Processing completed in 21.11ms
+2025-12-02 20:51:40,024 - utils - INFO - _bm25_retrieve completed in 4.52ms
+2025-12-02 20:51:40,054 - utils - INFO - _dense_retrieve completed in 27.14ms
+2025-12-02 20:51:40,056 - utils - INFO - _hybrid_retrieve completed in 37.00ms
+2025-12-02 20:51:40,058 - utils - INFO - retrieve completed in 38.35ms
+2025-12-02 20:51:40,059 - utils - INFO - retrieve_with_documents completed in 39.58ms
+2025-12-02 20:51:40,060 - utils - INFO - Retrieval completed in 40.98ms
+2025-12-02 20:51:40,061 - utils - INFO - Reranking 193 documents with cross-encoder
+2025-12-02 20:51:43,564 - utils - INFO - Reranking complete. Top score: 1.7879
+2025-12-02 20:51:43,565 - utils - INFO - rerank completed in 67016.49ms
+2025-12-02 20:51:43,565 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7874
+2025-12-02 20:51:43,566 - utils - INFO - rerank completed in 67017.68ms
+2025-12-02 20:51:43,566 - utils - INFO - Reranking completed in 67017.94ms
+2025-12-02 20:51:43,566 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:51:43,657 - utils - INFO - Deduplication: 50 -> 50 documents
+2025-12-02 20:51:43,928 - utils - INFO - rerank completed in 270.77ms
+2025-12-02 20:51:43,930 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:51:43,930 - utils - INFO - process completed in 364.26ms
+2025-12-02 20:51:43,931 - utils - INFO - Post-Processing completed in 364.42ms
+2025-12-02 20:51:43,933 - utils - INFO - Processing query: 'cricket world cup'
+2025-12-02 20:51:43,970 - utils - INFO - Query processed: 'cricket world cup' -> type='exploratory'
+2025-12-02 20:51:43,971 - utils - INFO - process completed in 37.69ms
+2025-12-02 20:51:43,971 - utils - INFO - Query Processing completed in 38.08ms
+2025-12-02 20:51:43,973 - utils - INFO - _bm25_retrieve completed in 1.36ms
+2025-12-02 20:51:44,086 - utils - INFO - _dense_retrieve completed in 112.91ms
+2025-12-02 20:51:44,090 - utils - INFO - _hybrid_retrieve completed in 115.95ms
+2025-12-02 20:51:44,091 - utils - INFO - retrieve completed in 119.06ms
+2025-12-02 20:51:44,096 - utils - INFO - retrieve_with_documents completed in 124.58ms
+2025-12-02 20:51:44,099 - utils - INFO - Retrieval completed in 127.46ms
+2025-12-02 20:51:44,101 - utils - INFO - Reranking 182 documents with cross-encoder
+2025-12-02 20:52:47,698 - utils - INFO - Reranking complete. Top score: 6.1104
+2025-12-02 20:52:47,699 - utils - INFO - rerank completed in 63597.81ms
+2025-12-02 20:52:47,699 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.8000
+2025-12-02 20:52:47,699 - utils - INFO - rerank completed in 63598.61ms
+2025-12-02 20:52:47,700 - utils - INFO - Reranking completed in 63598.87ms
+2025-12-02 20:52:47,700 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:52:47,735 - utils - INFO - Deduplication: 50 -> 50 documents
+2025-12-02 20:52:47,918 - utils - INFO - rerank completed in 183.41ms
+2025-12-02 20:52:47,919 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:52:47,920 - utils - INFO - process completed in 219.74ms
+2025-12-02 20:52:47,920 - utils - INFO - Post-Processing completed in 220.03ms
+2025-12-02 20:52:47,921 - utils - INFO - Evaluation complete
+2025-12-02 20:52:47,922 - utils - INFO - MAP: 0.0000
+2025-12-02 20:52:47,923 - utils - INFO - MRR: 0.0000
+2025-12-02 20:52:47,923 - utils - INFO - Avg Response Time: 50090.93ms
+2025-12-02 20:52:47,927 - utils - INFO - Evaluation report saved to /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/evaluation_report.json
+2025-12-02 20:52:49,931 - utils - INFO - Reranking complete. Top score: -1.8356
+2025-12-02 20:52:49,932 - utils - INFO - rerank completed in 69870.62ms
+2025-12-02 20:52:49,933 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.6433
+2025-12-02 20:52:49,933 - utils - INFO - rerank completed in 69872.25ms
+2025-12-02 20:52:49,934 - utils - INFO - Reranking completed in 69872.87ms
+2025-12-02 20:52:49,934 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:52:49,983 - utils - INFO - Deduplication: 50 -> 48 documents
+2025-12-02 20:52:50,244 - utils - INFO - rerank completed in 260.08ms
+2025-12-02 20:52:50,245 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:52:50,246 - utils - INFO - process completed in 312.03ms
+2025-12-02 20:52:50,248 - utils - INFO - Post-Processing completed in 313.26ms
+2025-12-02 20:52:50,251 - utils - INFO - Processing query: 'global warming'
+2025-12-02 20:52:50,285 - utils - INFO - Query processed: 'global warming' -> type='exploratory'
+2025-12-02 20:52:50,287 - utils - INFO - process completed in 35.63ms
+2025-12-02 20:52:50,288 - utils - INFO - Query Processing completed in 36.87ms
+2025-12-02 20:52:50,294 - utils - INFO - _bm25_retrieve completed in 4.98ms
+2025-12-02 20:52:50,337 - utils - INFO - _dense_retrieve completed in 41.48ms
+2025-12-02 20:52:50,345 - utils - INFO - _hybrid_retrieve completed in 55.72ms
+2025-12-02 20:52:50,347 - utils - INFO - retrieve completed in 57.09ms
+2025-12-02 20:52:50,348 - utils - INFO - retrieve_with_documents completed in 58.69ms
+2025-12-02 20:52:50,349 - utils - INFO - Retrieval completed in 59.55ms
+2025-12-02 20:52:50,349 - utils - INFO - Reranking 169 documents with cross-encoder
+2025-12-02 20:53:25,083 - utils - INFO - Reranking complete. Top score: -3.8352
+2025-12-02 20:53:25,084 - utils - INFO - rerank completed in 34734.41ms
+2025-12-02 20:53:25,084 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.8000
+2025-12-02 20:53:25,084 - utils - INFO - rerank completed in 34735.05ms
+2025-12-02 20:53:25,085 - utils - INFO - Reranking completed in 34735.38ms
+2025-12-02 20:53:25,085 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:53:25,134 - utils - INFO - Deduplication: 50 -> 49 documents
+2025-12-02 20:53:25,308 - utils - INFO - rerank completed in 173.80ms
+2025-12-02 20:53:25,308 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:53:25,308 - utils - INFO - process completed in 222.93ms
+2025-12-02 20:53:25,308 - utils - INFO - Post-Processing completed in 223.11ms
+2025-12-02 20:53:25,308 - utils - INFO - Processing query: 'technology innovation'
+2025-12-02 20:53:25,323 - utils - INFO - Query processed: 'technology innovation' -> type='exploratory'
+2025-12-02 20:53:25,323 - utils - INFO - process completed in 15.16ms
+2025-12-02 20:53:25,324 - utils - INFO - Query Processing completed in 15.32ms
+2025-12-02 20:53:25,325 - utils - INFO - _bm25_retrieve completed in 1.36ms
+2025-12-02 20:53:25,348 - utils - INFO - _dense_retrieve completed in 22.82ms
+2025-12-02 20:53:25,350 - utils - INFO - _hybrid_retrieve completed in 25.80ms
+2025-12-02 20:53:25,350 - utils - INFO - retrieve completed in 25.98ms
+2025-12-02 20:53:25,350 - utils - INFO - retrieve_with_documents completed in 26.55ms
+2025-12-02 20:53:25,350 - utils - INFO - Retrieval completed in 26.70ms
+2025-12-02 20:53:25,351 - utils - INFO - Reranking 168 documents with cross-encoder
+2025-12-02 20:53:56,221 - utils - INFO - Reranking complete. Top score: -3.1553
+2025-12-02 20:53:56,221 - utils - INFO - rerank completed in 30870.67ms
+2025-12-02 20:53:56,222 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7105
+2025-12-02 20:53:56,222 - utils - INFO - rerank completed in 30871.20ms
+2025-12-02 20:53:56,222 - utils - INFO - Reranking completed in 30871.39ms
+2025-12-02 20:53:56,222 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:53:56,253 - utils - INFO - Deduplication: 50 -> 47 documents
+2025-12-02 20:53:56,403 - utils - INFO - rerank completed in 149.67ms
+2025-12-02 20:53:56,403 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:53:56,404 - utils - INFO - process completed in 181.48ms
+2025-12-02 20:53:56,404 - utils - INFO - Post-Processing completed in 181.64ms
+2025-12-02 20:53:56,404 - utils - INFO - Processing query: 'economic growth'
+2025-12-02 20:53:56,419 - utils - INFO - Query processed: 'economic growth' -> type='exploratory'
+2025-12-02 20:53:56,419 - utils - INFO - process completed in 15.19ms
+2025-12-02 20:53:56,419 - utils - INFO - Query Processing completed in 15.31ms
+2025-12-02 20:53:56,421 - utils - INFO - _bm25_retrieve completed in 1.37ms
+2025-12-02 20:53:56,447 - utils - INFO - _dense_retrieve completed in 26.44ms
+2025-12-02 20:53:56,449 - utils - INFO - _hybrid_retrieve completed in 30.09ms
+2025-12-02 20:53:56,450 - utils - INFO - retrieve completed in 30.33ms
+2025-12-02 20:53:56,450 - utils - INFO - retrieve_with_documents completed in 30.72ms
+2025-12-02 20:53:56,450 - utils - INFO - Retrieval completed in 30.87ms
+2025-12-02 20:53:56,450 - utils - INFO - Reranking 157 documents with cross-encoder
+2025-12-02 20:54:25,228 - utils - INFO - Reranking complete. Top score: 6.0562
+2025-12-02 20:54:25,228 - utils - INFO - rerank completed in 28777.74ms
+2025-12-02 20:54:25,229 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.8000
+2025-12-02 20:54:25,229 - utils - INFO - rerank completed in 28778.43ms
+2025-12-02 20:54:25,229 - utils - INFO - Reranking completed in 28778.67ms
+2025-12-02 20:54:25,229 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:54:25,260 - utils - INFO - Deduplication: 50 -> 43 documents
+2025-12-02 20:54:25,375 - utils - INFO - rerank completed in 114.93ms
+2025-12-02 20:54:25,375 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:54:25,375 - utils - INFO - process completed in 146.17ms
+2025-12-02 20:54:25,375 - utils - INFO - Post-Processing completed in 146.34ms
+2025-12-02 20:54:25,376 - utils - INFO - Processing query: 'sports news'
+2025-12-02 20:54:25,401 - utils - INFO - Query processed: 'sports news' -> type='breaking'
+2025-12-02 20:54:25,401 - utils - INFO - process completed in 25.45ms
+2025-12-02 20:54:25,401 - utils - INFO - Query Processing completed in 25.59ms
+2025-12-02 20:54:25,403 - utils - INFO - _bm25_retrieve completed in 1.31ms
+2025-12-02 20:54:25,440 - utils - INFO - _dense_retrieve completed in 37.31ms
+2025-12-02 20:54:25,444 - utils - INFO - _hybrid_retrieve completed in 42.24ms
+2025-12-02 20:54:25,447 - utils - INFO - retrieve completed in 45.18ms
+2025-12-02 20:54:25,449 - utils - INFO - retrieve_with_documents completed in 47.59ms
+2025-12-02 20:54:25,452 - utils - INFO - Retrieval completed in 50.92ms
+2025-12-02 20:54:25,453 - utils - INFO - Reranking 179 documents with cross-encoder
+2025-12-02 20:54:57,560 - utils - INFO - Reranking complete. Top score: -1.7328
+2025-12-02 20:54:57,560 - utils - INFO - rerank completed in 32107.57ms
+2025-12-02 20:54:57,561 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.8000
+2025-12-02 20:54:57,561 - utils - INFO - rerank completed in 32108.30ms
+2025-12-02 20:54:57,561 - utils - INFO - Reranking completed in 32108.54ms
+2025-12-02 20:54:57,561 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:54:57,600 - utils - INFO - Deduplication: 50 -> 50 documents
+2025-12-02 20:54:57,738 - utils - INFO - rerank completed in 138.27ms
+2025-12-02 20:54:57,738 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:54:57,739 - utils - INFO - process completed in 177.37ms
+2025-12-02 20:54:57,739 - utils - INFO - Post-Processing completed in 177.52ms
+2025-12-02 20:54:57,739 - utils - INFO - Processing query: 'football match'
+2025-12-02 20:54:57,756 - utils - INFO - Query processed: 'football match' -> type='exploratory'
+2025-12-02 20:54:57,756 - utils - INFO - process completed in 17.32ms
+2025-12-02 20:54:57,756 - utils - INFO - Query Processing completed in 17.50ms
+2025-12-02 20:54:57,758 - utils - INFO - _bm25_retrieve completed in 1.33ms
+2025-12-02 20:54:57,783 - utils - INFO - _dense_retrieve completed in 24.38ms
+2025-12-02 20:54:57,785 - utils - INFO - _hybrid_retrieve completed in 28.25ms
+2025-12-02 20:54:57,787 - utils - INFO - retrieve completed in 29.96ms
+2025-12-02 20:54:57,788 - utils - INFO - retrieve_with_documents completed in 31.17ms
+2025-12-02 20:54:57,789 - utils - INFO - Retrieval completed in 32.87ms
+2025-12-02 20:54:57,790 - utils - INFO - Reranking 181 documents with cross-encoder
+2025-12-02 20:55:30,803 - utils - INFO - Reranking complete. Top score: 1.7879
+2025-12-02 20:55:30,803 - utils - INFO - rerank completed in 33013.09ms
+2025-12-02 20:55:30,804 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7874
+2025-12-02 20:55:30,804 - utils - INFO - rerank completed in 33013.78ms
+2025-12-02 20:55:30,804 - utils - INFO - Reranking completed in 33014.02ms
+2025-12-02 20:55:30,805 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:55:30,847 - utils - INFO - Deduplication: 50 -> 50 documents
+2025-12-02 20:55:30,965 - utils - INFO - rerank completed in 117.91ms
+2025-12-02 20:55:30,966 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:55:30,966 - utils - INFO - process completed in 161.22ms
+2025-12-02 20:55:30,966 - utils - INFO - Post-Processing completed in 161.40ms
+2025-12-02 20:55:30,966 - utils - INFO - Processing query: 'cricket world cup'
+2025-12-02 20:55:30,983 - utils - INFO - Query processed: 'cricket world cup' -> type='exploratory'
+2025-12-02 20:55:30,983 - utils - INFO - process completed in 16.68ms
+2025-12-02 20:55:30,983 - utils - INFO - Query Processing completed in 16.85ms
+2025-12-02 20:55:30,985 - utils - INFO - _bm25_retrieve completed in 1.41ms
+2025-12-02 20:55:31,013 - utils - INFO - _dense_retrieve completed in 27.76ms
+2025-12-02 20:55:31,015 - utils - INFO - _hybrid_retrieve completed in 31.64ms
+2025-12-02 20:55:31,016 - utils - INFO - retrieve completed in 32.74ms
+2025-12-02 20:55:31,017 - utils - INFO - retrieve_with_documents completed in 33.72ms
+2025-12-02 20:55:31,019 - utils - INFO - Retrieval completed in 35.90ms
+2025-12-02 20:55:31,021 - utils - INFO - Reranking 182 documents with cross-encoder
+2025-12-02 20:56:07,257 - utils - INFO - Reranking complete. Top score: 6.1104
+2025-12-02 20:56:07,257 - utils - INFO - rerank completed in 36236.16ms
+2025-12-02 20:56:07,257 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.8000
+2025-12-02 20:56:07,258 - utils - INFO - rerank completed in 36236.72ms
+2025-12-02 20:56:07,258 - utils - INFO - Reranking completed in 36236.96ms
+2025-12-02 20:56:07,258 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 20:56:07,290 - utils - INFO - Deduplication: 50 -> 50 documents
+2025-12-02 20:56:07,397 - utils - INFO - rerank completed in 106.94ms
+2025-12-02 20:56:07,397 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 20:56:07,397 - utils - INFO - process completed in 139.20ms
+2025-12-02 20:56:07,397 - utils - INFO - Post-Processing completed in 139.38ms
+2025-12-02 20:56:07,398 - utils - INFO - Evaluation complete
+2025-12-02 20:56:07,398 - utils - INFO - MAP: 0.0000
+2025-12-02 20:56:07,398 - utils - INFO - MRR: 0.0000
+2025-12-02 20:56:07,399 - utils - INFO - Avg Response Time: 48211.78ms
+2025-12-02 20:56:07,400 - utils - INFO - Evaluation report saved to /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/evaluation_report.json
+2025-12-02 21:07:25,784 - utils - INFO - Processing query: 'dollar exchange rate'
+2025-12-02 21:07:25,820 - utils - INFO - Query processed: 'dollar exchange rate' -> type='exploratory'
+2025-12-02 21:07:25,820 - utils - INFO - process completed in 36.08ms
+2025-12-02 21:07:25,820 - utils - INFO - Query Processing completed in 36.24ms
+2025-12-02 21:07:25,824 - utils - INFO - _bm25_retrieve completed in 3.26ms
+2025-12-02 21:07:25,856 - utils - INFO - _dense_retrieve completed in 32.51ms
+2025-12-02 21:07:25,858 - utils - INFO - _hybrid_retrieve completed in 37.34ms
+2025-12-02 21:07:25,858 - utils - INFO - retrieve completed in 37.58ms
+2025-12-02 21:07:25,860 - utils - INFO - retrieve_with_documents completed in 39.90ms
+2025-12-02 21:07:25,867 - utils - INFO - Retrieval completed in 46.19ms
+2025-12-02 21:07:25,868 - utils - INFO - Search Query: 'dollar exchange rate'
+2025-12-02 21:07:25,868 - utils - INFO - Corrected Query: 'dollar exchange rate'
+2025-12-02 21:07:25,868 - utils - INFO - Correction diff: False
+2025-12-02 21:08:12,476 - utils - INFO - Processing query: 'China manufacturing growth'
+2025-12-02 21:08:12,508 - utils - INFO - Query processed: 'China manufacturing growth' -> type='exploratory'
+2025-12-02 21:08:12,508 - utils - INFO - process completed in 32.50ms
+2025-12-02 21:08:12,509 - utils - INFO - Query Processing completed in 32.66ms
+2025-12-02 21:08:12,511 - utils - INFO - _bm25_retrieve completed in 2.32ms
+2025-12-02 21:08:12,535 - utils - INFO - _dense_retrieve completed in 24.17ms
+2025-12-02 21:08:12,536 - utils - INFO - _hybrid_retrieve completed in 27.31ms
+2025-12-02 21:08:12,536 - utils - INFO - retrieve completed in 27.51ms
+2025-12-02 21:08:12,537 - utils - INFO - retrieve_with_documents completed in 28.22ms
+2025-12-02 21:08:12,537 - utils - INFO - Retrieval completed in 28.46ms
+2025-12-02 21:08:12,537 - utils - INFO - Search Query: 'China manufacturing growth'
+2025-12-02 21:08:12,538 - utils - INFO - Corrected Query: 'China manufacturing growth'
+2025-12-02 21:08:12,538 - utils - INFO - Correction diff: False
+2025-12-02 21:08:20,743 - utils - INFO - Processing query: 'China manufacturing growth'
+2025-12-02 21:08:20,771 - utils - INFO - Query processed: 'China manufacturing growth' -> type='exploratory'
+2025-12-02 21:08:20,771 - utils - INFO - process completed in 28.50ms
+2025-12-02 21:08:20,772 - utils - INFO - Query Processing completed in 28.62ms
+2025-12-02 21:08:20,773 - utils - INFO - _bm25_retrieve completed in 1.61ms
+2025-12-02 21:08:20,795 - utils - INFO - _dense_retrieve completed in 21.14ms
+2025-12-02 21:08:20,795 - utils - INFO - _hybrid_retrieve completed in 23.56ms
+2025-12-02 21:08:20,796 - utils - INFO - retrieve completed in 24.46ms
+2025-12-02 21:08:20,797 - utils - INFO - retrieve_with_documents completed in 25.60ms
+2025-12-02 21:08:20,799 - utils - INFO - Retrieval completed in 27.05ms
+2025-12-02 21:08:20,799 - utils - INFO - Search Query: 'China manufacturing growth'
+2025-12-02 21:08:20,800 - utils - INFO - Corrected Query: 'China manufacturing growth'
+2025-12-02 21:08:20,801 - utils - INFO - Correction diff: False
+2025-12-02 21:08:33,188 - utils - INFO - Processing query: 'business AND (merger OR acquisition)'
+2025-12-02 21:08:33,219 - utils - INFO - Query processed: 'business AND (merger OR acquisition)' -> type='exploratory'
+2025-12-02 21:08:33,219 - utils - INFO - process completed in 31.23ms
+2025-12-02 21:08:33,219 - utils - INFO - Query Processing completed in 31.39ms
+2025-12-02 22:26:53,218 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-02 22:27:19,178 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-12-02 22:27:19,187 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-12-02 22:27:21,675 - utils - INFO - Loading vocabulary for spell checker...
+2025-12-02 22:27:22,445 - utils - INFO - Loaded 21795 terms into spell checker
+2025-12-02 22:27:22,446 - utils - INFO - Query processor initialized
+2025-12-02 22:27:22,543 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-12-02 22:27:22,544 - utils - INFO - Using device: cpu
+2025-12-02 22:27:26,200 - utils - INFO - Neural reranker initialized
+2025-12-02 22:27:26,210 - utils - INFO - Ensemble reranker initialized
+2025-12-02 22:27:26,210 - utils - INFO - Post-processor initialized
+2025-12-02 22:27:28,182 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-02 22:27:28,646 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-02 22:27:32,223 - utils - INFO - Inverted index built with 21795 terms
+2025-12-02 22:27:32,224 - utils - INFO - build_index completed in 3578.18ms
+2025-12-02 22:27:32,255 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 22:27:32,275 - utils - INFO - BM25 index loaded successfully
+2025-12-02 22:27:32,621 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 22:27:32,623 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 22:27:37,774 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 22:27:43,140 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 22:27:43,142 - utils - INFO - Loading indices...
+2025-12-02 22:27:43,143 - utils - INFO - Loading BM25 index...
+2025-12-02 22:27:43,145 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 22:27:43,308 - utils - INFO - BM25 index loaded successfully
+2025-12-02 22:27:43,309 - utils - INFO - Loading article metadata...
+2025-12-02 22:27:44,441 - utils - INFO - Loading dense embeddings...
+2025-12-02 22:27:44,441 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 22:27:44,443 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 22:27:57,164 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 22:28:03,580 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 22:28:03,587 - utils - INFO - Indices loaded: 2692 articles indexed
+2025-12-02 22:28:03,589 - utils - INFO - Pipeline initialized successfully!
+2025-12-02 22:28:03,961 - utils - INFO - Processing query: 'market'
+2025-12-02 22:28:03,983 - utils - INFO - Query processed: 'market' -> type='exploratory'
+2025-12-02 22:28:03,984 - utils - INFO - process completed in 22.46ms
+2025-12-02 22:28:03,985 - utils - INFO - Query Processing completed in 23.34ms
+2025-12-02 22:28:04,224 - utils - INFO - search_with_documents completed in 238.98ms
+2025-12-02 22:28:04,225 - utils - INFO - Retrieval completed in 239.24ms
+2025-12-02 22:28:04,225 - utils - INFO - Reranking 100 documents with cross-encoder
+2025-12-02 22:29:08,561 - utils - INFO - Reranking complete. Top score: -0.7419
+2025-12-02 22:29:08,562 - utils - INFO - rerank completed in 64337.02ms
+2025-12-02 22:29:08,562 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.6482
+2025-12-02 22:29:08,562 - utils - INFO - rerank completed in 64337.61ms
+2025-12-02 22:29:08,562 - utils - INFO - Reranking completed in 64337.82ms
+2025-12-02 22:29:08,563 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-02 22:29:08,563 - utils - INFO - Deduplication: 50 -> 44 documents
+2025-12-02 22:29:08,564 - utils - INFO - rerank completed in 1.06ms
+2025-12-02 22:29:08,564 - utils - INFO - Post-processing complete: 10 final results
+2025-12-02 22:29:08,565 - utils - INFO - process completed in 1.97ms
+2025-12-02 22:29:08,565 - utils - INFO - Post-Processing completed in 2.16ms
+2025-12-02 22:56:10,062 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-02 22:56:29,163 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-12-02 22:56:29,164 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-12-02 22:56:32,085 - utils - INFO - Loading vocabulary for spell checker...
+2025-12-02 22:56:33,052 - utils - INFO - Loaded 21795 terms into spell checker
+2025-12-02 22:56:33,052 - utils - INFO - Query processor initialized
+2025-12-02 22:56:33,091 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-12-02 22:56:33,092 - utils - INFO - Using device: cpu
+2025-12-02 22:56:36,057 - utils - INFO - Neural reranker initialized
+2025-12-02 22:56:36,060 - utils - INFO - Ensemble reranker initialized
+2025-12-02 22:56:36,062 - utils - INFO - Post-processor initialized
+2025-12-02 22:56:38,513 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-02 22:56:39,649 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-02 22:56:41,019 - utils - INFO - Inverted index built with 21795 terms
+2025-12-02 22:56:41,019 - utils - INFO - build_index completed in 1370.32ms
+2025-12-02 22:56:41,057 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 22:56:41,077 - utils - INFO - BM25 index loaded successfully
+2025-12-02 22:56:41,301 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 22:56:41,302 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 22:56:44,848 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 22:56:48,648 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 22:56:48,649 - utils - INFO - Loading indices...
+2025-12-02 22:56:48,650 - utils - INFO - Loading BM25 index...
+2025-12-02 22:56:48,653 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 22:56:48,707 - utils - INFO - BM25 index loaded successfully
+2025-12-02 22:56:48,716 - utils - INFO - Loading article metadata...
+2025-12-02 22:56:49,921 - utils - INFO - Loading dense embeddings...
+2025-12-02 22:56:49,931 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 22:56:49,932 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 22:56:54,029 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 22:56:57,568 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 22:56:57,577 - utils - INFO - Indices loaded: 2692 articles indexed
+2025-12-02 22:56:57,577 - utils - INFO - Pipeline initialized successfully!
+2025-12-02 22:56:57,767 - utils - INFO - Processing query: 'market'
+2025-12-02 22:56:57,900 - utils - INFO - Query processed: 'market' -> type='exploratory'
+2025-12-02 22:56:57,910 - utils - INFO - process completed in 143.22ms
+2025-12-02 22:56:57,910 - utils - INFO - Query Processing completed in 143.44ms
+2025-12-02 22:56:58,623 - utils - INFO - search_with_documents completed in 712.78ms
+2025-12-02 22:56:58,625 - utils - INFO - Retrieval completed in 714.70ms
+2025-12-02 23:02:38,014 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-02 23:03:01,337 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-12-02 23:03:01,337 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-12-02 23:03:04,570 - utils - INFO - Loading vocabulary for spell checker...
+2025-12-02 23:03:05,547 - utils - INFO - Loaded 21795 terms into spell checker
+2025-12-02 23:03:05,547 - utils - INFO - Query processor initialized
+2025-12-02 23:03:05,590 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-12-02 23:03:05,591 - utils - INFO - Using device: cpu
+2025-12-02 23:03:09,077 - utils - INFO - Neural reranker initialized
+2025-12-02 23:03:09,078 - utils - INFO - Ensemble reranker initialized
+2025-12-02 23:03:09,078 - utils - INFO - Post-processor initialized
+2025-12-02 23:03:12,487 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-02 23:03:13,172 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-02 23:03:16,049 - utils - INFO - Inverted index built with 21795 terms
+2025-12-02 23:03:16,049 - utils - INFO - build_index completed in 2877.62ms
+2025-12-02 23:03:16,189 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 23:03:16,247 - utils - INFO - BM25 index loaded successfully
+2025-12-02 23:03:16,777 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 23:03:16,778 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 23:03:20,763 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 23:03:24,530 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 23:03:24,531 - utils - INFO - Loading indices...
+2025-12-02 23:03:24,531 - utils - INFO - Loading BM25 index...
+2025-12-02 23:03:24,531 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 23:03:24,559 - utils - INFO - BM25 index loaded successfully
+2025-12-02 23:03:24,560 - utils - INFO - Loading article metadata...
+2025-12-02 23:03:24,909 - utils - INFO - Loading dense embeddings...
+2025-12-02 23:03:24,909 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 23:03:24,910 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 23:03:28,400 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 23:03:32,315 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 23:03:32,318 - utils - INFO - Indices loaded: 2692 articles indexed
+2025-12-02 23:03:32,319 - utils - INFO - Pipeline initialized successfully!
+2025-12-02 23:03:32,552 - utils - INFO - Processing query: 'market'
+2025-12-02 23:03:32,677 - utils - INFO - Query processed: 'market' -> type='exploratory'
+2025-12-02 23:03:32,679 - utils - INFO - process completed in 126.62ms
+2025-12-02 23:03:32,681 - utils - INFO - Query Processing completed in 128.86ms
+2025-12-02 23:03:33,008 - utils - INFO - search_with_documents completed in 326.41ms
+2025-12-02 23:03:33,013 - utils - INFO - Retrieval completed in 331.77ms
+2025-12-02 23:03:33,013 - utils - INFO - Reranking 50 documents with cross-encoder
+2025-12-02 23:04:04,357 - utils - INFO - Reranking complete. Top score: -1.7101
+2025-12-02 23:04:04,362 - utils - INFO - rerank completed in 31348.94ms
+2025-12-02 23:04:04,362 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.6820
+2025-12-02 23:04:04,363 - utils - INFO - rerank completed in 31349.35ms
+2025-12-02 23:04:04,363 - utils - INFO - Reranking completed in 31349.49ms
+2025-12-02 23:04:04,363 - utils - INFO - Starting post-processing pipeline for 20 documents
+2025-12-02 23:04:04,364 - utils - INFO - Deduplication: 20 -> 15 documents
+2025-12-02 23:04:04,366 - utils - INFO - rerank completed in 0.40ms
+2025-12-02 23:04:04,370 - utils - INFO - Post-processing complete: 10 final results
+2025-12-02 23:04:04,370 - utils - INFO - process completed in 7.54ms
+2025-12-02 23:04:04,370 - utils - INFO - Post-Processing completed in 7.67ms
+2025-12-02 23:48:22,021 - utils - INFO - Initializing Cortex IR System...
+2025-12-02 23:48:22,021 - utils - INFO - Checking system readiness...
+2025-12-02 23:48:22,022 - utils - INFO - ✅ Preprocessed data found
+2025-12-02 23:48:22,022 - utils - INFO - ✅ Search indices found
+2025-12-02 23:48:22,022 - utils - INFO - ✅ All components ready - launching UI...
+2025-12-02 23:48:32,323 - utils - INFO - Loading IR pipeline...
+2025-12-02 23:48:32,323 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-12-02 23:48:32,323 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-12-02 23:48:33,280 - utils - INFO - Loading vocabulary for spell checker...
+2025-12-02 23:48:33,644 - utils - INFO - Loaded 21795 terms into spell checker
+2025-12-02 23:48:33,644 - utils - INFO - Query processor initialized
+2025-12-02 23:48:33,675 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-12-02 23:48:33,676 - utils - INFO - Using device: cpu
+2025-12-02 23:48:36,788 - utils - INFO - Neural reranker initialized
+2025-12-02 23:48:36,789 - utils - INFO - Ensemble reranker initialized
+2025-12-02 23:48:36,789 - utils - INFO - Post-processor initialized
+2025-12-02 23:48:37,348 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-02 23:48:37,486 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-02 23:48:38,219 - utils - INFO - Inverted index built with 21795 terms
+2025-12-02 23:48:38,219 - utils - INFO - build_index completed in 732.81ms
+2025-12-02 23:48:38,249 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 23:48:38,268 - utils - INFO - BM25 index loaded successfully
+2025-12-02 23:48:38,426 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 23:48:38,427 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 23:48:42,454 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 23:48:47,397 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 23:48:47,397 - utils - INFO - Loading indices...
+2025-12-02 23:48:47,397 - utils - INFO - Loading BM25 index...
+2025-12-02 23:48:47,398 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 23:48:47,412 - utils - INFO - BM25 index loaded successfully
+2025-12-02 23:48:47,412 - utils - INFO - Loading article metadata...
+2025-12-02 23:48:47,591 - utils - INFO - Loading dense embeddings...
+2025-12-02 23:48:47,591 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 23:48:47,593 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 23:48:52,426 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 23:49:00,733 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 23:49:00,733 - utils - INFO - Indices loaded: 2692 articles indexed
+2025-12-02 23:49:00,733 - utils - INFO - Pipeline initialized successfully!
+2025-12-02 23:49:00,733 - utils - INFO - ✅ Pipeline loaded successfully!
+2025-12-02 23:49:00,733 - utils - INFO - 🎉 Cortex IR System initialized and ready!
+2025-12-02 23:53:39,485 - utils - INFO - Initializing Cortex IR System...
+2025-12-02 23:53:39,485 - utils - INFO - Checking system readiness...
+2025-12-02 23:53:39,486 - utils - INFO - ✅ Preprocessed data found
+2025-12-02 23:53:39,486 - utils - INFO - ✅ Search indices found
+2025-12-02 23:53:39,486 - utils - INFO - ✅ All components ready - launching UI...
+2025-12-02 23:53:45,327 - utils - INFO - Loading IR pipeline...
+2025-12-02 23:53:45,327 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-12-02 23:53:45,327 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-12-02 23:53:46,059 - utils - INFO - Loading vocabulary for spell checker...
+2025-12-02 23:53:46,318 - utils - INFO - Loaded 21795 terms into spell checker
+2025-12-02 23:53:46,319 - utils - INFO - Query processor initialized
+2025-12-02 23:53:46,347 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-12-02 23:53:46,347 - utils - INFO - Using device: cpu
+2025-12-02 23:53:48,595 - utils - INFO - Neural reranker initialized
+2025-12-02 23:53:48,596 - utils - INFO - Ensemble reranker initialized
+2025-12-02 23:53:48,596 - utils - INFO - Post-processor initialized
+2025-12-02 23:53:49,129 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-02 23:53:49,277 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-02 23:53:50,040 - utils - INFO - Inverted index built with 21795 terms
+2025-12-02 23:53:50,040 - utils - INFO - build_index completed in 763.69ms
+2025-12-02 23:53:50,067 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 23:53:50,080 - utils - INFO - BM25 index loaded successfully
+2025-12-02 23:53:50,232 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 23:53:50,233 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 23:53:54,279 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 23:53:58,350 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 23:53:58,350 - utils - INFO - Loading indices...
+2025-12-02 23:53:58,350 - utils - INFO - Loading BM25 index...
+2025-12-02 23:53:58,350 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-02 23:53:58,360 - utils - INFO - BM25 index loaded successfully
+2025-12-02 23:53:58,361 - utils - INFO - Loading article metadata...
+2025-12-02 23:53:58,534 - utils - INFO - Loading dense embeddings...
+2025-12-02 23:53:58,534 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-02 23:53:58,535 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-02 23:54:02,244 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-02 23:54:05,211 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-02 23:54:05,212 - utils - INFO - Indices loaded: 2692 articles indexed
+2025-12-02 23:54:05,212 - utils - INFO - Pipeline initialized successfully!
+2025-12-02 23:54:05,213 - utils - INFO - ✅ Pipeline loaded successfully!
+2025-12-02 23:54:05,214 - utils - INFO - 🎉 Cortex IR System initialized and ready!
+2025-12-02 23:55:11,686 - utils - INFO - Processing query: 'sports team performance 2023'
+2025-12-02 23:55:11,725 - utils - INFO - Query processed: 'sports team performance 2023' -> type='exploratory'
+2025-12-02 23:55:11,725 - utils - INFO - process completed in 38.42ms
+2025-12-02 23:55:11,725 - utils - INFO - Query Processing completed in 38.59ms
+2025-12-02 23:55:11,728 - utils - INFO - _bm25_retrieve completed in 3.19ms
+2025-12-02 23:55:11,915 - utils - INFO - _dense_retrieve completed in 186.41ms
+2025-12-02 23:55:11,915 - utils - INFO - _hybrid_retrieve completed in 190.15ms
+2025-12-02 23:55:11,915 - utils - INFO - retrieve completed in 190.28ms
+2025-12-02 23:55:11,916 - utils - INFO - retrieve_with_documents completed in 190.90ms
+2025-12-02 23:55:11,917 - utils - INFO - Retrieval completed in 192.12ms
+2025-12-02 23:55:11,917 - utils - INFO - Reranking 20 documents with cross-encoder
+2025-12-02 23:55:15,705 - utils - INFO - Reranking complete. Top score: 0.1430
+2025-12-02 23:55:15,705 - utils - INFO - rerank completed in 3787.59ms
+2025-12-02 23:55:15,705 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7160
+2025-12-02 23:55:15,705 - utils - INFO - rerank completed in 3787.92ms
+2025-12-02 23:55:15,706 - utils - INFO - Reranking completed in 3788.16ms
+2025-12-02 23:55:15,706 - utils - INFO - Starting post-processing pipeline for 20 documents
+2025-12-02 23:55:15,712 - utils - INFO - Deduplication: 20 -> 20 documents
+2025-12-02 23:55:15,723 - utils - INFO - rerank completed in 10.81ms
+2025-12-02 23:55:15,723 - utils - INFO - Post-processing complete: 10 final results
+2025-12-02 23:55:15,724 - utils - INFO - process completed in 17.89ms
+2025-12-02 23:55:15,724 - utils - INFO - Post-Processing completed in 18.04ms
+2025-12-02 23:55:15,724 - utils - INFO - Search Query: 'sports team performance 2023'
+2025-12-02 23:55:15,724 - utils - INFO - Corrected Query: 'sports team performance 2023'
+2025-12-02 23:55:15,724 - utils - INFO - Correction diff: False
+2025-12-02 23:55:25,005 - utils - INFO - Processing query: 'sports team performance 2023'
+2025-12-02 23:55:25,036 - utils - INFO - Query processed: 'sports team performance 2023' -> type='exploratory'
+2025-12-02 23:55:25,037 - utils - INFO - process completed in 31.29ms
+2025-12-02 23:55:25,037 - utils - INFO - Query Processing completed in 31.48ms
+2025-12-02 23:55:25,039 - utils - INFO - _bm25_retrieve completed in 1.78ms
+2025-12-02 23:55:25,061 - utils - INFO - _dense_retrieve completed in 22.50ms
+2025-12-02 23:55:25,062 - utils - INFO - _hybrid_retrieve completed in 25.21ms
+2025-12-02 23:55:25,064 - utils - INFO - retrieve completed in 27.27ms
+2025-12-02 23:55:25,066 - utils - INFO - retrieve_with_documents completed in 28.90ms
+2025-12-02 23:55:25,067 - utils - INFO - Retrieval completed in 29.85ms
+2025-12-02 23:55:25,067 - utils - INFO - Reranking 20 documents with cross-encoder
+2025-12-02 23:55:29,682 - utils - INFO - Reranking complete. Top score: 0.1430
+2025-12-02 23:55:29,682 - utils - INFO - rerank completed in 4614.80ms
+2025-12-02 23:55:29,682 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7160
+2025-12-02 23:55:29,682 - utils - INFO - rerank completed in 4615.07ms
+2025-12-02 23:55:29,682 - utils - INFO - Reranking completed in 4615.27ms
+2025-12-02 23:55:29,682 - utils - INFO - Starting post-processing pipeline for 20 documents
+2025-12-02 23:55:29,690 - utils - INFO - Deduplication: 20 -> 20 documents
+2025-12-02 23:55:29,714 - utils - INFO - rerank completed in 24.39ms
+2025-12-02 23:55:29,715 - utils - INFO - Post-processing complete: 20 final results
+2025-12-02 23:55:29,716 - utils - INFO - process completed in 33.69ms
+2025-12-02 23:55:29,716 - utils - INFO - Post-Processing completed in 33.91ms
+2025-12-02 23:55:29,717 - utils - INFO - Search Query: 'sports team performance 2023'
+2025-12-02 23:55:29,718 - utils - INFO - Corrected Query: 'sports team performance 2023'
+2025-12-02 23:55:29,718 - utils - INFO - Correction diff: False
+2025-12-02 23:55:43,938 - utils - INFO - Processing query: 'who won the championship?'
+2025-12-02 23:55:43,970 - utils - INFO - Query processed: 'who won the championship?' -> type='factual'
+2025-12-02 23:55:43,970 - utils - INFO - process completed in 32.32ms
+2025-12-02 23:55:43,970 - utils - INFO - Query Processing completed in 32.47ms
+2025-12-02 23:55:43,972 - utils - INFO - _bm25_retrieve completed in 1.51ms
+2025-12-02 23:55:43,998 - utils - INFO - _dense_retrieve completed in 25.80ms
+2025-12-02 23:55:43,999 - utils - INFO - _hybrid_retrieve completed in 28.64ms
+2025-12-02 23:55:43,999 - utils - INFO - retrieve completed in 28.90ms
+2025-12-02 23:55:44,000 - utils - INFO - retrieve_with_documents completed in 29.43ms
+2025-12-02 23:55:44,000 - utils - INFO - Retrieval completed in 29.62ms
+2025-12-02 23:55:44,000 - utils - INFO - Search Query: 'who won the championship?'
+2025-12-02 23:55:44,000 - utils - INFO - Corrected Query: 'who won the championship'
+2025-12-02 23:55:44,000 - utils - INFO - Correction diff: True
+2025-12-02 23:55:59,518 - utils - INFO - Processing query: 'business AND (merger OR acquisition)'
+2025-12-02 23:55:59,551 - utils - INFO - Query processed: 'business AND (merger OR acquisition)' -> type='exploratory'
+2025-12-02 23:55:59,552 - utils - INFO - process completed in 33.76ms
+2025-12-02 23:55:59,552 - utils - INFO - Query Processing completed in 33.98ms

@@ -1,12 +1,20 @@
-# News Article IR System - Complete Implementation Guide
+this# News Article IR System - Complete Implementation Guide
 
 ## System Overview
 
-**Project Name**: Cortex IR (or your chosen name)  
-**Dataset**: News Articles (2000 articles from Kaggle)  
-**Architecture**: 4-Stage Hybrid Pipeline with Neural Reranking  
-**Target Performance**: ~230-350ms query latency on CPU  
+**Project Name**: Cortex IR  
+**Dataset**: News Articles (2,692 articles from Articles.csv)  
+**Architecture**: Hybrid Pipeline with Boolean Retrieval, BM25, Dense Embeddings, Neural Reranking  
+**Target Performance**: ~250-350ms query latency on CPU  
 **Hardware Requirements**: Core i5 6th Gen + 16GB RAM (Satisfied ✅)
+
+**New Features (v2.0)**:
+- ✅ Boolean Retrieval (AND, OR, NOT operators)
+- ✅ Metadata Filtering (Category, Date, Entity)
+- ✅ Hybrid Search Strategy (Precision + Relevance)
+- ✅ Advanced Gradio Interface with Filters
+- ✅ Complete Lemmatization Pipeline
+- ✅ Interactive Search Experience
 
 ---
 
@@ -17,12 +25,14 @@
 3. [Installation & Setup](#installation--setup)
 4. [Stage 0: Preprocessing & Indexing](#stage-0-preprocessing--indexing)
 5. [Stage 1: Hybrid Retrieval](#stage-1-hybrid-retrieval)
-6. [Stage 2: Neural Reranking](#stage-2-neural-reranking)
-7. [Stage 3: Post-Processing](#stage-3-post-processing)
-8. [Stage 4: Gradio Interface](#stage-4-gradio-interface)
-9. [Evaluation & Metrics](#evaluation--metrics)
-10. [Implementation Checklist](#implementation-checklist)
-11. [Troubleshooting](#troubleshooting)
+6. [Stage 1.5: Boolean & Metadata Filtering](#stage-15-boolean--metadata-filtering) **NEW**
+7. [Stage 2: Neural Reranking](#stage-2-neural-reranking)
+8. [Stage 3: Post-Processing](#stage-3-post-processing)
+9. [Stage 4: Gradio Interface](#stage-4-gradio-interface)
+10. [New Features Guide](#new-features-guide) **NEW**
+11. [Evaluation & Metrics](#evaluation--metrics)
+12. [Implementation Checklist](#implementation-checklist)
+13. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -1205,6 +1215,373 @@ with gr.Blocks(title="News Article IR System", theme=gr.themes.Soft()) as demo:
 if __name__ == "__main__":
     demo.launch(share=True)
 ```
+
+---
+
+## New Features Guide
+
+### 10.1 Boolean Retrieval System
+
+The system now supports Boolean queries with AND, OR, and NOT operators for precise document retrieval.
+
+**Module**: `boolean_retrieval.py`
+
+**Features**:
+- Full Boolean logic support (AND, OR, NOT)
+- Inverted index integration for O(1) term lookup
+- Set-based operations for efficient evaluation
+- Recursive expression parsing
+- Query preprocessing that preserves operators
+
+**Example Usage**:
+
+```python
+from boolean_retrieval import BooleanRetriever
+
+# Initialize retriever
+retriever = BooleanRetriever()
+
+# Set the inverted index (automatically done by HybridSearchEngine)
+# inverted_index = {term: set(doc_ids)}
+retriever.set_index(inverted_index)
+
+# Execute Boolean queries
+results = retriever.retrieve("economy AND inflation")
+# Returns: [(doc_id, 1.0), (doc_id, 1.0), ...]
+
+results = retriever.retrieve("sports AND (basketball OR football)")
+results = retriever.retrieve("technology NOT smartphone")
+```
+
+**How It Works**:
+1. Query parsing: Tokenizes while preserving AND/OR/NOT operators
+2. Term lookup: Gets document sets from inverted index
+3. Set operations: Applies Boolean logic using set intersection/union/difference
+4. Results: Returns matching document IDs with score 1.0
+
+**Integration**:
+- Automatically used by `HybridSearchEngine` when Boolean operators detected
+- Provides candidate set for subsequent BM25 ranking
+- Combines precision of Boolean logic with relevance ranking
+
+### 10.2 Metadata Filtering
+
+Filter search results by category, date range, or entity mentions.
+
+**Module**: `metadata_manager.py`
+
+**Features**:
+- Category filtering (Business, Sports, etc.)
+- Date range filtering (ISO format: YYYY-MM-DD)
+- Entity-based filtering (search by entity mentions)
+- Collection statistics and analytics
+- SQLite backend with dict-like row access
+
+**Example Usage**:
+
+```python
+from metadata_manager import MetadataManager
+
+# Initialize manager
+manager = MetadataManager()
+
+# Filter by category
+business_docs = manager.filter_by_category("Business")
+# Returns: {0, 15, 23, 45, ...}  # Set of doc IDs
+
+# Filter by date range
+recent_docs = manager.filter_by_date_range(
+    start_date="2023-01-01",
+    end_date="2023-12-31"
+)
+
+# Filter by entity
+tesla_docs = manager.filter_by_entity("Tesla")
+
+# Get collection statistics
+stats = manager.get_collection_stats()
+# Returns: {
+#   'total_documents': 2692,
+#   'categories': {'Business': 1284, 'Sports': 1408},
+#   'unique_entities': 8542,
+#   'date_range': {'min': '2021-01-01', 'max': '2023-12-31'}
+# }
+
+# Get available categories
+categories = manager.get_categories()
+# Returns: ['Business', 'Sports']
+
+# Close connection when done
+manager.close()
+```
+
+**Database Schema**:
+```sql
+-- Articles table
+CREATE TABLE articles (
+    id INTEGER PRIMARY KEY,
+    title TEXT,
+    content TEXT,
+    category TEXT,
+    date TEXT,
+    parsed_date TEXT
+);
+
+-- Entities table
+CREATE TABLE entities (
+    article_id INTEGER,
+    text TEXT,
+    label TEXT,
+    confidence REAL,
+    in_title INTEGER
+);
+```
+
+### 10.3 Hybrid Search Engine
+
+Combines Boolean retrieval, metadata filtering, and ranked retrieval for powerful search capabilities.
+
+**Module**: `hybrid_search.py`
+
+**Architecture**:
+```
+Query Input
+    ↓
+[Boolean Detection] → Is Boolean? (AND/OR/NOT present)
+    ↓
+[Candidate Selection Stage]
+    ├─ Boolean Retrieval (if applicable)
+    ├─ Category Filter (if specified)
+    ├─ Date Range Filter (if specified)
+    └─ Entity Filter (if specified)
+    ↓ (Set Intersection)
+Candidate Set
+    ↓
+[Ranking Stage]
+    ├─ BM25 Retrieval
+    ├─ Dense Retrieval (sentence-transformers)
+    └─ RRF Fusion
+    ↓
+[Filter to Candidates]
+    ↓
+Top-K Ranked Results
+```
+
+**Example Usage**:
+
+```python
+from hybrid_search import HybridSearchEngine
+
+# Initialize engine
+engine = HybridSearchEngine()
+engine.load_indices(bm25_index, articles, dense_embeddings)
+
+# Example 1: Boolean query only
+results = engine.search(
+    query="economy AND inflation",
+    top_k=10
+)
+
+# Example 2: Boolean + Category filter
+results = engine.search(
+    query="market AND growth",
+    category="Business",
+    top_k=10
+)
+
+# Example 3: Complex query with all filters
+results = engine.search_with_documents(
+    query="technology AND (innovation OR advancement) NOT decline",
+    category="Business",
+    start_date="2023-01-01",
+    end_date="2023-12-31",
+    entity="Apple",
+    top_k=20
+)
+
+# Close connections
+engine.close()
+```
+
+**Performance**:
+- Boolean retrieval: <5ms (set operations)
+- Metadata filtering: <10ms (indexed SQLite queries)
+- Total overhead: ~10-15ms vs standard search
+- Benefit: Much higher precision with user control
+
+### 10.4 Enhanced Main Pipeline
+
+The main pipeline now supports hybrid search with full filtering capabilities.
+
+**Module**: `main.py` (updated)
+
+**New Method**: `hybrid_search()`
+
+```python
+from main import CortexIRPipeline
+
+# Initialize pipeline
+pipeline = CortexIRPipeline()
+
+# Standard search (unchanged)
+result = pipeline.search(
+    query="artificial intelligence",
+    top_k=10,
+    enable_reranking=True,
+    enable_post_processing=True
+)
+
+# NEW: Hybrid search with filters
+result = pipeline.hybrid_search(
+    query="technology AND innovation",
+    top_k=10,
+    category="Business",                    # Filter by category
+    start_date="2023-01-01",               # Filter by date range
+    end_date="2023-12-31",
+    entity="Tesla",                         # Filter by entity
+    enable_reranking=True,                 # Apply neural reranking
+    enable_post_processing=True            # Apply post-processing
+)
+
+# Result includes filter information
+print(result['filters'])
+# {'category': 'Business', 'start_date': '2023-01-01', ...}
+```
+
+**Pipeline Stages**:
+1. Query Processing (same as before)
+2. **Hybrid Retrieval** (NEW - with Boolean + filters)
+3. Neural Reranking (same as before)
+4. Post-Processing (same as before)
+
+### 10.5 Advanced Gradio Interface
+
+New "Advanced Search" tab with Boolean queries and metadata filters.
+
+**Module**: `gradio_app.py` (updated)
+
+**New UI Components**:
+- Boolean query input textbox
+- Category dropdown filter (None, Business, Sports)
+- Date range inputs (start_date, end_date)
+- Entity filter textbox
+- Filter badges in results display
+- Boolean logic indicator badge
+
+**Example Queries** (provided in UI):
+- `business AND growth`
+- `sports AND (basketball OR football)`
+- `economy NOT recession`
+- `technology AND innovation`
+- `market AND stocks`
+
+**Filter Combinations**:
+1. Boolean only: `economy AND inflation`
+2. Boolean + Category: `growth AND market` + Category: Business
+3. Boolean + Date: `championship` + Date: 2023-01-01 to 2023-12-31
+4. All filters: Complex Boolean + Category + Date + Entity
+
+**Launch**:
+```bash
+cd implementation
+python gradio_app.py
+```
+
+Navigate to "🔬 Advanced Search" tab.
+
+### 10.6 Preprocessing with Lemmatization
+
+Confirmed lemmatization implementation in preprocessing pipeline.
+
+**Module**: `preprocessing.py`
+
+**Lemmatization Process**:
+```python
+# Uses spaCy's lemma_ attribute for proper lemmatization
+title_tokens = [
+    token.lemma_.lower() 
+    for token in doc_title 
+    if not token.is_stop and not token.is_punct and token.is_alpha
+]
+
+content_tokens = [
+    token.lemma_.lower() 
+    for token in doc_content 
+    if not token.is_stop and not token.is_punct and token.is_alpha
+]
+```
+
+**Examples**:
+- "running" → "run"
+- "better" → "good"
+- "companies" → "company"
+- "is" → "be"
+
+**Benefits**:
+- Improved recall (matches word variations)
+- Better query-document matching
+- Consistent with both query and document processing
+
+**Title Boosting**:
+```python
+# Title tokens repeated 3x in all_tokens
+all_tokens = title_tokens * 3 + content_tokens
+
+# Configured in config.py
+BM25_TITLE_BOOST = 3
+```
+
+### 10.7 Complete Module List
+
+Updated list of all modules in `implementation/` folder:
+
+1. **config.py** - Configuration parameters
+2. **preprocessing.py** - Text preprocessing with lemmatization
+3. **indexing.py** - BM25, dense, and metadata indexing
+4. **boolean_retrieval.py** - Boolean query processing **NEW**
+5. **metadata_manager.py** - Metadata filtering **NEW**
+6. **retrieval.py** - BM25 and dense retrieval
+7. **hybrid_search.py** - Hybrid search engine **NEW**
+8. **query_processor.py** - Query classification and processing
+9. **reranker.py** - Neural reranking
+10. **post_processor.py** - Diversity, temporal, deduplication
+11. **main.py** - Main pipeline orchestrator (updated)
+12. **gradio_app.py** - Web interface (updated)
+13. **evaluation.py** - Evaluation metrics
+14. **utils.py** - Utility functions
+
+### 10.8 Testing New Features
+
+**Test Boolean Retrieval**:
+```bash
+cd implementation
+python boolean_retrieval.py
+```
+
+**Test Metadata Manager**:
+```bash
+cd implementation
+python metadata_manager.py
+```
+
+**Test Hybrid Search**:
+```bash
+cd implementation
+python hybrid_search.py
+```
+
+**Test Full System**:
+```bash
+cd implementation
+python gradio_app.py
+```
+
+**Sample Test Queries**:
+1. `business AND growth` (Boolean only)
+2. `sports AND championship` + Category: Sports (Boolean + filter)
+3. `economy NOT recession` (Boolean NOT)
+4. `technology AND (innovation OR advancement)` (Complex Boolean)
+5. Regular query + multiple filters
 
 ---
 

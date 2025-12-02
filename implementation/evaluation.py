@@ -68,6 +68,31 @@ class IRMetrics:
             return 0.0
         
         return len(retrieved_at_k & relevant_set) / len(relevant_set)
+
+    def f1_at_k(
+        self,
+        retrieved: List[int],
+        relevant: List[int],
+        k: int
+    ) -> float:
+        """
+        Calculate F1-Score@K
+        
+        Args:
+            retrieved: List of retrieved document IDs
+            relevant: List of relevant document IDs
+            k: Cut-off rank
+            
+        Returns:
+            F1-Score@K
+        """
+        precision = self.precision_at_k(retrieved, relevant, k)
+        recall = self.recall_at_k(retrieved, relevant, k)
+        
+        if precision + recall == 0:
+            return 0.0
+            
+        return 2 * (precision * recall) / (precision + recall)
     
     def average_precision(
         self,
@@ -238,6 +263,7 @@ class SystemEvaluator:
         results = {
             'precision': {k: [] for k in k_values},
             'recall': {k: [] for k in k_values},
+            'f1': {k: [] for k in k_values},
             'ndcg': {k: [] for k in k_values},
             'map': [],
             'mrr': [],
@@ -261,9 +287,11 @@ class SystemEvaluator:
             for k in k_values:
                 precision = self.metrics.precision_at_k(retrieved, relevant, k)
                 recall = self.metrics.recall_at_k(retrieved, relevant, k)
+                f1 = self.metrics.f1_at_k(retrieved, relevant, k)
                 
                 results['precision'][k].append(precision)
                 results['recall'][k].append(recall)
+                results['f1'][k].append(f1)
         
         # Calculate aggregate metrics
         results['map'] = self.metrics.mean_average_precision(
@@ -285,6 +313,7 @@ class SystemEvaluator:
         for k in k_values:
             summary[f'precision@{k}'] = np.mean(results['precision'][k])
             summary[f'recall@{k}'] = np.mean(results['recall'][k])
+            summary[f'f1@{k}'] = np.mean(results['f1'][k])
         
         logger.info("Evaluation complete")
         logger.info(f"MAP: {summary['map']:.4f}")
@@ -322,8 +351,31 @@ class SystemEvaluator:
         for k in [5, 10, 20]:
             if f'recall@{k}' in summary:
                 print(f"  R@{k}: {summary[f'recall@{k}']:.4f}")
+
+        print(f"\nF1-Score@K:")
+        for k in [5, 10, 20]:
+            if f'f1@{k}' in summary:
+                print(f"  F1@{k}: {summary[f'f1@{k}']:.4f}")
         
         print("\n" + "="*70 + "\n")
+
+    def save_evaluation_report(self, evaluation: Dict, filename: str = "evaluation_report.json"):
+        """Save evaluation report to JSON file"""
+        import json
+        from pathlib import Path
+        
+        # Convert numpy types to native types for JSON serialization
+        def convert(o):
+            if isinstance(o, np.generic): return o.item()
+            raise TypeError
+            
+        try:
+            output_path = self.pipeline.config.INDEX_DIR / filename
+            with open(output_path, 'w') as f:
+                json.dump(evaluation, f, default=convert, indent=4)
+            logger.info(f"Evaluation report saved to {output_path}")
+        except Exception as e:
+            logger.error(f"Error saving evaluation report: {e}")
 
 
 def main():

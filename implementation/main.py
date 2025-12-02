@@ -34,6 +34,10 @@ class CortexIRPipeline:
         self.reranker = EnsembleReranker(config)
         self.post_processor = PostProcessor(config)
         
+        # Initialize Hybrid Search Engine
+        from hybrid_search import HybridSearchEngine
+        self.hybrid_engine = HybridSearchEngine(config)
+        
         # Load indices
         self._load_indices()
         
@@ -53,7 +57,7 @@ class CortexIRPipeline:
         logger.info("Loading article metadata...")
         articles = builder.load_metadata()
         
-        # Load dense embeddings (optional)
+        # Load dense embeddings (optional).csv
         try:
             logger.info("Loading dense embeddings...")
             dense_embeddings = builder.load_dense_embeddings()
@@ -107,12 +111,17 @@ class CortexIRPipeline:
         
         # Stage 3: Reranking (optional)
         if enable_reranking and documents:
+            # Limit documents to rerank for performance
+            docs_to_rerank = documents[:self.config.NUM_DOCS_TO_RERANK]
+            
             with Timer("Reranking") as t:
-                documents = self.reranker.rerank(
+                reranked_docs = self.reranker.rerank(
                     query=processed_query['corrected'],
-                    documents=documents,
-                    top_k=self.config.RERANK_TOP_K
+                    documents=docs_to_rerank,
+                    top_k=self.config.TOP_K_RERANK
                 )
+                # Append remaining docs (un-reranked) if needed, or just keep top_k
+                documents = reranked_docs
             stage_times['reranking'] = t.elapsed * 1000
         else:
             stage_times['reranking'] = 0
@@ -153,6 +162,98 @@ class CortexIRPipeline:
         
         return result
     
+    def hybrid_search(
+        self,
+        query: str,
+        category: str = None,
+        start_date: str = None,
+        end_date: str = None,
+        entity: str = None,
+        top_k: int = 10,
+        enable_reranking: bool = True,
+        enable_post_processing: bool = True
+    ) -> Dict:
+        """
+        Execute hybrid search with filters
+        """
+        start_time = time.time()
+        stage_times = {}
+        
+        # Stage 1: Query Processing
+        with Timer("Query Processing") as t:
+            processed_query = self.query_processor.process(query)
+        stage_times['query_processing'] = t.elapsed * 1000
+        
+        # Stage 2: Hybrid Retrieval (Boolean + Metadata + Ranked)
+        with Timer("Retrieval") as t:
+            # Use the hybrid engine
+            search_results = self.hybrid_engine.search_with_documents(
+                query=query, # Pass raw query for boolean parsing
+                category=category,
+                start_date=start_date,
+                end_date=end_date,
+                entity=entity,
+                top_k=self.config.TOP_K_RETRIEVAL, # Retrieve more for reranking
+                use_hybrid=self.config.USE_DENSE_RETRIEVAL
+            )
+            documents = search_results['results']
+            query_type = search_results['query_type']
+        stage_times['retrieval'] = t.elapsed * 1000
+        
+        # Stage 3: Reranking (optional)
+        if enable_reranking and documents:
+            # Limit documents to rerank for performance
+            docs_to_rerank = documents[:self.config.NUM_DOCS_TO_RERANK]
+            
+            with Timer("Reranking") as t:
+                reranked_docs = self.reranker.rerank(
+                    query=processed_query['corrected'],
+                    documents=docs_to_rerank,
+                    top_k=self.config.TOP_K_RERANK
+                )
+                documents = reranked_docs
+            stage_times['reranking'] = t.elapsed * 1000
+        else:
+            stage_times['reranking'] = 0
+            
+        # Stage 4: Post-Processing (optional)
+        clusters = None
+        if enable_post_processing and documents:
+            with Timer("Post-Processing") as t:
+                documents, clusters = self.post_processor.process(
+                    documents=documents,
+                    query=processed_query,
+                    top_k=top_k
+                )
+            stage_times['post_processing'] = t.elapsed * 1000
+        else:
+            stage_times['post_processing'] = 0
+            documents = documents[:top_k]
+            
+        total_time = time.time() - start_time
+        
+        # Update query type in processed query if boolean
+        if query_type == 'boolean':
+            processed_query['type'] = 'boolean'
+            
+        return {
+            'results': documents,
+            'query': processed_query,
+            'clusters': clusters,
+            'metadata': {
+                'total_time_ms': total_time * 1000,
+                'stage_times': stage_times,
+                'num_results': len(documents),
+                'reranking_enabled': enable_reranking,
+                'post_processing_enabled': enable_post_processing,
+                'filters': {
+                    'category': category,
+                    'date_range': f"{start_date} to {end_date}" if start_date or end_date else None,
+                    'entity': entity
+                }
+            }
+        }
+
     def batch_search(
         self,
         queries: List[str],

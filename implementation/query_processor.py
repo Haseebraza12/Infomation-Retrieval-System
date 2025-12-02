@@ -8,7 +8,7 @@ import spacy
 from spellchecker import SpellChecker
 
 from config import Config
-from utils import logger, timer
+from utils import logger, timer, load_pickle
 
 config = Config()
 
@@ -32,6 +32,39 @@ class QueryProcessor:
         # Initialize spell checker
         self.spell = SpellChecker()
         
+        # Load vocabulary from processed data to enhance spell checker
+        try:
+            logger.info("Loading vocabulary for spell checker...")
+            processed_path = self.config.PROCESSED_DATA_PATH
+            if processed_path.exists():
+                articles = load_pickle(processed_path)
+                vocab = set()
+                for article in articles:
+                    # Add title and content tokens (assuming they are lists of strings)
+                    # We use the raw tokens or lemmatized? 
+                    # Spell checker usually works on raw words.
+                    # But processed data might have 'all_tokens' which are lemmatized?
+                    # Let's check what's available. 'title_tokens' and 'content_tokens' are usually lemmatized in preprocessing.py
+                    # But we also have raw text. 
+                    # If we want to correct to *index terms*, we should use the terms in the index.
+                    # But users type raw words.
+                    # If I type "runing", I want "running" (which might lemmatize to "run").
+                    # If I type "sindh", and "sindh" is in index, I want to keep it.
+                    # So adding lemmatized tokens to spell checker might be okay if we want to match index.
+                    # But better to add raw words if possible. 
+                    # Preprocessing stores 'title_tokens' and 'content_tokens' which are lemmatized.
+                    # It doesn't seem to store raw tokens list easily accessible without re-tokenizing raw text.
+                    # However, 'all_tokens' used for boolean index are lemmatized.
+                    # Let's use the tokens we have. It's better than nothing.
+                    vocab.update(article.get('title_tokens', []))
+                    vocab.update(article.get('content_tokens', []))
+                
+                # Add to spell checker
+                self.spell.word_frequency.load_words(list(vocab))
+                logger.info(f"Loaded {len(vocab)} terms into spell checker")
+        except Exception as e:
+            logger.warning(f"Could not load vocabulary: {e}")
+        
         # Query type patterns
         self.query_patterns = {
             'breaking': ['latest', 'breaking', 'recent', 'news', 'today', 'now'],
@@ -48,12 +81,20 @@ class QueryProcessor:
         corrected_words = []
         
         for word in words:
-            # Skip if word is capitalized (likely proper noun)
-            if word[0].isupper():
-                corrected_words.append(word)
+            # Check if word is in our index vocabulary (case insensitive)
+            # self.spell.known([word]) checks if it's in the dictionary (English + Index)
+            
+            # If it's in the index (known), keep it.
+            if self.spell.known([word]):
+                 corrected_words.append(word)
             else:
-                corrected = self.spell.correction(word)
-                corrected_words.append(corrected if corrected else word)
+                 # Not known. Is it capitalized? (Likely proper noun not in dict)
+                 if word[0].isupper():
+                     corrected_words.append(word)
+                 else:
+                     # Try to correct
+                     corrected = self.spell.correction(word)
+                     corrected_words.append(corrected if corrected else word)
         
         return ' '.join(corrected_words)
     

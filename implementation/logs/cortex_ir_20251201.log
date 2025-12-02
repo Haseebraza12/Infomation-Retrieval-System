@@ -1,0 +1,244 @@
+2025-12-01 20:18:49,848 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-01 20:18:49,857 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-01 20:18:49,858 - utils - ERROR - Error initializing BooleanRetriever: No module named 'pandas'
+2025-12-01 20:20:19,588 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-01 20:20:19,591 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-01 20:20:20,720 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-01 20:20:21,425 - utils - INFO - Inverted index built with 21809 terms
+2025-12-01 20:20:21,425 - utils - INFO - build_index completed in 705.05ms
+2025-12-01 20:21:17,179 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-01 20:21:17,182 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-01 20:21:18,035 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-01 20:21:18,638 - utils - INFO - Inverted index built with 21809 terms
+2025-12-01 20:21:18,638 - utils - INFO - build_index completed in 602.56ms
+2025-12-01 20:22:30,989 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-01 20:22:36,659 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-01 20:22:37,350 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-01 20:22:38,179 - utils - INFO - Inverted index built with 21809 terms
+2025-12-01 20:22:38,180 - utils - INFO - build_index completed in 829.67ms
+2025-12-01 20:23:11,230 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-01 20:23:14,839 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-01 20:23:15,475 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-01 20:23:16,233 - utils - INFO - Inverted index built with 21809 terms
+2025-12-01 20:23:16,233 - utils - INFO - build_index completed in 758.02ms
+2025-12-01 20:23:52,511 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-01 20:23:56,416 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-01 20:23:57,058 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-01 20:23:57,852 - utils - INFO - Inverted index built with 21809 terms
+2025-12-01 20:23:57,852 - utils - INFO - build_index completed in 793.41ms
+2025-12-01 20:28:06,798 - utils - INFO - Initializing Cortex IR System...
+2025-12-01 20:28:06,798 - utils - INFO - Checking system readiness...
+2025-12-01 20:28:06,798 - utils - INFO - ✅ Preprocessed data found
+2025-12-01 20:28:06,798 - utils - INFO - ✅ Search indices found
+2025-12-01 20:28:06,799 - utils - INFO - ✅ All components ready - launching UI...
+2025-12-01 20:28:14,785 - utils - INFO - Loading IR pipeline...
+2025-12-01 20:28:14,785 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-12-01 20:28:14,785 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-12-01 20:28:15,531 - utils - INFO - Query processor initialized
+2025-12-01 20:28:15,531 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-12-01 20:28:15,531 - utils - INFO - Using device: cpu
+2025-12-01 20:28:18,670 - utils - INFO - Neural reranker initialized
+2025-12-01 20:28:18,670 - utils - INFO - Ensemble reranker initialized
+2025-12-01 20:28:18,671 - utils - INFO - Post-processor initialized
+2025-12-01 20:28:19,188 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-01 20:28:19,352 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-01 20:28:20,172 - utils - INFO - Inverted index built with 21809 terms
+2025-12-01 20:28:20,172 - utils - INFO - build_index completed in 820.02ms
+2025-12-01 20:28:20,203 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-01 20:28:20,224 - utils - INFO - BM25 index loaded successfully
+2025-12-01 20:28:20,356 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-01 20:28:20,370 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-01 20:28:24,579 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-01 20:28:28,344 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-01 20:28:28,345 - utils - INFO - Loading indices...
+2025-12-01 20:28:28,345 - utils - INFO - Loading BM25 index...
+2025-12-01 20:28:28,346 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-01 20:28:28,378 - utils - INFO - BM25 index loaded successfully
+2025-12-01 20:28:28,378 - utils - INFO - Loading article metadata...
+2025-12-01 20:28:28,549 - utils - INFO - Loading dense embeddings...
+2025-12-01 20:28:28,550 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-01 20:28:28,551 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-01 20:28:35,745 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-01 20:28:41,184 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-01 20:28:41,184 - utils - INFO - Indices loaded: 2692 articles indexed
+2025-12-01 20:28:41,184 - utils - INFO - Pipeline initialized successfully!
+2025-12-01 20:28:41,184 - utils - INFO - ✅ Pipeline loaded successfully!
+2025-12-01 20:28:41,184 - utils - INFO - 🎉 Cortex IR System initialized and ready!
+2025-12-01 20:30:06,089 - utils - INFO - Processing query: 'impact of inflation on economy'
+2025-12-01 20:30:06,179 - utils - INFO - Query processed: 'impact of inflation on economy' -> type='analytical'
+2025-12-01 20:30:06,180 - utils - INFO - process completed in 91.09ms
+2025-12-01 20:30:06,180 - utils - INFO - Query Processing completed in 91.90ms
+2025-12-01 20:30:06,193 - utils - INFO - _bm25_retrieve completed in 12.19ms
+2025-12-01 20:30:06,389 - utils - INFO - _dense_retrieve completed in 194.80ms
+2025-12-01 20:30:06,389 - utils - INFO - _hybrid_retrieve completed in 208.63ms
+2025-12-01 20:30:06,390 - utils - INFO - retrieve completed in 208.75ms
+2025-12-01 20:30:06,391 - utils - INFO - retrieve_with_documents completed in 209.96ms
+2025-12-01 20:30:06,391 - utils - INFO - Retrieval completed in 210.17ms
+2025-12-01 20:30:34,319 - utils - INFO - Processing query: 'economy AND inflation NOT recession'
+2025-12-01 20:30:34,360 - utils - INFO - Query processed: 'economy AND inflation NOT recession' -> type='exploratory'
+2025-12-01 20:30:34,360 - utils - INFO - process completed in 41.82ms
+2025-12-01 20:30:34,361 - utils - INFO - Query Processing completed in 42.01ms
+2025-12-01 20:30:34,452 - utils - INFO - search_with_documents completed in 91.21ms
+2025-12-01 20:30:34,452 - utils - INFO - Retrieval completed in 91.54ms
+2025-12-01 20:30:34,452 - utils - INFO - Reranking 100 documents with cross-encoder
+2025-12-01 20:30:51,730 - utils - INFO - Reranking complete. Top score: -4.2113
+2025-12-01 20:30:51,730 - utils - INFO - rerank completed in 17277.59ms
+2025-12-01 20:30:51,730 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7427
+2025-12-01 20:30:51,730 - utils - INFO - rerank completed in 17277.91ms
+2025-12-01 20:30:51,731 - utils - INFO - Reranking completed in 17278.27ms
+2025-12-01 20:30:51,731 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-01 20:30:51,731 - utils - INFO - Deduplication: 50 -> 43 documents
+2025-12-01 20:30:51,732 - utils - INFO - rerank completed in 1.03ms
+2025-12-01 20:30:51,733 - utils - INFO - Post-processing complete: 10 final results
+2025-12-01 20:30:51,733 - utils - INFO - process completed in 1.97ms
+2025-12-01 20:30:51,733 - utils - INFO - Post-Processing completed in 2.06ms
+2025-12-01 20:32:42,672 - utils - INFO - Processing query: 'economy AND inflation NOT USA'
+2025-12-01 20:32:42,719 - utils - INFO - Query processed: 'economy AND inflation NOT USA' -> type='exploratory'
+2025-12-01 20:32:42,720 - utils - INFO - process completed in 47.15ms
+2025-12-01 20:32:42,720 - utils - INFO - Query Processing completed in 47.68ms
+2025-12-01 20:32:42,797 - utils - INFO - search_with_documents completed in 75.90ms
+2025-12-01 20:32:42,799 - utils - INFO - Retrieval completed in 78.61ms
+2025-12-01 20:32:42,801 - utils - INFO - Reranking 100 documents with cross-encoder
+2025-12-01 20:33:00,749 - utils - INFO - Reranking complete. Top score: -2.3642
+2025-12-01 20:33:00,749 - utils - INFO - rerank completed in 17948.02ms
+2025-12-01 20:33:00,749 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.8000
+2025-12-01 20:33:00,749 - utils - INFO - rerank completed in 17948.36ms
+2025-12-01 20:33:00,749 - utils - INFO - Reranking completed in 17948.46ms
+2025-12-01 20:33:00,750 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-12-01 20:33:00,750 - utils - INFO - Deduplication: 50 -> 43 documents
+2025-12-01 20:33:00,751 - utils - INFO - rerank completed in 1.01ms
+2025-12-01 20:33:00,752 - utils - INFO - Post-processing complete: 10 final results
+2025-12-01 20:33:00,752 - utils - INFO - process completed in 1.94ms
+2025-12-01 20:33:00,752 - utils - INFO - Post-Processing completed in 2.02ms
+2025-12-01 20:33:22,153 - utils - INFO - Processing query: 'economy AND inflation NOT USA'
+2025-12-01 20:33:22,199 - utils - INFO - Query processed: 'economy AND inflation NOT USA' -> type='exploratory'
+2025-12-01 20:33:22,200 - utils - INFO - process completed in 46.90ms
+2025-12-01 20:33:22,200 - utils - INFO - Query Processing completed in 47.16ms
+2025-12-01 20:33:22,428 - utils - INFO - search_with_documents completed in 227.49ms
+2025-12-01 20:33:22,428 - utils - INFO - Retrieval completed in 227.68ms
+2025-12-01 20:33:33,041 - utils - INFO - Processing query: 'economy AND inflation NOT US'
+2025-12-01 20:33:33,085 - utils - INFO - Query processed: 'economy AND inflation NOT US' -> type='exploratory'
+2025-12-01 20:33:33,085 - utils - INFO - process completed in 44.09ms
+2025-12-01 20:33:33,086 - utils - INFO - Query Processing completed in 44.87ms
+2025-12-01 20:33:33,124 - utils - INFO - search_with_documents completed in 37.94ms
+2025-12-01 20:33:33,125 - utils - INFO - Retrieval completed in 38.13ms
+2025-12-01 20:33:35,994 - utils - INFO - Processing query: 'economy AND inflation NOT US'
+2025-12-01 20:33:36,046 - utils - INFO - Query processed: 'economy AND inflation NOT US' -> type='exploratory'
+2025-12-01 20:33:36,046 - utils - INFO - process completed in 52.07ms
+2025-12-01 20:33:36,046 - utils - INFO - Query Processing completed in 52.23ms
+2025-12-01 20:33:36,076 - utils - INFO - search_with_documents completed in 29.13ms
+2025-12-01 20:33:36,076 - utils - INFO - Retrieval completed in 29.37ms
+2025-12-01 20:33:39,695 - utils - INFO - Processing query: 'economy AND inflation NOT US'
+2025-12-01 20:33:39,739 - utils - INFO - Query processed: 'economy AND inflation NOT US' -> type='exploratory'
+2025-12-01 20:33:39,740 - utils - INFO - process completed in 44.99ms
+2025-12-01 20:33:39,740 - utils - INFO - Query Processing completed in 45.22ms
+2025-12-01 20:33:39,774 - utils - INFO - search_with_documents completed in 33.06ms
+2025-12-01 20:33:39,774 - utils - INFO - Retrieval completed in 33.32ms
+2025-12-01 20:33:47,292 - utils - INFO - Processing query: 'economy AND inflation NOT US'
+2025-12-01 20:33:47,339 - utils - INFO - Query processed: 'economy AND inflation NOT US' -> type='exploratory'
+2025-12-01 20:33:47,340 - utils - INFO - process completed in 47.55ms
+2025-12-01 20:33:47,340 - utils - INFO - Query Processing completed in 47.69ms
+2025-12-01 20:33:47,374 - utils - INFO - search_with_documents completed in 33.94ms
+2025-12-01 20:33:47,374 - utils - INFO - Retrieval completed in 34.17ms
+2025-12-01 20:33:48,597 - utils - INFO - Processing query: 'economy AND inflation NOT US'
+2025-12-01 20:33:48,642 - utils - INFO - Query processed: 'economy AND inflation NOT US' -> type='exploratory'
+2025-12-01 20:33:48,642 - utils - INFO - process completed in 45.78ms
+2025-12-01 20:33:48,643 - utils - INFO - Query Processing completed in 45.93ms
+2025-12-01 20:33:48,670 - utils - INFO - search_with_documents completed in 27.50ms
+2025-12-01 20:33:48,671 - utils - INFO - Retrieval completed in 28.40ms
+2025-12-01 20:33:54,727 - utils - INFO - Processing query: 'economy AND inflation NOT US'
+2025-12-01 20:33:54,782 - utils - INFO - Query processed: 'economy AND inflation NOT US' -> type='exploratory'
+2025-12-01 20:33:54,784 - utils - INFO - process completed in 57.29ms
+2025-12-01 20:33:54,786 - utils - INFO - Query Processing completed in 59.12ms
+2025-12-01 20:33:54,820 - utils - INFO - search_with_documents completed in 33.97ms
+2025-12-01 20:33:54,821 - utils - INFO - Retrieval completed in 34.16ms
+2025-12-01 20:34:01,007 - utils - INFO - Processing query: 'business AND (merger OR acquisition)'
+2025-12-01 20:34:01,077 - utils - INFO - Query processed: 'business AND (merger OR acquisition)' -> type='exploratory'
+2025-12-01 20:34:01,077 - utils - INFO - process completed in 70.75ms
+2025-12-01 20:34:01,078 - utils - INFO - Query Processing completed in 70.94ms
+2025-12-01 20:42:31,219 - utils - INFO - Initializing Cortex IR System...
+2025-12-01 20:42:31,219 - utils - INFO - Checking system readiness...
+2025-12-01 20:42:31,220 - utils - INFO - ✅ Preprocessed data found
+2025-12-01 20:42:31,220 - utils - INFO - ✅ Search indices found
+2025-12-01 20:42:31,220 - utils - INFO - ✅ All components ready - launching UI...
+2025-12-01 20:42:36,842 - utils - INFO - Loading IR pipeline...
+2025-12-01 20:42:36,842 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-12-01 20:42:36,842 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-12-01 20:42:37,572 - utils - INFO - Query processor initialized
+2025-12-01 20:42:37,572 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-12-01 20:42:37,572 - utils - INFO - Using device: cpu
+2025-12-01 20:42:41,168 - utils - INFO - Neural reranker initialized
+2025-12-01 20:42:41,168 - utils - INFO - Ensemble reranker initialized
+2025-12-01 20:42:41,168 - utils - INFO - Post-processor initialized
+2025-12-01 20:42:41,704 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-01 20:42:41,866 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-01 20:42:42,717 - utils - INFO - Inverted index built with 21809 terms
+2025-12-01 20:42:42,717 - utils - INFO - build_index completed in 851.21ms
+2025-12-01 20:42:42,742 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-01 20:42:42,756 - utils - INFO - BM25 index loaded successfully
+2025-12-01 20:42:42,895 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-01 20:42:42,896 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-01 20:42:48,721 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-01 20:42:52,610 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-01 20:42:52,611 - utils - INFO - Loading indices...
+2025-12-01 20:42:52,611 - utils - INFO - Loading BM25 index...
+2025-12-01 20:42:52,612 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-12-01 20:42:52,644 - utils - INFO - BM25 index loaded successfully
+2025-12-01 20:42:52,644 - utils - INFO - Loading article metadata...
+2025-12-01 20:42:52,820 - utils - INFO - Loading dense embeddings...
+2025-12-01 20:42:52,820 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-12-01 20:42:52,821 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-12-01 20:42:57,742 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-12-01 20:43:01,007 - utils - INFO - Retriever loaded with 2692 articles
+2025-12-01 20:43:01,007 - utils - INFO - Indices loaded: 2692 articles indexed
+2025-12-01 20:43:01,008 - utils - INFO - Pipeline initialized successfully!
+2025-12-01 20:43:01,009 - utils - INFO - ✅ Pipeline loaded successfully!
+2025-12-01 20:43:01,009 - utils - INFO - 🎉 Cortex IR System initialized and ready!
+2025-12-01 20:44:05,920 - utils - INFO - Processing query: 'economy AND inflation NOT US'
+2025-12-01 20:44:05,964 - utils - INFO - Query processed: 'economy AND inflation NOT US' -> type='exploratory'
+2025-12-01 20:44:05,965 - utils - INFO - process completed in 45.56ms
+2025-12-01 20:44:05,965 - utils - INFO - Query Processing completed in 45.74ms
+2025-12-01 20:44:06,032 - utils - INFO - search_with_documents completed in 67.08ms
+2025-12-01 20:44:06,033 - utils - INFO - Retrieval completed in 67.41ms
+2025-12-01 20:44:06,033 - utils - INFO - Starting post-processing pipeline for 100 documents
+2025-12-01 20:44:06,034 - utils - INFO - Deduplication: 100 -> 92 documents
+2025-12-01 20:44:06,048 - utils - INFO - rerank completed in 13.39ms
+2025-12-01 20:44:06,048 - utils - INFO - Post-processing complete: 10 final results
+2025-12-01 20:44:06,048 - utils - INFO - process completed in 15.43ms
+2025-12-01 20:44:06,048 - utils - INFO - Post-Processing completed in 15.57ms
+2025-12-01 21:04:01,288 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-01 21:04:02,034 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-01 21:04:02,721 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-01 21:04:04,120 - utils - INFO - Inverted index built with 21809 terms
+2025-12-01 21:04:04,121 - utils - INFO - build_index completed in 1399.95ms
+2025-12-01 22:26:15,566 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-01 22:26:16,892 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-01 22:26:17,812 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-01 22:26:19,154 - utils - INFO - Inverted index built with 21809 terms
+2025-12-01 22:26:19,154 - utils - INFO - build_index completed in 1341.74ms
+2025-12-01 22:45:27,301 - utils - INFO - Starting preprocessing pipeline...
+2025-12-01 22:45:27,301 - utils - INFO - Loading dataset from /home/haseeb-raza/Desktop/IR_Assignment_3/Articles.csv
+2025-12-01 22:45:27,301 - utils - INFO - Trying encoding: utf-8
+2025-12-01 22:45:27,346 - utils - INFO - Trying encoding: latin-1
+2025-12-01 22:45:27,409 - utils - INFO - Successfully loaded with latin-1 encoding
+2025-12-01 22:45:27,409 - utils - INFO - Loaded 2692 articles
+2025-12-01 22:45:27,409 - utils - INFO - Columns: ['Article', 'Date', 'Heading', 'NewsType']
+2025-12-01 22:45:27,409 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-12-01 22:45:28,443 - utils - INFO - ArticlePreprocessor initialized
+2025-12-01 22:45:28,443 - utils - INFO - Preprocessing 2692 articles...
+2025-12-01 22:49:23,895 - utils - INFO - Successfully preprocessed 2692 articles
+2025-12-01 22:49:24,480 - utils - INFO - Saved 2692 preprocessed articles to /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/processed_articles.pkl
+2025-12-01 22:49:24,480 - utils - INFO - 
+=== Preprocessing Statistics ===
+2025-12-01 22:49:24,480 - utils - INFO - Total articles: 2692
+2025-12-01 22:49:24,481 - utils - INFO - Average document length: 161.1 tokens
+2025-12-01 22:49:24,482 - utils - INFO - Categories: {'business': 1284, 'sports': 1408}
+2025-12-01 22:49:24,483 - utils - INFO - Total entities extracted: 91829
+2025-12-01 22:49:24,483 - utils - INFO - Average entities per article: 34.1
+2025-12-01 22:49:24,483 - utils - INFO - 
+Preprocessing complete!
+2025-12-01 22:53:34,625 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-12-01 22:53:35,889 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-12-01 22:53:36,830 - utils - INFO - Building positional inverted index for 2692 articles...
+2025-12-01 22:53:37,890 - utils - INFO - Inverted index built with 21795 terms
+2025-12-01 22:53:37,890 - utils - INFO - build_index completed in 1060.40ms

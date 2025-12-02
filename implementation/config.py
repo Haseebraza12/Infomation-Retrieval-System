@@ -35,7 +35,8 @@ BM25_TITLE_BOOST = 3  # Repeat title tokens 3x for boosting
 
 # Retrieval parameters
 TOP_K_RETRIEVAL = 100
-TOP_K_RERANK = 50  # Reduced from 100 for faster processing
+NUM_DOCS_TO_RERANK = 20 # Limit input to reranker for speed
+TOP_K_RERANK = 20  # Reduced for faster processing (was 50)
 TOP_K_FINAL = 10
 RRF_K = 60  # Reciprocal Rank Fusion constant
 
@@ -110,6 +111,7 @@ class Config:
     
     # Retrieval
     TOP_K_RETRIEVAL: int = TOP_K_RETRIEVAL
+    NUM_DOCS_TO_RERANK: int = NUM_DOCS_TO_RERANK
     TOP_K_RERANK: int = TOP_K_RERANK
     TOP_K_FINAL: int = TOP_K_FINAL
     RRF_K: int = RRF_K

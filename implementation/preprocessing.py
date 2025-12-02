@@ -109,16 +109,29 @@ class ArticlePreprocessor:
         
         # Tokenization and lemmatization
         if doc_title is not None and doc_content is not None:
+            # Load NLTK stop words
+            try:
+                import nltk
+                from nltk.corpus import stopwords
+                try:
+                    nltk.data.find('corpora/stopwords')
+                except LookupError:
+                    nltk.download('stopwords')
+                nltk_stopwords = set(stopwords.words('english'))
+            except Exception as e:
+                logger.warning(f"Could not load NLTK stopwords: {e}. Using spaCy defaults.")
+                nltk_stopwords = set()
+
             title_tokens = [
                 token.lemma_.lower() 
                 for token in doc_title 
-                if not token.is_stop and not token.is_punct and token.is_alpha
+                if (token.text == 'US' or (token.text.lower() not in nltk_stopwords and not token.is_stop and not token.is_punct and token.is_alpha))
             ]
             
             content_tokens = [
                 token.lemma_.lower() 
                 for token in doc_content 
-                if not token.is_stop and not token.is_punct and token.is_alpha
+                if (token.text == 'US' or (token.text.lower() not in nltk_stopwords and not token.is_stop and not token.is_punct and token.is_alpha))
             ]
             
             # Named Entity Recognition with confidence filtering
@@ -142,7 +155,7 @@ class ArticlePreprocessor:
             'content_clean': content_clean,
             'title_tokens': title_tokens,
             'content_tokens': content_tokens,
-            'all_tokens': title_tokens + content_tokens,
+            'all_tokens': (title_tokens * self.config.BM25_TITLE_BOOST) + content_tokens,
             'entities': entities,
             'date': date,
             'parsed_date': parsed_date,

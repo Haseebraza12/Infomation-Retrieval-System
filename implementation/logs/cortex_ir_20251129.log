@@ -1,0 +1,297 @@
+2025-11-29 18:21:43,539 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-11-29 18:23:01,145 - implementation - INFO - Cortex IR System v1.0.0 initialized
+2025-11-29 18:23:10,746 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-11-29 18:23:10,747 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-11-29 18:23:12,024 - utils - INFO - Query processor initialized
+2025-11-29 18:23:12,024 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-11-29 18:23:12,024 - utils - INFO - Using device: cpu
+2025-11-29 18:23:14,633 - utils - INFO - Neural reranker initialized
+2025-11-29 18:23:14,633 - utils - INFO - Ensemble reranker initialized
+2025-11-29 18:23:14,633 - utils - INFO - Post-processor initialized
+2025-11-29 18:23:14,641 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-11-29 18:23:14,862 - utils - INFO - Building inverted index for 2692 articles...
+2025-11-29 18:23:15,096 - utils - INFO - Inverted index built with 21809 terms
+2025-11-29 18:23:15,096 - utils - INFO - build_index completed in 234.56ms
+2025-11-29 18:23:15,136 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-11-29 18:23:15,154 - utils - INFO - BM25 index loaded successfully
+2025-11-29 18:23:15,349 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-11-29 18:23:15,351 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-11-29 18:23:18,861 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-11-29 18:23:22,131 - utils - INFO - Retriever loaded with 2692 articles
+2025-11-29 18:23:22,131 - utils - INFO - Loading indices...
+2025-11-29 18:23:22,131 - utils - INFO - Loading BM25 index...
+2025-11-29 18:23:22,131 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-11-29 18:23:22,142 - utils - INFO - BM25 index loaded successfully
+2025-11-29 18:23:22,142 - utils - INFO - Loading article metadata...
+2025-11-29 18:23:22,368 - utils - INFO - Loading dense embeddings...
+2025-11-29 18:23:22,368 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-11-29 18:23:22,370 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-11-29 18:23:25,626 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-11-29 18:23:28,788 - utils - INFO - Retriever loaded with 2692 articles
+2025-11-29 18:23:28,788 - utils - INFO - Indices loaded: 2692 articles indexed
+2025-11-29 18:23:28,788 - utils - INFO - Pipeline initialized successfully!
+2025-11-29 18:23:28,788 - utils - INFO - Processing query: 'economy AND growth'
+2025-11-29 18:23:28,801 - utils - INFO - Query processed: 'economy AND growth' -> type='exploratory'
+2025-11-29 18:23:28,801 - utils - INFO - process completed in 13.03ms
+2025-11-29 18:23:28,801 - utils - INFO - Query Processing completed in 13.19ms
+2025-11-29 18:23:28,830 - utils - INFO - search_with_documents completed in 28.28ms
+2025-11-29 18:23:28,830 - utils - INFO - Retrieval completed in 28.80ms
+2025-11-29 18:23:28,830 - utils - INFO - Reranking 100 documents with cross-encoder
+2025-11-29 18:23:45,123 - utils - INFO - Reranking complete. Top score: 3.2573
+2025-11-29 18:23:45,124 - utils - INFO - rerank completed in 16293.11ms
+2025-11-29 18:23:45,124 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7854
+2025-11-29 18:23:45,124 - utils - INFO - rerank completed in 16293.60ms
+2025-11-29 18:23:45,124 - utils - INFO - Reranking completed in 16293.71ms
+2025-11-29 18:23:45,124 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-11-29 18:23:45,125 - utils - INFO - Deduplication: 50 -> 47 documents
+2025-11-29 18:23:45,125 - utils - INFO - rerank completed in 0.61ms
+2025-11-29 18:23:45,126 - utils - INFO - Post-processing complete: 5 final results
+2025-11-29 18:23:45,126 - utils - INFO - process completed in 1.44ms
+2025-11-29 18:23:45,126 - utils - INFO - Post-Processing completed in 1.53ms
+2025-11-29 18:23:45,126 - utils - INFO - Processing query: 'market'
+2025-11-29 18:23:45,136 - utils - INFO - Query processed: 'market' -> type='exploratory'
+2025-11-29 18:23:45,136 - utils - INFO - process completed in 9.91ms
+2025-11-29 18:23:45,136 - utils - INFO - Query Processing completed in 10.01ms
+2025-11-29 18:23:45,138 - utils - INFO - _bm25_retrieve completed in 1.25ms
+2025-11-29 18:23:45,217 - utils - INFO - _dense_retrieve completed in 79.19ms
+2025-11-29 18:23:45,244 - utils - INFO - _hybrid_retrieve completed in 107.21ms
+2025-11-29 18:23:45,244 - utils - INFO - retrieve completed in 107.47ms
+2025-11-29 18:23:45,246 - utils - INFO - retrieve_with_documents completed in 109.76ms
+2025-11-29 18:23:45,247 - utils - INFO - search_with_documents completed in 111.34ms
+2025-11-29 18:23:45,248 - utils - INFO - Retrieval completed in 111.57ms
+2025-11-29 18:23:45,248 - utils - INFO - Processing query: 'news'
+2025-11-29 18:23:45,299 - utils - INFO - Query processed: 'news' -> type='breaking'
+2025-11-29 18:23:45,299 - utils - INFO - process completed in 51.05ms
+2025-11-29 18:23:45,299 - utils - INFO - Query Processing completed in 51.20ms
+2025-11-29 18:23:45,327 - utils - INFO - _bm25_retrieve completed in 2.88ms
+2025-11-29 18:23:45,355 - utils - INFO - _dense_retrieve completed in 27.40ms
+2025-11-29 18:23:45,358 - utils - INFO - _hybrid_retrieve completed in 33.47ms
+2025-11-29 18:23:45,358 - utils - INFO - retrieve completed in 33.66ms
+2025-11-29 18:23:45,364 - utils - INFO - retrieve_with_documents completed in 39.93ms
+2025-11-29 18:23:45,368 - utils - INFO - search_with_documents completed in 69.06ms
+2025-11-29 18:23:45,369 - utils - INFO - Retrieval completed in 69.92ms
+2025-11-29 18:23:45,370 - utils - INFO - Reranking 100 documents with cross-encoder
+2025-11-29 18:24:00,016 - utils - INFO - Reranking complete. Top score: -2.0653
+2025-11-29 18:24:00,018 - utils - INFO - rerank completed in 14648.62ms
+2025-11-29 18:24:00,019 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.8000
+2025-11-29 18:24:00,019 - utils - INFO - rerank completed in 14649.91ms
+2025-11-29 18:24:00,020 - utils - INFO - Reranking completed in 14650.22ms
+2025-11-29 18:24:00,020 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-11-29 18:24:00,048 - utils - INFO - Deduplication: 50 -> 41 documents
+2025-11-29 18:24:00,057 - utils - INFO - rerank completed in 8.82ms
+2025-11-29 18:24:00,057 - utils - INFO - Post-processing complete: 5 final results
+2025-11-29 18:24:00,058 - utils - INFO - process completed in 37.46ms
+2025-11-29 18:24:00,058 - utils - INFO - Post-Processing completed in 37.59ms
+2025-11-29 18:24:00,058 - utils - INFO - Processing query: 'government'
+2025-11-29 18:24:00,081 - utils - INFO - Query processed: 'government' -> type='exploratory'
+2025-11-29 18:24:00,081 - utils - INFO - process completed in 22.94ms
+2025-11-29 18:24:00,081 - utils - INFO - Query Processing completed in 23.10ms
+2025-11-29 18:24:00,132 - utils - INFO - _bm25_retrieve completed in 2.19ms
+2025-11-29 18:24:00,168 - utils - INFO - _dense_retrieve completed in 35.88ms
+2025-11-29 18:24:00,173 - utils - INFO - _hybrid_retrieve completed in 43.37ms
+2025-11-29 18:24:00,174 - utils - INFO - retrieve completed in 44.22ms
+2025-11-29 18:24:00,176 - utils - INFO - retrieve_with_documents completed in 46.88ms
+2025-11-29 18:24:00,179 - utils - INFO - search_with_documents completed in 97.80ms
+2025-11-29 18:24:00,180 - utils - INFO - Retrieval completed in 99.07ms
+2025-11-29 18:24:00,181 - utils - INFO - Reranking 100 documents with cross-encoder
+2025-11-29 18:24:13,982 - utils - INFO - Reranking complete. Top score: -0.0942
+2025-11-29 18:24:13,982 - utils - INFO - rerank completed in 13800.83ms
+2025-11-29 18:24:13,983 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7063
+2025-11-29 18:24:13,983 - utils - INFO - rerank completed in 13801.60ms
+2025-11-29 18:24:13,983 - utils - INFO - Reranking completed in 13801.91ms
+2025-11-29 18:24:13,983 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-11-29 18:24:14,030 - utils - INFO - Deduplication: 50 -> 48 documents
+2025-11-29 18:24:14,041 - utils - INFO - rerank completed in 10.59ms
+2025-11-29 18:24:14,041 - utils - INFO - Post-processing complete: 5 final results
+2025-11-29 18:24:14,042 - utils - INFO - process completed in 58.43ms
+2025-11-29 18:24:14,042 - utils - INFO - Post-Processing completed in 58.80ms
+2025-11-29 18:30:51,490 - utils - INFO - Initializing Cortex IR System...
+2025-11-29 18:30:51,491 - utils - INFO - Checking system readiness...
+2025-11-29 18:30:51,491 - utils - INFO - ✅ Preprocessed data found
+2025-11-29 18:30:51,491 - utils - INFO - ✅ Search indices found
+2025-11-29 18:30:51,491 - utils - INFO - ✅ All components ready - launching UI...
+2025-11-29 18:30:57,145 - utils - INFO - Loading IR pipeline...
+2025-11-29 18:30:57,145 - utils - INFO - Initializing Cortex IR Pipeline...
+2025-11-29 18:30:57,145 - utils - INFO - Loading spaCy model: en_core_web_sm
+2025-11-29 18:30:57,881 - utils - INFO - Query processor initialized
+2025-11-29 18:30:57,881 - utils - INFO - Loading cross-encoder model: cross-encoder/ms-marco-MiniLM-L-6-v2
+2025-11-29 18:30:57,881 - utils - INFO - Using device: cpu
+2025-11-29 18:31:00,603 - utils - INFO - Neural reranker initialized
+2025-11-29 18:31:00,603 - utils - INFO - Ensemble reranker initialized
+2025-11-29 18:31:00,603 - utils - INFO - Post-processor initialized
+2025-11-29 18:31:00,605 - utils - INFO - Loading processed data for Boolean Retrieval...
+2025-11-29 18:31:00,775 - utils - INFO - Building inverted index for 2692 articles...
+2025-11-29 18:31:00,936 - utils - INFO - Inverted index built with 21809 terms
+2025-11-29 18:31:00,936 - utils - INFO - build_index completed in 161.05ms
+2025-11-29 18:31:00,964 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-11-29 18:31:00,974 - utils - INFO - BM25 index loaded successfully
+2025-11-29 18:31:01,108 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-11-29 18:31:01,109 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-11-29 18:31:04,381 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-11-29 18:31:07,646 - utils - INFO - Retriever loaded with 2692 articles
+2025-11-29 18:31:07,647 - utils - INFO - Loading indices...
+2025-11-29 18:31:07,647 - utils - INFO - Loading BM25 index...
+2025-11-29 18:31:07,647 - utils - INFO - Loading BM25 index from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/bm25_index
+2025-11-29 18:31:07,659 - utils - INFO - BM25 index loaded successfully
+2025-11-29 18:31:07,660 - utils - INFO - Loading article metadata...
+2025-11-29 18:31:07,834 - utils - INFO - Loading dense embeddings...
+2025-11-29 18:31:07,834 - utils - INFO - Loading dense embeddings from /home/haseeb-raza/Desktop/IR_Assignment_3/implementation/indexes/dense_embeddings.npy
+2025-11-29 18:31:07,835 - utils - INFO - Dense embeddings loaded: shape=(2692, 384)
+2025-11-29 18:31:11,344 - utils - INFO - Loading dense retrieval model: sentence-transformers/all-MiniLM-L6-v2
+2025-11-29 18:31:15,313 - utils - INFO - Retriever loaded with 2692 articles
+2025-11-29 18:31:15,314 - utils - INFO - Indices loaded: 2692 articles indexed
+2025-11-29 18:31:15,314 - utils - INFO - Pipeline initialized successfully!
+2025-11-29 18:31:15,314 - utils - INFO - ✅ Pipeline loaded successfully!
+2025-11-29 18:31:15,314 - utils - INFO - 🎉 Cortex IR System initialized and ready!
+2025-11-29 18:31:47,642 - utils - INFO - Processing query: 'sports NOT football'
+2025-11-29 18:31:47,675 - utils - INFO - Query processed: 'sports NOT football' -> type='exploratory'
+2025-11-29 18:31:47,676 - utils - INFO - process completed in 34.33ms
+2025-11-29 18:31:47,676 - utils - INFO - Query Processing completed in 34.52ms
+2025-11-29 18:31:47,718 - utils - INFO - search_with_documents completed in 41.38ms
+2025-11-29 18:31:47,720 - utils - INFO - Retrieval completed in 43.91ms
+2025-11-29 18:31:47,720 - utils - INFO - Reranking 51 documents with cross-encoder
+2025-11-29 18:31:55,819 - utils - INFO - Reranking complete. Top score: -3.8197
+2025-11-29 18:31:55,821 - utils - INFO - rerank completed in 8100.53ms
+2025-11-29 18:31:55,821 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7933
+2025-11-29 18:31:55,821 - utils - INFO - rerank completed in 8100.85ms
+2025-11-29 18:31:55,821 - utils - INFO - Reranking completed in 8100.98ms
+2025-11-29 18:31:55,822 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-11-29 18:31:55,822 - utils - INFO - Deduplication: 50 -> 50 documents
+2025-11-29 18:31:55,824 - utils - INFO - rerank completed in 2.09ms
+2025-11-29 18:31:55,825 - utils - INFO - Post-processing complete: 10 final results
+2025-11-29 18:31:55,825 - utils - INFO - process completed in 3.52ms
+2025-11-29 18:31:55,825 - utils - INFO - Post-Processing completed in 3.65ms
+2025-11-29 18:33:12,885 - utils - INFO - Processing query: 'economy AND inflation NOT recession'
+2025-11-29 18:33:12,925 - utils - INFO - Query processed: 'economy AND inflation NOT recession' -> type='exploratory'
+2025-11-29 18:33:12,925 - utils - INFO - process completed in 39.97ms
+2025-11-29 18:33:12,925 - utils - INFO - Query Processing completed in 40.20ms
+2025-11-29 18:33:12,964 - utils - INFO - search_with_documents completed in 37.51ms
+2025-11-29 18:33:12,964 - utils - INFO - Retrieval completed in 37.83ms
+2025-11-29 18:33:12,964 - utils - INFO - Reranking 100 documents with cross-encoder
+2025-11-29 18:33:29,408 - utils - INFO - Reranking complete. Top score: -4.2113
+2025-11-29 18:33:29,408 - utils - INFO - rerank completed in 16443.78ms
+2025-11-29 18:33:29,408 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7427
+2025-11-29 18:33:29,409 - utils - INFO - rerank completed in 16444.56ms
+2025-11-29 18:33:29,409 - utils - INFO - Reranking completed in 16444.70ms
+2025-11-29 18:33:29,409 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-11-29 18:33:29,409 - utils - INFO - Deduplication: 50 -> 43 documents
+2025-11-29 18:33:29,411 - utils - INFO - rerank completed in 2.04ms
+2025-11-29 18:33:29,412 - utils - INFO - Post-processing complete: 10 final results
+2025-11-29 18:33:29,412 - utils - INFO - process completed in 3.22ms
+2025-11-29 18:33:29,412 - utils - INFO - Post-Processing completed in 3.41ms
+2025-11-29 18:34:04,091 - utils - INFO - Processing query: 'economy AND inflation NOT recession'
+2025-11-29 18:34:04,126 - utils - INFO - Query processed: 'economy AND inflation NOT recession' -> type='exploratory'
+2025-11-29 18:34:04,126 - utils - INFO - process completed in 34.78ms
+2025-11-29 18:34:04,127 - utils - INFO - Query Processing completed in 35.31ms
+2025-11-29 18:34:04,160 - utils - INFO - search_with_documents completed in 32.64ms
+2025-11-29 18:34:04,160 - utils - INFO - Retrieval completed in 32.95ms
+2025-11-29 18:34:19,986 - utils - INFO - Processing query: 'Taiwan economy rallies thanks to electronics demand'
+2025-11-29 18:34:20,028 - utils - INFO - Query processed: 'Taiwan economy rallies thanks to electronics demand' -> type='exploratory'
+2025-11-29 18:34:20,028 - utils - INFO - process completed in 42.40ms
+2025-11-29 18:34:20,028 - utils - INFO - Query Processing completed in 42.65ms
+2025-11-29 18:34:20,032 - utils - INFO - _bm25_retrieve completed in 2.88ms
+2025-11-29 18:34:20,120 - utils - INFO - _dense_retrieve completed in 87.92ms
+2025-11-29 18:34:20,120 - utils - INFO - _hybrid_retrieve completed in 91.66ms
+2025-11-29 18:34:20,122 - utils - INFO - retrieve completed in 93.73ms
+2025-11-29 18:34:20,123 - utils - INFO - retrieve_with_documents completed in 94.74ms
+2025-11-29 18:34:20,124 - utils - INFO - Retrieval completed in 94.93ms
+2025-11-29 18:34:20,131 - utils - INFO - Reranking 178 documents with cross-encoder
+2025-11-29 18:34:50,464 - utils - INFO - Reranking complete. Top score: 8.5451
+2025-11-29 18:34:50,465 - utils - INFO - rerank completed in 30334.35ms
+2025-11-29 18:34:50,465 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.8000
+2025-11-29 18:34:50,466 - utils - INFO - rerank completed in 30335.06ms
+2025-11-29 18:34:50,466 - utils - INFO - Reranking completed in 30335.27ms
+2025-11-29 18:34:50,466 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-11-29 18:34:50,532 - utils - INFO - Deduplication: 50 -> 50 documents
+2025-11-29 18:34:50,585 - utils - INFO - rerank completed in 53.02ms
+2025-11-29 18:34:50,586 - utils - INFO - Post-processing complete: 10 final results
+2025-11-29 18:34:50,586 - utils - INFO - process completed in 120.36ms
+2025-11-29 18:34:50,586 - utils - INFO - Post-Processing completed in 120.55ms
+2025-11-29 18:35:14,683 - utils - INFO - Processing query: 'Taiwan economy rallies thanks to electronics demand'
+2025-11-29 18:35:14,726 - utils - INFO - Query processed: 'Taiwan economy rallies thanks to electronics demand' -> type='exploratory'
+2025-11-29 18:35:14,727 - utils - INFO - process completed in 43.64ms
+2025-11-29 18:35:14,727 - utils - INFO - Query Processing completed in 43.85ms
+2025-11-29 18:35:14,729 - utils - INFO - _bm25_retrieve completed in 2.01ms
+2025-11-29 18:35:14,758 - utils - INFO - _dense_retrieve completed in 28.51ms
+2025-11-29 18:35:14,759 - utils - INFO - _hybrid_retrieve completed in 31.80ms
+2025-11-29 18:35:14,759 - utils - INFO - retrieve completed in 31.96ms
+2025-11-29 18:35:14,760 - utils - INFO - retrieve_with_documents completed in 33.12ms
+2025-11-29 18:35:14,760 - utils - INFO - Retrieval completed in 33.34ms
+2025-11-29 18:35:14,760 - utils - INFO - Reranking 178 documents with cross-encoder
+2025-11-29 18:35:48,215 - utils - INFO - Reranking complete. Top score: 8.5451
+2025-11-29 18:35:48,216 - utils - INFO - rerank completed in 33455.33ms
+2025-11-29 18:35:48,216 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.8000
+2025-11-29 18:35:48,216 - utils - INFO - rerank completed in 33455.99ms
+2025-11-29 18:35:48,217 - utils - INFO - Reranking completed in 33456.21ms
+2025-11-29 18:35:48,217 - utils - INFO - Starting post-processing pipeline for 50 documents
+2025-11-29 18:35:48,271 - utils - INFO - Deduplication: 50 -> 50 documents
+2025-11-29 18:35:48,284 - utils - INFO - rerank completed in 12.22ms
+2025-11-29 18:35:48,284 - utils - INFO - Post-processing complete: 5 final results
+2025-11-29 18:35:48,285 - utils - INFO - process completed in 67.61ms
+2025-11-29 18:35:48,285 - utils - INFO - Post-Processing completed in 67.77ms
+2025-11-29 18:35:51,474 - utils - INFO - Processing query: 'Taiwan economy rallies thanks to electronics demand'
+2025-11-29 18:35:51,507 - utils - INFO - Query processed: 'Taiwan economy rallies thanks to electronics demand' -> type='exploratory'
+2025-11-29 18:35:51,508 - utils - INFO - process completed in 33.78ms
+2025-11-29 18:35:51,508 - utils - INFO - Query Processing completed in 34.02ms
+2025-11-29 18:35:51,510 - utils - INFO - _bm25_retrieve completed in 1.93ms
+2025-11-29 18:35:51,535 - utils - INFO - _dense_retrieve completed in 25.04ms
+2025-11-29 18:35:51,537 - utils - INFO - _hybrid_retrieve completed in 28.34ms
+2025-11-29 18:35:51,537 - utils - INFO - retrieve completed in 28.85ms
+2025-11-29 18:35:51,538 - utils - INFO - retrieve_with_documents completed in 29.47ms
+2025-11-29 18:35:51,539 - utils - INFO - Retrieval completed in 30.43ms
+2025-11-29 18:36:34,838 - utils - INFO - Processing query: 'f*ck you
+'
+2025-11-29 18:36:34,890 - utils - INFO - Query processed: 'f*ck you
+' -> type='exploratory'
+2025-11-29 18:36:34,892 - utils - INFO - process completed in 53.94ms
+2025-11-29 18:36:34,893 - utils - INFO - Query Processing completed in 54.58ms
+2025-11-29 18:36:34,904 - utils - INFO - _bm25_retrieve completed in 8.37ms
+2025-11-29 18:36:35,054 - utils - INFO - _dense_retrieve completed in 149.41ms
+2025-11-29 18:36:35,055 - utils - INFO - _hybrid_retrieve completed in 160.20ms
+2025-11-29 18:36:35,055 - utils - INFO - retrieve completed in 160.41ms
+2025-11-29 18:36:35,058 - utils - INFO - retrieve_with_documents completed in 162.82ms
+2025-11-29 18:36:35,058 - utils - INFO - Retrieval completed in 163.05ms
+2025-11-29 18:36:42,754 - utils - INFO - Processing query: 'f*ck you
+'
+2025-11-29 18:36:42,791 - utils - INFO - Query processed: 'f*ck you
+' -> type='exploratory'
+2025-11-29 18:36:42,792 - utils - INFO - process completed in 37.78ms
+2025-11-29 18:36:42,792 - utils - INFO - Query Processing completed in 38.00ms
+2025-11-29 18:36:42,794 - utils - INFO - _bm25_retrieve completed in 1.76ms
+2025-11-29 18:36:42,824 - utils - INFO - _dense_retrieve completed in 29.61ms
+2025-11-29 18:36:42,825 - utils - INFO - _hybrid_retrieve completed in 32.32ms
+2025-11-29 18:36:42,825 - utils - INFO - retrieve completed in 32.47ms
+2025-11-29 18:36:42,825 - utils - INFO - retrieve_with_documents completed in 32.97ms
+2025-11-29 18:36:42,825 - utils - INFO - Retrieval completed in 33.17ms
+2025-11-29 18:36:42,826 - utils - INFO - Reranking 189 documents with cross-encoder
+2025-11-29 18:37:17,505 - utils - INFO - Reranking complete. Top score: -7.0910
+2025-11-29 18:37:17,505 - utils - INFO - rerank completed in 34679.97ms
+2025-11-29 18:37:17,506 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7188
+2025-11-29 18:37:17,507 - utils - INFO - rerank completed in 34681.07ms
+2025-11-29 18:37:17,507 - utils - INFO - Reranking completed in 34681.30ms
+2025-11-29 18:38:54,039 - utils - INFO - Processing query: 'LONDON & TAIWAN'
+2025-11-29 18:38:54,083 - utils - INFO - Query processed: 'LONDON & TAIWAN' -> type='exploratory'
+2025-11-29 18:38:54,083 - utils - INFO - process completed in 44.42ms
+2025-11-29 18:38:54,084 - utils - INFO - Query Processing completed in 45.17ms
+2025-11-29 18:38:54,087 - utils - INFO - _bm25_retrieve completed in 2.17ms
+2025-11-29 18:38:54,121 - utils - INFO - _dense_retrieve completed in 34.20ms
+2025-11-29 18:38:54,122 - utils - INFO - _hybrid_retrieve completed in 37.78ms
+2025-11-29 18:38:54,122 - utils - INFO - retrieve completed in 37.98ms
+2025-11-29 18:38:54,123 - utils - INFO - retrieve_with_documents completed in 38.66ms
+2025-11-29 18:38:54,123 - utils - INFO - Retrieval completed in 38.83ms
+2025-11-29 18:39:06,470 - utils - INFO - Processing query: 'LONDON & TAIWAN'
+2025-11-29 18:39:06,504 - utils - INFO - Query processed: 'LONDON & TAIWAN' -> type='exploratory'
+2025-11-29 18:39:06,505 - utils - INFO - process completed in 35.13ms
+2025-11-29 18:39:06,506 - utils - INFO - Query Processing completed in 35.50ms
+2025-11-29 18:39:06,510 - utils - INFO - _bm25_retrieve completed in 3.12ms
+2025-11-29 18:39:06,541 - utils - INFO - _dense_retrieve completed in 30.05ms
+2025-11-29 18:39:06,544 - utils - INFO - _hybrid_retrieve completed in 37.81ms
+2025-11-29 18:39:06,546 - utils - INFO - retrieve completed in 39.55ms
+2025-11-29 18:39:06,548 - utils - INFO - retrieve_with_documents completed in 41.11ms
+2025-11-29 18:39:06,550 - utils - INFO - Retrieval completed in 43.62ms
+2025-11-29 18:39:06,552 - utils - INFO - Reranking 184 documents with cross-encoder
+2025-11-29 18:39:39,480 - utils - INFO - Reranking complete. Top score: -1.9697
+2025-11-29 18:39:39,481 - utils - INFO - rerank completed in 32929.16ms
+2025-11-29 18:39:39,481 - utils - INFO - Ensemble reranking complete. Top ensemble score: 0.7080
+2025-11-29 18:39:39,482 - utils - INFO - rerank completed in 32929.93ms
+2025-11-29 18:39:39,482 - utils - INFO - Reranking completed in 32930.15ms
