@@ -412,13 +412,7 @@ This is an academic project. For improvements:
 3. Make your changes
 4. Submit a pull request
 
-## License
 
-MIT License - feel free to use for academic purposes.
-
-## Author
-
-Built as part of CS516 Information Retrieval Assignment.
 
 ## Acknowledgments
 
@@ -427,6 +421,3 @@ Built as part of CS516 Information Retrieval Assignment.
 - **RAGatouille** for simplified ColBERT integration
 - **Gradio** for rapid UI development
 
----
-
-**Built with love for advanced information retrieval**
