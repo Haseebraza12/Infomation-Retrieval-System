@@ -1,88 +1,93 @@
-# 🧠 Cortex IR - Advanced News Article Search Engine
+# Cortex IR - Advanced News Article Search Engine
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<img width="1920" height="924" alt="image" src="https://github.com/user-attachments/assets/d389c4c1-9f75-4f59-8d59-7c05551eaa09" />
+
 
 A state-of-the-art hybrid information retrieval system for news articles, combining BM25, ColBERT, neural reranking, and intelligent post-processing for superior search performance.
 
-## 🌟 Features
+## Features
 
-- **🔍 Hybrid Search**: Combines sparse (BM25) and dense (ColBERT) retrieval
-- **🧠 Neural Reranking**: Cross-encoder model for improved relevance
-- **🎯 Query Intelligence**: Automatic classification, expansion, and spell correction
-- **🌈 Diversity Aware**: MMR algorithm for diverse results
-- **⏰ Temporal Intelligence**: Context-aware temporal boosting
-- **🔗 Entity Deduplication**: Remove duplicates based on named entities
-- **📊 Topic Clustering**: Organize results by themes
-- **🎨 Modern UI**: Beautiful Gradio interface with animations and visualizations
-- **⚡ Fast Performance**: ~10-15ms query latency on CPU
-- **🚀 Auto-Setup**: Automatically preprocesses and indexes data on first run
+- **Hybrid Search**: Combines sparse (BM25) and dense (ColBERT) retrieval
+- **Neural Reranking**: Cross-encoder model for improved relevance
+- **Query Intelligence**: Automatic classification, expansion, and spell correction
+- **Diversity Aware**: MMR algorithm for diverse results
+- **Temporal Intelligence**: Context-aware temporal boosting
+- **Entity Deduplication**: Remove duplicates based on named entities
+- **Topic Clustering**: Organize results by themes
+- **Modern UI**: Beautiful Gradio interface with animations and visualizations
+- **Fast Performance**: ~10-15ms query latency on CPU
+- **Auto-Setup**: Automatically preprocesses and indexes data on first run
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 implementation/
-├── config.py                 # Configuration management
-├── utils.py                  # Utility functions
-├── preprocessing.py          # Stage 0: Article preprocessing
-├── indexing.py              # Stage 0: Index construction
-├── query_processor.py        # Stage 1: Query processing
-├── retrieval.py             # Stage 1: Hybrid retrieval
-├── reranker.py              # Stage 2: Neural reranking
-├── post_processor.py        # Stage 3: Post-processing
-├── main.py                  # Complete pipeline orchestration
-├── gradio_app.py            # Gradio web interface
-├── evaluation.py            # Evaluation metrics
-├── requirements.txt         # Python dependencies
-├── .env.example            # Environment variables template
-└── README.md               # This file
+|-- config.py                 # Configuration management
+|-- utils.py                  # Utility functions
+|-- preprocessing.py          # Stage 0: Article preprocessing
+|-- indexing.py               # Stage 0: Index construction
+|-- query_processor.py        # Stage 1: Query processing
+|-- retrieval.py              # Stage 1: Hybrid retrieval
+|-- reranker.py               # Stage 2: Neural reranking
+|-- post_processor.py         # Stage 3: Post-processing
+|-- main.py                   # Complete pipeline orchestration
+|-- gradio_app.py             # Gradio web interface
+|-- evaluation.py             # Evaluation metrics
+|-- requirements.txt          # Python dependencies
+|-- .env.example              # Environment variables template
+\-- README.md                 # This file
 ```
 
-## 🏗️ System Architecture
+## System Architecture
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│  STAGE 0: Preprocessing & Indexing (Offline)                │
-├──────────────────────────────────────────────────────────────┤
-│  • spaCy NLP pipeline (tokenization, lemmatization, NER)     │
-│  • BM25+ sparse index (bm25s library)                        │
-│  • ColBERTv2 dense index (RAGatouille)                       │
-│  • SQLite metadata store                                      │
-│  • BERTopic clustering                                        │
-└──────────────────────────────────────────────────────────────┘
-                            ↓
-┌──────────────────────────────────────────────────────────────┐
-│  STAGE 1: Hybrid Retrieval (~60-80ms)                       │
-├──────────────────────────────────────────────────────────────┤
-│  • Query classification (breaking/historical/factual/        │
-│    analytical)                                                │
-│  • Parallel BM25 + ColBERT retrieval                         │
-│  • Reciprocal Rank Fusion (RRF)                              │
-│  • Returns top 100 candidates                                │
-└──────────────────────────────────────────────────────────────┘
-                            ↓
-┌──────────────────────────────────────────────────────────────┐
-│  STAGE 2: Neural Reranking (~200-280ms)                     │
-├──────────────────────────────────────────────────────────────┤
-│  • Cross-encoder (ms-marco-MiniLM-L-6-v2)                   │
-│  • Batch processing for efficiency                           │
-│  • Ensemble scoring with multiple signals                    │
-│  • Returns top 50 candidates                                 │
-└──────────────────────────────────────────────────────────────┘
-                            ↓
-┌──────────────────────────────────────────────────────────────┐
-│  STAGE 3: Post-Processing (~40ms)                           │
-├──────────────────────────────────────────────────────────────┤
-│  • Diversity reranking (MMR)                                 │
-│  • Temporal intelligence boosting                            │
-│  • Entity-based deduplication                                │
-│  • Category balancing                                        │
-│  • Topic clustering for presentation                         │
-│  • Returns final 20 results                                  │
-└──────────────────────────────────────────────────────────────┘
++--------------------------------------------------------------+
+|  STAGE 0: Preprocessing & Indexing (Offline)                 |
++--------------------------------------------------------------+
+|  - spaCy NLP pipeline (tokenization, lemmatization, NER)     |
+|  - BM25+ sparse index (bm25s library)                        |
+|  - ColBERTv2 dense index (RAGatouille)                       |
+|  - SQLite metadata store                                     |
+|  - BERTopic clustering                                       |
++--------------------------------------------------------------+
+                            |
+                            v
++--------------------------------------------------------------+
+|  STAGE 1: Hybrid Retrieval (~60-80ms)                        |
++--------------------------------------------------------------+
+|  - Query classification (breaking/historical/factual/        |
+|    analytical)                                               |
+|  - Parallel BM25 + ColBERT retrieval                         |
+|  - Reciprocal Rank Fusion (RRF)                              |
+|  - Returns top 100 candidates                                |
++--------------------------------------------------------------+
+                            |
+                            v
++--------------------------------------------------------------+
+|  STAGE 2: Neural Reranking (~200-280ms)                      |
++--------------------------------------------------------------+
+|  - Cross-encoder (ms-marco-MiniLM-L-6-v2)                    |
+|  - Batch processing for efficiency                           |
+|  - Ensemble scoring with multiple signals                    |
+|  - Returns top 50 candidates                                 |
++--------------------------------------------------------------+
+                            |
+                            v
++--------------------------------------------------------------+
+|  STAGE 3: Post-Processing (~40ms)                            |
++--------------------------------------------------------------+
+|  - Diversity reranking (MMR)                                 |
+|  - Temporal intelligence boosting                            |
+|  - Entity-based deduplication                                |
+|  - Category balancing                                        |
+|  - Topic clustering for presentation                         |
+|  - Returns final 20 results                                  |
++--------------------------------------------------------------+
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -125,7 +130,7 @@ cp .env.example .env
 # Edit .env with your preferred settings
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 **Just run one command:**
 
@@ -140,9 +145,9 @@ python gradio_app.py
 ```
 
 The system will automatically:
-- ✅ Check if data is preprocessed (if not, preprocess Articles.csv)
-- ✅ Check if indices are built (if not, build BM25 and metadata indices)
-- ✅ Launch the Gradio web interface at `http://localhost:7860`
+- Check if data is preprocessed (if not, preprocess Articles.csv)
+- Check if indices are built (if not, build BM25 and metadata indices)
+- Launch the Gradio web interface at `http://localhost:7860`
 
 **First run takes ~3-5 minutes for preprocessing and indexing. Subsequent runs start instantly.**
 
@@ -184,7 +189,7 @@ for i, doc in enumerate(results['results'], 1):
     print(f"   {doc['snippet']}\n")
 ```
 
-## 📊 Configuration
+## Configuration
 
 Edit `config.py` or create a `.env` file to customize:
 
@@ -212,7 +217,7 @@ DIVERSITY_LAMBDA_FACTUAL = 0.9      # Relevance weight
 DIVERSITY_LAMBDA_EXPLORATORY = 0.6   # Balanced weight
 ```
 
-## 🧪 Evaluation
+## Evaluation
 
 Evaluate system performance:
 
@@ -244,30 +249,30 @@ evaluator.print_evaluation_report(evaluation)
 - **NDCG@K** (Normalized Discounted Cumulative Gain)
 - **Response Time** (Average and standard deviation)
 
-## 🎨 Web Interface Features
+## Web Interface Features
 
 ### Search Tab
-- 🔍 Intelligent search with auto-correction
-- 🎛️ Configurable result count
-- ⚙️ Toggle reranking and post-processing
-- 📊 Real-time performance metrics
-- 📈 Interactive visualizations
-- 🏷️ Category and timeline distributions
-- 💡 Example queries
+- Intelligent search with auto-correction
+- Configurable result count
+- Toggle reranking and post-processing
+- Real-time performance metrics
+- Interactive visualizations
+- Category and timeline distributions
+- Example queries
 
 ### Analytics Tab
-- 📉 Search history statistics
-- ⏱️ Average response times
-- 🎯 Query type distribution
-- 📊 Usage patterns
+- Search history statistics
+- Average response times
+- Query type distribution
+- Usage patterns
 
 ### About Tab
-- 📖 System documentation
-- 🏗️ Architecture overview
-- 🛠️ Technology stack
-- 📈 Performance specifications
+- System documentation
+- Architecture overview
+- Technology stack
+- Performance specifications
 
-## 🔧 Module Details
+## Module Details
 
 ### preprocessing.py
 - **ArticlePreprocessor**: Tokenization, lemmatization, NER
@@ -318,7 +323,7 @@ evaluator.print_evaluation_report(evaluation)
 - Interactive visualizations
 - Search analytics dashboard
 
-## 📈 Performance
+## Performance
 
 Typical performance on Core i5 6th Gen + 16GB RAM:
 
@@ -330,7 +335,7 @@ Typical performance on Core i5 6th Gen + 16GB RAM:
 | Post-Processing | ~40ms |
 | **Total** | **~300-400ms** |
 
-## 🧰 Technology Stack
+## Technology Stack
 
 ### Core IR
 - **bm25s**: Fast BM25 implementation
@@ -353,7 +358,7 @@ Typical performance on Core i5 6th Gen + 16GB RAM:
 - **Plotly**: Interactive charts
 - **Matplotlib/Seaborn**: Static plots
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Indices Not Found
 ```bash
@@ -377,7 +382,7 @@ python -m spacy download en_core_web_sm
 - Use smaller cross-encoder model
 - Reduce number of post-processing steps
 
-## 📝 Example Queries
+## Example Queries
 
 **Breaking News Queries:**
 - "latest COVID updates"
@@ -399,7 +404,7 @@ python -m spacy download en_core_web_sm
 - "trends in sports performance"
 - "effects of market volatility"
 
-## 🤝 Contributing
+## Contributing
 
 This is an academic project. For improvements:
 1. Fork the repository
@@ -407,15 +412,15 @@ This is an academic project. For improvements:
 3. Make your changes
 4. Submit a pull request
 
-## 📄 License
+## License
 
 MIT License - feel free to use for academic purposes.
 
-## 👨‍💻 Author
+## Author
 
 Built as part of CS516 Information Retrieval Assignment.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **spaCy** for NLP capabilities
 - **Hugging Face** for transformer models
@@ -424,4 +429,4 @@ Built as part of CS516 Information Retrieval Assignment.
 
 ---
 
-**Built with ❤️ for advanced information retrieval**
+**Built with love for advanced information retrieval**
